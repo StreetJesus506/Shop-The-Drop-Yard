@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:wght@500;700;900&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #1c1b19;
+  color: #f4f1ea;
+  font-family: 'Work Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #ff5a1f;
+  color: #1c1b19;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1c1b19;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6b6b63;
+}
