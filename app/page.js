@@ -383,11 +383,15 @@ export default function Home() {
           transition={{ duration: 0.4, ease: 'easeInOut' }}
           style={{
             position: 'absolute',
-            top: '50%', left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 'min(85vw, 600px)',
-            height: 'min(45vw, 320px)',
-            zIndex: 5,
+top: '45%', left: '50%',
+transform: 'translate(-50%, -50%)',
+width: '90vw',
+height: '40vw',
+minHeight: '200px',
+maxWidth: '600px',
+maxHeight: '320px',
+zIndex: 5,
+
           }}
         >
           <ShippingContainer
