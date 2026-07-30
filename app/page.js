@@ -1,0 +1,602 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+import * as THREE from 'three'
+import { motion, AnimatePresence } from 'framer-motion'
+
+const brands = [
+  {
+    id: 'pro',
+    lot: '01',
+    name: 'P.R.O.',
+    full: 'Proletariat Revolution Outfitters',
+    ethos: 'Clothing for the working class.',
+    tag: 'NO WAR BUT CLASS WAR',
+    stamp: 'FRAGILE: IDEAS',
+    accent: '#b01e28',
+    bg: '#b01e28',
+    text: '#f3e9e2',
+    containerColor: 0xb01e28,
+    trimColor: 0x8e1620,
+  },
+  {
+    id: 'nudefarmer',
+    lot: '02',
+    name: 'The Nude Farmer',
+    full: 'The Nude Farmer',
+    ethos: 'Farm to fit designs for the high minded.',
+    tag: 'GIRLS GROW TOO',
+    stamp: 'HERBAL',
+    accent: '#46522f',
+    bg: '#46522f',
+    text: '#f1ead4',
+    containerColor: 0x46522f,
+    trimColor: 0x3a4326,
+  },
+  {
+    id: 'unpopular',
+    lot: '03',
+    name: 'Unpopular Demand',
+    full: 'Unpopular Demand',
+    ethos: 'Wearing what history tries to bury.',
+    tag: 'ACAB',
+    stamp: 'CIGS CORNER STORE',
+    accent: '#c9a24a',
+    bg: '#0b0b0b',
+    text: '#ece4cf',
+    containerColor: 0x1a1a1a,
+    trimColor: 0xc9a24a,
+  },
+  {
+    id: 'deadair',
+    lot: '04',
+    name: 'Dead Air',
+    full: 'Dead Air',
+    ethos: 'Cult cinema. Retro pop culture. Channel surf style, rerun energy.',
+    tag: 'BE KIND REWIND',
+    stamp: 'HANDLE W/ CARE',
+    accent: '#2ee6d6',
+    bg: '#11111c',
+    text: '#dfe6f0',
+    containerColor: 0x11111c,
+    trimColor: 0x2ee6d6,
+  },
+]
+
+function ShippingContainer({ brand, isActive, onClick }) {
+  const mountRef = useRef(null)
+  const sceneRef = useRef(null)
+  const rendererRef = useRef(null)
+  const animFrameRef = useRef(null)
+  const containerGroupRef = useRef(null)
+  const targetRotationRef = useRef({ y: 0.3 })
+
+  useEffect(() => {
+    const mount = mountRef.current
+    if (!mount) return
+
+    const w = mount.clientWidth
+    const h = mount.clientHeight
+
+    // Scene
+    const scene = new THREE.Scene()
+    sceneRef.current = scene
+
+    // Camera
+    const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100)
+    camera.position.set(0, 0.5, 5)
+
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    renderer.setSize(w, h)
+    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.shadowMap.enabled = true
+    mount.appendChild(renderer.domElement)
+    rendererRef.current = renderer
+
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
+    scene.add(ambientLight)
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2)
+    dirLight.position.set(5, 8, 5)
+    dirLight.castShadow = true
+    scene.add(dirLight)
+
+    const rimLight = new THREE.DirectionalLight(0xffffff, 0.4)
+    rimLight.position.set(-5, 2, -5)
+    scene.add(rimLight)
+
+    // Container group
+    const group = new THREE.Group()
+    containerGroupRef.current = group
+    scene.add(group)
+
+    // Main container body
+    const bodyGeo = new THREE.BoxGeometry(3.2, 1.4, 1.2)
+    const bodyMat = new THREE.MeshStandardMaterial({
+      color: brand.containerColor,
+      roughness: 0.7,
+      metalness: 0.3,
+    })
+    const body = new THREE.Mesh(bodyGeo, bodyMat)
+    body.castShadow = true
+    group.add(body)
+
+    // Corrugated panels (horizontal ribs)
+    const ribMat = new THREE.MeshStandardMaterial({
+      color: brand.trimColor,
+      roughness: 0.8,
+      metalness: 0.2,
+    })
+
+    for (let i = -1.4; i <= 1.4; i += 0.28) {
+      const ribGeo = new THREE.BoxGeometry(3.22, 0.04, 1.22)
+      const rib = new THREE.Mesh(ribGeo, ribMat)
+      rib.position.y = i * 0.45
+      group.add(rib)
+    }
+
+    // Corner posts
+    const postMat = new THREE.MeshStandardMaterial({
+      color: brand.trimColor,
+      roughness: 0.6,
+      metalness: 0.4,
+    })
+
+    const postPositions = [
+      [-1.62, 0, 0.62],
+      [1.62, 0, 0.62],
+      [-1.62, 0, -0.62],
+      [1.62, 0, -0.62],
+    ]
+
+    postPositions.forEach(([x, y, z]) => {
+      const postGeo = new THREE.BoxGeometry(0.08, 1.45, 0.08)
+      const post = new THREE.Mesh(postGeo, postMat)
+      post.position.set(x, y, z)
+      group.add(post)
+    })
+
+    // Door details on front face
+    const doorMat = new THREE.MeshStandardMaterial({
+      color: brand.trimColor,
+      roughness: 0.7,
+      metalness: 0.3,
+    })
+
+    // Left door
+    const leftDoorGeo = new THREE.BoxGeometry(1.5, 1.35, 0.04)
+    const leftDoor = new THREE.Mesh(leftDoorGeo, doorMat)
+    leftDoor.position.set(-0.4, 0, 0.62)
+    group.add(leftDoor)
+
+    // Right door
+    const rightDoorGeo = new THREE.BoxGeometry(1.5, 1.35, 0.04)
+    const rightDoor = new THREE.Mesh(rightDoorGeo, doorMat)
+    rightDoor.position.set(0.82, 0, 0.62)
+    group.add(rightDoor)
+
+    // Door handle bar left
+    const handleGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.8)
+    const handleMat = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, metalness: 0.8, roughness: 0.2 })
+    const handleL = new THREE.Mesh(handleGeo, handleMat)
+    handleL.position.set(0.12, 0, 0.66)
+    handleL.rotation.x = Math.PI / 2
+    group.add(handleL)
+
+    const handleR = new THREE.Mesh(handleGeo, handleMat)
+    handleR.position.set(0.12, 0, 0.66)
+    handleR.rotation.x = Math.PI / 2
+    handleR.position.x = 0.12
+    group.add(handleR)
+
+    // Lot number text plane (colored stripe)
+    const stripeGeo = new THREE.BoxGeometry(3.22, 0.18, 0.02)
+    const stripeMat = new THREE.MeshStandardMaterial({ color: 0xf4f1ea, roughness: 1 })
+    const stripe = new THREE.Mesh(stripeGeo, stripeMat)
+    stripe.position.set(0, 0.55, 0.62)
+    group.add(stripe)
+
+    // Initial rotation
+    group.rotation.y = 0.3
+    group.rotation.x = -0.08
+
+    // Animate
+    let hoverAngle = 0
+    const animate = () => {
+      animFrameRef.current = requestAnimationFrame(animate)
+      hoverAngle += 0.008
+      group.rotation.y = targetRotationRef.current.y + Math.sin(hoverAngle) * 0.04
+
+      if (isActive) {
+        targetRotationRef.current.y += (0.1 - targetRotationRef.current.y) * 0.05
+      } else {
+        targetRotationRef.current.y += (0.4 - targetRotationRef.current.y) * 0.05
+      }
+
+      renderer.render(scene, camera)
+    }
+    animate()
+
+    // Resize handler
+    const handleResize = () => {
+      if (!mount) return
+      const w = mount.clientWidth
+      const h = mount.clientHeight
+      camera.aspect = w / h
+      camera.updateProjectionMatrix()
+      renderer.setSize(w, h)
+    }
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      cancelAnimationFrame(animFrameRef.current)
+      mount.removeChild(renderer.domElement)
+      renderer.dispose()
+    }
+  }, [brand, isActive])
+
+  return (
+    <div
+      ref={mountRef}
+      onClick={onClick}
+      style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+    />
+  )
+}
+
+export default function Home() {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [selectedBrand, setSelectedBrand] = useState(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const containerRef = useRef(null)
+  const startYRef = useRef(null)
+
+  const activeBrand = brands[activeIndex]
+
+  const goToNext = () => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setActiveIndex(i => (i + 1) % brands.length)
+      setIsTransitioning(false)
+    }, 300)
+  }
+
+  const goToPrev = () => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setActiveIndex(i => (i - 1 + brands.length) % brands.length)
+      setIsTransitioning(false)
+    }, 300)
+  }
+
+  // Scroll and swipe handling
+  useEffect(() => {
+    let lastScroll = 0
+
+    const handleWheel = (e) => {
+      e.preventDefault()
+      const now = Date.now()
+      if (now - lastScroll < 800) return
+      lastScroll = now
+      if (e.deltaY > 0) goToNext()
+      else goToPrev()
+    }
+
+    const handleTouchStart = (e) => {
+      startYRef.current = e.touches[0].clientY
+    }
+
+    const handleTouchEnd = (e) => {
+      if (startYRef.current === null) return
+      const diff = startYRef.current - e.changedTouches[0].clientY
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) goToNext()
+        else goToPrev()
+      }
+      startYRef.current = null
+    }
+
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    window.addEventListener('touchstart', handleTouchStart, { passive: true })
+    window.addEventListener('touchend', handleTouchEnd, { passive: true })
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel)
+      window.removeEventListener('touchstart', handleTouchStart)
+      window.removeEventListener('touchend', handleTouchEnd)
+    }
+  }, [activeIndex, isTransitioning])
+
+  const openBrand = (brand) => setSelectedBrand(brand)
+  const closeBrand = () => setSelectedBrand(null)
+
+  return (
+    <main style={{ width: '100vw', height: '100vh', overflow: 'hidden', background: '#1c1b19', position: 'relative' }}>
+
+      {/* Background color transition */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeIndex}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.15 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6 }}
+          style={{
+            position: 'absolute', inset: 0,
+            background: activeBrand.accent,
+            pointerEvents: 'none',
+          }}
+        />
+      </AnimatePresence>
+
+      {/* Grid overlay */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        backgroundImage: `
+          repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(244,241,234,0.04) 79px, rgba(244,241,234,0.04) 80px),
+          repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(244,241,234,0.04) 79px, rgba(244,241,234,0.04) 80px)
+        `
+      }} />
+
+      {/* Header */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0,
+        padding: '20px 28px',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
+        zIndex: 10,
+      }}>
+        <div>
+          <h1 style={{
+            fontFamily: 'Big Shoulders Stencil, sans-serif',
+            fontSize: 'clamp(28px, 5vw, 52px)',
+            fontWeight: 900, textTransform: 'uppercase',
+            lineHeight: 0.9, margin: 0, color: '#f4f1ea',
+          }}>
+            THE DROP<br /><span style={{ color: '#ff5a1f' }}>YARD</span>
+          </h1>
+          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#6b6b63', marginTop: '6px' }}>
+            EST. 2026
+          </p>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#6b6b63', margin: 0 }}>
+            LOT {activeBrand.lot} / 04
+          </p>
+          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#6b6b63', margin: '4px 0 0' }}>
+            {activeBrand.stamp}
+          </p>
+        </div>
+      </div>
+
+      {/* 3D Container */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeIndex}
+          initial={{ opacity: 0, x: 80 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -80 }}
+          transition={{ duration: 0.4, ease: 'easeInOut' }}
+          style={{
+            position: 'absolute',
+            top: '50%', left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 'min(85vw, 600px)',
+            height: 'min(45vw, 320px)',
+            zIndex: 5,
+          }}
+        >
+          <ShippingContainer
+            brand={activeBrand}
+            isActive={true}
+            onClick={() => openBrand(activeBrand)}
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Brand info */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeIndex + '-info'}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          style={{
+            position: 'absolute',
+            bottom: '120px', left: '28px', right: '28px',
+            zIndex: 10,
+          }}
+        >
+          <h2 style={{
+            fontFamily: 'Big Shoulders Stencil, sans-serif',
+            fontSize: 'clamp(32px, 7vw, 72px)',
+            fontWeight: 900, textTransform: 'uppercase',
+            lineHeight: 0.9, margin: '0 0 10px',
+            color: activeBrand.accent,
+          }}>
+            {activeBrand.name}
+          </h2>
+          <p style={{
+            fontFamily: 'Work Sans, sans-serif',
+            fontSize: 'clamp(13px, 2vw, 16px)',
+            color: '#cfcac0', margin: '0 0 6px',
+            maxWidth: '480px',
+          }}>
+            {activeBrand.ethos}
+          </p>
+          <p style={{
+            fontFamily: 'Space Mono, monospace',
+            fontSize: '11px', color: '#6b6b63',
+            letterSpacing: '1px',
+          }}>
+            {activeBrand.tag}
+          </p>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Enter button */}
+      <motion.button
+        onClick={() => openBrand(activeBrand)}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.97 }}
+        style={{
+          position: 'absolute', bottom: '40px', left: '28px',
+          fontFamily: 'Big Shoulders Stencil, sans-serif',
+          fontSize: '14px', letterSpacing: '2px',
+          background: 'none',
+          border: `2px solid ${activeBrand.accent}`,
+          color: activeBrand.accent,
+          padding: '12px 28px',
+          cursor: 'pointer', zIndex: 10,
+          textTransform: 'uppercase',
+        }}
+      >
+        ENTER BRAND →
+      </motion.button>
+
+      {/* Nav arrows */}
+      <div style={{
+        position: 'absolute', bottom: '40px', right: '28px',
+        display: 'flex', gap: '12px', zIndex: 10,
+      }}>
+        <button
+          onClick={goToPrev}
+          style={{
+            fontFamily: 'Space Mono, monospace', fontSize: '18px',
+            background: 'none', border: '1px solid #6b6b63',
+            color: '#6b6b63', width: '44px', height: '44px',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+        >
+          ↑
+        </button>
+        <button
+          onClick={goToNext}
+          style={{
+            fontFamily: 'Space Mono, monospace', fontSize: '18px',
+            background: 'none', border: '1px solid #6b6b63',
+            color: '#6b6b63', width: '44px', height: '44px',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+        >
+          ↓
+        </button>
+      </div>
+
+      {/* Dot indicators */}
+      <div style={{
+        position: 'absolute', right: '28px', top: '50%',
+        transform: 'translateY(-50%)',
+        display: 'flex', flexDirection: 'column', gap: '10px', zIndex: 10,
+      }}>
+        {brands.map((b, i) => (
+          <button
+            key={b.id}
+            onClick={() => setActiveIndex(i)}
+            style={{
+              width: i === activeIndex ? '10px' : '6px',
+              height: i === activeIndex ? '10px' : '6px',
+              borderRadius: '50%',
+              background: i === activeIndex ? activeBrand.accent : '#6b6b63',
+              border: 'none', cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Scroll hint */}
+      <motion.p
+        animate={{ opacity: [0.4, 1, 0.4] }}
+        transition={{ duration: 2, repeat: Infinity }}
+        style={{
+          position: 'absolute', bottom: '52px',
+          left: '50%', transform: 'translateX(-50%)',
+          fontFamily: 'Space Mono, monospace', fontSize: '10px',
+          color: '#6b6b63', letterSpacing: '2px',
+          zIndex: 10, whiteSpace: 'nowrap',
+        }}
+      >
+        SCROLL TO EXPLORE
+      </motion.p>
+
+      {/* Brand view overlay */}
+      <AnimatePresence>
+        {selectedBrand && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              position: 'fixed', inset: 0,
+              background: selectedBrand.bg,
+              color: selectedBrand.text,
+              zIndex: 50, overflowY: 'auto',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 24px', borderBottom: '2px solid rgba(255,255,255,0.1)' }}>
+              <button
+                onClick={closeBrand}
+                style={{
+                  fontFamily: 'Big Shoulders Stencil, sans-serif',
+                  fontSize: '12px', letterSpacing: '1px',
+                  background: 'none',
+                  border: `1px solid ${selectedBrand.text}`,
+                  color: selectedBrand.text,
+                  padding: '8px 14px', cursor: 'pointer',
+                }}
+              >
+                ← BACK TO THE YARD
+              </button>
+              <span style={{ fontFamily: 'Big Shoulders Stencil, sans-serif', fontSize: '22px', fontWeight: 700, textTransform: 'uppercase' }}>
+                {selectedBrand.name}
+              </span>
+              <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '11px', opacity: 0.7 }}>
+                LOT {selectedBrand.lot}
+              </span>
+            </div>
+
+            <div style={{ padding: '70px 24px 60px', maxWidth: '1180px', margin: '0 auto' }}>
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                style={{
+                  fontFamily: 'Big Shoulders Stencil, sans-serif',
+                  fontSize: 'clamp(40px, 8vw, 92px)',
+                  lineHeight: 0.92, marginBottom: '18px',
+                  fontWeight: 900, textTransform: 'uppercase',
+                  color: selectedBrand.accent,
+                }}
+              >
+                {selectedBrand.full}
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                style={{ fontSize: '16px', maxWidth: '480px', lineHeight: 1.5, opacity: 0.85 }}
+              >
+                {selectedBrand.ethos}
+              </motion.p>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                style={{ marginTop: '32px', fontFamily: 'Space Mono, monospace', fontSize: '13px', opacity: 0.6 }}
+              >
+                Products coming soon — connect Printify to populate this page.
+              </motion.p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </main>
+  )
+}
