@@ -84,7 +84,7 @@ function ShippingContainer({ brand, isActive, onClick }) {
 
     // Camera
     const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100)
-    camera.position.set(0, 0.5, 5)
+    camera.position.set(0, 0.5, 7)
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
@@ -113,7 +113,7 @@ function ShippingContainer({ brand, isActive, onClick }) {
     scene.add(group)
 
     // Main container body
-    const bodyGeo = new THREE.BoxGeometry(3.2, 1.4, 1.2)
+    const bodyGeo = new THREE.BoxGeometry(2.4, 1.0, 0.9)
     const bodyMat = new THREE.MeshStandardMaterial({
       color: brand.containerColor,
       roughness: 0.7,
@@ -131,7 +131,7 @@ function ShippingContainer({ brand, isActive, onClick }) {
     })
 
     for (let i = -1.4; i <= 1.4; i += 0.28) {
-      const ribGeo = new THREE.BoxGeometry(3.22, 0.04, 1.22)
+      const ribGeo = new THREE.BoxGeometry(2.42, 0.04, 0.92)
       const rib = new THREE.Mesh(ribGeo, ribMat)
       rib.position.y = i * 0.45
       group.add(rib)
@@ -145,11 +145,12 @@ function ShippingContainer({ brand, isActive, onClick }) {
     })
 
     const postPositions = [
-      [-1.62, 0, 0.62],
-      [1.62, 0, 0.62],
-      [-1.62, 0, -0.62],
-      [1.62, 0, -0.62],
-    ]
+  [-1.22, 0, 0.47],
+  [1.22, 0, 0.47],
+  [-1.22, 0, -0.47],
+  [1.22, 0, -0.47],
+]
+
 
     postPositions.forEach(([x, y, z]) => {
       const postGeo = new THREE.BoxGeometry(0.08, 1.45, 0.08)
