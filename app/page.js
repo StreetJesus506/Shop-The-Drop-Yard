@@ -172,7 +172,7 @@ export default function Home() {
             {/* Footer */}
             <footer className="max-w-5xl mx-auto mt-16 pt-5 border-t border-gray-800 flex justify-between flex-wrap gap-3" style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#6b6b63' }}>
               <span>THE DROP YARD</span>
-              <span>FULFILLMENT: PRINTIFY</span>
+              <span>CONTACT@SHOPTHEDROPYARD.COM</span>
             </footer>
           </motion.div>
         ) : (
