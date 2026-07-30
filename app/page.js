@@ -223,7 +223,7 @@ export default function Home() {
                 transition={{ delay: 0.3 }}
                 style={{ marginTop: '32px', fontFamily: 'Space Mono, monospace', fontSize: '13px', opacity: 0.6 }}
               >
-                Products loading soon — connect Printify to populate this page.
+                Products loading soon.
               </motion.p>
             </div>
           </motion.div>
