@@ -1,10 +1,13 @@
 import { Resend } from 'resend';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const resend = new Resend(process.env.RESEND_API_KEY);
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function POST(req) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
   const body = await req.text();
   const sig = req.headers.get('stripe-signature');
 
@@ -22,7 +25,6 @@ export async function POST(req) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-
     const customerEmail = session.customer_details?.email || 'Unknown';
     const customerName = session.customer_details?.name || 'Unknown';
     const amount = (session.amount_total / 100).toFixed(2);
