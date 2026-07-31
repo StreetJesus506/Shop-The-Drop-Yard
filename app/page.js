@@ -136,11 +136,12 @@ function ShippingContainer({ brand, isActive, onClick }) {
     line.position.set(0, 0, 0.54)
     group.add(line)
 
-    ggroup.rotation.y = 0.35
+    group.rotation.y = 0.35
 group.rotation.x = -0.08
 group.position.x = -1.5
-    group.position.y = 0
-    group.scale.set(1.7, 1.7, 1.7)
+group.position.y = 0
+group.scale.set(1.5, 1.5, 1.5)
+
 
 
 
