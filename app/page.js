@@ -83,8 +83,10 @@ function ShippingContainer({ brand, isActive, onClick }) {
     sceneRef.current = scene
 
     // Camera
-    const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100)
-    camera.position.set(0, 0.5, 7)
+    const camera = new THREE.PerspectiveCamera(60, w / h, 0.1, 100)
+camera.position.set(0, 0, 6)
+camera.lookAt(0, 0, 0)
+
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
@@ -200,8 +202,9 @@ function ShippingContainer({ brand, isActive, onClick }) {
     group.add(stripe)
 
     // Initial rotation
-    group.rotation.y = 0.3
-    group.rotation.x = -0.08
+    group.rotation.y = 0.2
+group.rotation.x = -0.05
+
 
     // Animate
     let hoverAngle = 0
@@ -211,10 +214,11 @@ function ShippingContainer({ brand, isActive, onClick }) {
       group.rotation.y = targetRotationRef.current.y + Math.sin(hoverAngle) * 0.04
 
       if (isActive) {
-        targetRotationRef.current.y += (0.1 - targetRotationRef.current.y) * 0.05
-      } else {
-        targetRotationRef.current.y += (0.4 - targetRotationRef.current.y) * 0.05
-      }
+  targetRotationRef.current.y += (0.15 - targetRotationRef.current.y) * 0.05
+} else {
+  targetRotationRef.current.y += (0.2 - targetRotationRef.current.y) * 0.05
+}
+
 
       renderer.render(scene, camera)
     }
