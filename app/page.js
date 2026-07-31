@@ -31,7 +31,7 @@ const brands = [
     bg: '#46522f',
     text: '#f1ead4',
     containerColor: 0x46522f,
-    trimColor: 0x3a4326,
+    trimColor: 0x8a9e6a,
   },
   {
     id: 'unpopular',
@@ -138,7 +138,7 @@ function ShippingContainer({ brand, isActive, onClick }) {
 
     group.rotation.y = 0.25
 group.rotation.x = -0.06
-group.position.x = -1.2
+group.position.x = -1.9
 group.position.y = 0.5
 group.scale.set(1.5, 1.5, 1.5)
 
