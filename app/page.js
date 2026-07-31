@@ -138,6 +138,8 @@ function ShippingContainer({ brand, isActive, onClick }) {
 
     group.rotation.y = 0.25
     group.rotation.x = -0.06
+    group.position.x = -0.3
+
 
     let t = 0
     const animate = () => {
