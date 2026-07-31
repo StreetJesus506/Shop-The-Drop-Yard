@@ -171,7 +171,7 @@ function ShippingContainer({ brand, isActive, onClick }) {
     <div
       ref={mountRef}
       onClick={onClick}
-      style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+      style={{ width: '100%', height: '100%', cursor: 'pointer', overflow: 'hidden' }}
     />
   )
 }
