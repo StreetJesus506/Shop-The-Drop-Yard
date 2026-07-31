@@ -309,17 +309,17 @@ export default function Home() {
           exit={{ opacity: 0, x: -80 }}
           transition={{ duration: 0.4, ease: 'easeInOut' }}
           style={{
-            position: 'absolute',
-top: '45%', left: '50%',
-transform: 'translate(-50%, -50%)',
-width: '90vw',
-height: '40vw',
-minHeight: '200px',
-maxWidth: '600px',
-maxHeight: '320px',
-zIndex: 5,
+  position: 'absolute',
+  top: '42%', left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '95vw',
+  height: '50vw',
+  minHeight: '220px',
+  maxWidth: '700px',
+  maxHeight: '380px',
+  zIndex: 5,
+}}
 
-          }}
         >
           <ShippingContainer
             brand={activeBrand}
