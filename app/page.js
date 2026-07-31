@@ -123,12 +123,12 @@ function ShippingContainer({ brand, isActive, onClick }) {
 
     // White stripe
     const stripe = new THREE.Mesh(new THREE.BoxGeometry(2.82, 0.15, 0.02), whiteMat)
-    stripe.position.set(0, 0.45, 0.52)
+    stripe.position.set(0, 0.45, 0.55)
     group.add(stripe)
 
     // Door outline
     const door = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.1, 0.02), trimMat)
-    door.position.set(0, 0, 0.52)
+    door.position.set(0, 0, 0.51)
     group.add(door)
 
     // Door center line
