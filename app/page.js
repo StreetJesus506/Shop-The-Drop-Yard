@@ -321,9 +321,9 @@ export default function Home() {
           transition={{ duration: 0.4, ease: 'easeInOut' }}
           style={{
   position: 'absolute',
-  top: '42%', left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '95vw',
+  top: '42%', left: '30%',
+transform: 'translate(-50%, -50%)',
+width: '95vw',
   height: '50vw',
   minHeight: '220px',
   maxWidth: '700px',
