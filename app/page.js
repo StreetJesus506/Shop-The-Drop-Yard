@@ -535,7 +535,7 @@ left: '50%', transform: 'translateX(-50%)',
                 transition={{ delay: 0.3 }}
                 style={{ marginTop: '32px', fontFamily: 'Space Mono, monospace', fontSize: '13px', opacity: 0.6 }}
               >
-                Products coming soon — connect Printify to populate this page.
+                Products coming soon.
               </motion.p>
             </div>
           </motion.div>
