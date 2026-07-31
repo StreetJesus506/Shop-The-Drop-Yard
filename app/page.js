@@ -434,7 +434,7 @@ width: '95vw',
 
       {/* Dot indicators */}
       <div style={{
-        position: 'absolute', right: '28px', top: '50%',
+        position: 'absolute', left: '18px', top: '50%',
         transform: 'translateY(-50%)',
         display: 'flex', flexDirection: 'column', gap: '10px', zIndex: 10,
       }}>
