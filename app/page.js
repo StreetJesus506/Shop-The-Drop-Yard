@@ -76,7 +76,7 @@ function ShippingContainer({ brand, isActive, onClick }) {
 
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100)
-    camera.position.set(-0.8, 0.3, 5)
+    camera.position.set(-2.8, 0.3, 5)
     camera.lookAt(0, 0, 0)
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
