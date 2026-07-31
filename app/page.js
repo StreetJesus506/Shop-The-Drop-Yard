@@ -115,7 +115,7 @@ function ShippingContainer({ brand, isActive, onClick }) {
     }
 
     // Corner posts
-    ;[[-1.41, 0.5], [1.41, 0.5], [-1.41, -0.5], [1.41, -0.5]].forEach(([x, z]) => {
+  const postPositions = [[-1.41, 0.5], [1.41, 0.5], [-1.41, -0.5], [1.41, -0.5]].forEach(([x, z]) => {
       const post = new THREE.Mesh(new THREE.BoxGeometry(0.07, 1.22, 0.07), trimMat)
       post.position.set(x, 0, z)
       group.add(post)
