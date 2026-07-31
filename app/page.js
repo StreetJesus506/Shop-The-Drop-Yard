@@ -138,7 +138,7 @@ function ShippingContainer({ brand, isActive, onClick }) {
 
     group.rotation.y = 0.25
     group.rotation.x = -0.06
-    group.position.x = -1.2
+    group.position.x = -3.0
 
 
     let t = 0
