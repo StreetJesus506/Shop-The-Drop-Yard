@@ -136,11 +136,11 @@ function ShippingContainer({ brand, isActive, onClick }) {
     line.position.set(0, 0, 0.54)
     group.add(line)
 
-    group.rotation.y = 0.3
-group.rotation.x = -0.06
-group.position.x = -3.2
-group.position.y = -0.2
-group.scale.set(1.4, 1.4, 1.4)
+    group.position.x = -1.8
+group.rotation.y = 0.4
+group.rotation.x = -0.08
+group.scale.set(1.3, 1.3, 1.3)
+
 
 
 
@@ -430,7 +430,7 @@ export default function Home() {
       <div style={{
         position: 'absolute', right: '28px', top: '50%',
         transform: 'translateY(-50%)',
-        display: 'flex', flexDirection: 'column', gap: '10px', zIndex: 10,
+        display: 'none', flexDirection: 'column', gap: '10px', zIndex: 10,
       }}>
         {brands.map((b, i) => (
           <button
