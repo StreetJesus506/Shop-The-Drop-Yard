@@ -141,7 +141,7 @@ group.rotation.x = -0.06
 group.position.x = -3.2
 group.position.y = -0.2
 group.scale.set(1.4, 1.4, 1.4)
-)
+
 
 
 
