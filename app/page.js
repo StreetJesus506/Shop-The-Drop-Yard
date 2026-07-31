@@ -385,7 +385,7 @@ width: '95vw',
 
       {/* Enter button */}
       <motion.button
-        onClick={() => openBrand(activeBrand)}
+        onClick={() => window.location.href = `/brands/${activeBrand.id}`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.97 }}
         style={{
