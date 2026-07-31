@@ -65,183 +65,105 @@ const brands = [
 
 function ShippingContainer({ brand, isActive, onClick }) {
   const mountRef = useRef(null)
-  const sceneRef = useRef(null)
-  const rendererRef = useRef(null)
   const animFrameRef = useRef(null)
-  const containerGroupRef = useRef(null)
-  const targetRotationRef = useRef({ y: 0.3 })
 
   useEffect(() => {
     const mount = mountRef.current
     if (!mount) return
 
-    const w = mount.clientWidth
-    const h = mount.clientHeight
+    const w = mount.offsetWidth
+    const h = mount.offsetHeight
 
-    // Scene
     const scene = new THREE.Scene()
-    sceneRef.current = scene
+    const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100)
+    camera.position.set(0, 0.3, 5)
+    camera.lookAt(0, 0, 0)
 
-    // Camera
-    const camera = new THREE.PerspectiveCamera(60, w / h, 0.1, 100)
-camera.position.set(0, 0, 6)
-camera.lookAt(0, 0, 0)
-
-
-    // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     renderer.setSize(w, h)
-    renderer.setPixelRatio(window.devicePixelRatio)
-    renderer.shadowMap.enabled = true
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     mount.appendChild(renderer.domElement)
-    rendererRef.current = renderer
 
     // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
-    scene.add(ambientLight)
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7))
+    const dir = new THREE.DirectionalLight(0xffffff, 1.2)
+    dir.position.set(3, 5, 5)
+    scene.add(dir)
+    const rim = new THREE.DirectionalLight(0xffffff, 0.3)
+    rim.position.set(-3, 0, -3)
+    scene.add(rim)
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2)
-    dirLight.position.set(5, 8, 5)
-    dirLight.castShadow = true
-    scene.add(dirLight)
-
-    const rimLight = new THREE.DirectionalLight(0xffffff, 0.4)
-    rimLight.position.set(-5, 2, -5)
-    scene.add(rimLight)
-
-    // Container group
     const group = new THREE.Group()
-    containerGroupRef.current = group
     scene.add(group)
 
-    // Main container body
-    const bodyGeo = new THREE.BoxGeometry(2.4, 1.0, 0.9)
     const bodyMat = new THREE.MeshStandardMaterial({
-      color: brand.containerColor,
-      roughness: 0.7,
-      metalness: 0.3,
+      color: brand.containerColor, roughness: 0.7, metalness: 0.3
     })
-    const body = new THREE.Mesh(bodyGeo, bodyMat)
-    body.castShadow = true
-    group.add(body)
-
-    // Corrugated panels (horizontal ribs)
-    const ribMat = new THREE.MeshStandardMaterial({
-      color: brand.trimColor,
-      roughness: 0.8,
-      metalness: 0.2,
+    const trimMat = new THREE.MeshStandardMaterial({
+      color: brand.trimColor, roughness: 0.6, metalness: 0.4
     })
+    const whiteMat = new THREE.MeshStandardMaterial({ color: 0xf4f1ea })
 
-    for (let i = -1.4; i <= 1.4; i += 0.28) {
-      const ribGeo = new THREE.BoxGeometry(2.42, 0.04, 0.92)
-      const rib = new THREE.Mesh(ribGeo, ribMat)
-      rib.position.y = i * 0.45
+    // Body
+    group.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(2.8, 1.2, 1.0), bodyMat)))
+
+    // Ribs
+    for (let i = -5; i <= 5; i++) {
+      const rib = new THREE.Mesh(new THREE.BoxGeometry(2.82, 0.035, 1.02), trimMat)
+      rib.position.y = i * 0.11
       group.add(rib)
     }
 
     // Corner posts
-    const postMat = new THREE.MeshStandardMaterial({
-      color: brand.trimColor,
-      roughness: 0.6,
-      metalness: 0.4,
-    })
-
-    const postPositions = [
-  [-1.22, 0, 0.47],
-  [1.22, 0, 0.47],
-  [-1.22, 0, -0.47],
-  [1.22, 0, -0.47],
-]
-
-
-    postPositions.forEach(([x, y, z]) => {
-      const postGeo = new THREE.BoxGeometry(0.08, 1.45, 0.08)
-      const post = new THREE.Mesh(postGeo, postMat)
-      post.position.set(x, y, z)
+    ;[[-1.41, 0.5], [1.41, 0.5], [-1.41, -0.5], [1.41, -0.5]].forEach(([x, z]) => {
+      const post = new THREE.Mesh(new THREE.BoxGeometry(0.07, 1.22, 0.07), trimMat)
+      post.position.set(x, 0, z)
       group.add(post)
     })
 
-    // Door details on front face
-    const doorMat = new THREE.MeshStandardMaterial({
-      color: brand.trimColor,
-      roughness: 0.7,
-      metalness: 0.3,
-    })
-
-    // Left door
-    const leftDoorGeo = new THREE.BoxGeometry(1.5, 1.35, 0.04)
-    const leftDoor = new THREE.Mesh(leftDoorGeo, doorMat)
-    leftDoor.position.set(-0.4, 0, 0.62)
-    group.add(leftDoor)
-
-    // Right door
-    const rightDoorGeo = new THREE.BoxGeometry(1.5, 1.35, 0.04)
-    const rightDoor = new THREE.Mesh(rightDoorGeo, doorMat)
-    rightDoor.position.set(0.82, 0, 0.62)
-    group.add(rightDoor)
-
-    // Door handle bar left
-    const handleGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.8)
-    const handleMat = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, metalness: 0.8, roughness: 0.2 })
-    const handleL = new THREE.Mesh(handleGeo, handleMat)
-    handleL.position.set(0.12, 0, 0.66)
-    handleL.rotation.x = Math.PI / 2
-    group.add(handleL)
-
-    const handleR = new THREE.Mesh(handleGeo, handleMat)
-    handleR.position.set(0.12, 0, 0.66)
-    handleR.rotation.x = Math.PI / 2
-    handleR.position.x = 0.12
-    group.add(handleR)
-
-    // Lot number text plane (colored stripe)
-    const stripeGeo = new THREE.BoxGeometry(3.22, 0.18, 0.02)
-    const stripeMat = new THREE.MeshStandardMaterial({ color: 0xf4f1ea, roughness: 1 })
-    const stripe = new THREE.Mesh(stripeGeo, stripeMat)
-    stripe.position.set(0, 0.55, 0.62)
+    // White stripe
+    const stripe = new THREE.Mesh(new THREE.BoxGeometry(2.82, 0.15, 0.02), whiteMat)
+    stripe.position.set(0, 0.45, 0.52)
     group.add(stripe)
 
-    // Initial rotation
-    group.rotation.y = 0.2
-group.rotation.x = -0.05
+    // Door outline
+    const door = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.1, 0.02), trimMat)
+    door.position.set(0, 0, 0.52)
+    group.add(door)
 
+    // Door center line
+    const line = new THREE.Mesh(new THREE.BoxGeometry(0.03, 1.1, 0.03), whiteMat)
+    line.position.set(0, 0, 0.54)
+    group.add(line)
 
-    // Animate
-    let hoverAngle = 0
+    group.rotation.y = 0.25
+    group.rotation.x = -0.06
+
+    let t = 0
     const animate = () => {
       animFrameRef.current = requestAnimationFrame(animate)
-      hoverAngle += 0.008
-      group.rotation.y = targetRotationRef.current.y + Math.sin(hoverAngle) * 0.04
-
-      if (isActive) {
-  targetRotationRef.current.y += (0.15 - targetRotationRef.current.y) * 0.05
-} else {
-  targetRotationRef.current.y += (0.2 - targetRotationRef.current.y) * 0.05
-}
-
-
+      t += 0.008
+      group.rotation.y = 0.25 + Math.sin(t) * 0.03
       renderer.render(scene, camera)
     }
     animate()
 
-    // Resize handler
-    const handleResize = () => {
-      if (!mount) return
-      const w = mount.clientWidth
-      const h = mount.clientHeight
+    const onResize = () => {
+      const w = mount.offsetWidth
+      const h = mount.offsetHeight
       camera.aspect = w / h
       camera.updateProjectionMatrix()
       renderer.setSize(w, h)
     }
-    window.addEventListener('resize', handleResize)
+    window.addEventListener('resize', onResize)
 
     return () => {
-      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('resize', onResize)
       cancelAnimationFrame(animFrameRef.current)
-      mount.removeChild(renderer.domElement)
+      if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement)
       renderer.dispose()
     }
-  }, [brand, isActive])
+  }, [brand])
 
   return (
     <div
