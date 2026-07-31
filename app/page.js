@@ -436,7 +436,7 @@ width: '95vw',
       <div style={{
         position: 'absolute', right: '28px', top: '50%',
         transform: 'translateY(-50%)',
-        display: 'none', flexDirection: 'column', gap: '10px', zIndex: 10,
+        display: 'flex', flexDirection: 'column', gap: '10px', zIndex: 10,
       }}>
         {brands.map((b, i) => (
           <button
