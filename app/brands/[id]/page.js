@@ -51,7 +51,8 @@ async function getProducts(shopId) {
       }
     )
     const data = await res.json()
-    return data.data || []
+    return (data.data || []).filter(p => p.visible === true)
+
   } catch (err) {
     return []
   }
