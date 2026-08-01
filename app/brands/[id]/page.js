@@ -120,7 +120,9 @@ export default async function BrandPage({ params }) {
         )}
         {products.map(product => {
           const image = product.images?.[0]?.src || null
-          const price = product.variants?.[0]?.price
+          const enabledVariant = product.variants?.find(v => v.is_enabled)
+const price = enabledVariant?.price
+
           const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
 
           return (
