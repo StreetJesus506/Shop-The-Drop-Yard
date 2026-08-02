@@ -71,49 +71,48 @@ if (!variants || variants.length === 0) return null
       )}
 
       {/* Size selector */}
-      {sizes.length > 0 && (
-        <div style={{ marginBottom: '28px' }}>
-          <p style={{
-            fontFamily: 'Space Mono, monospace', fontSize: '11px',
-            letterSpacing: '1px', marginBottom: '10px',
-            opacity: 0.6, textTransform: 'uppercase',
-          }}>
-            Size: <span style={{ color: style.accent }}>{selectedSize}</span>
-          </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-            {sizes.map(size => {
-              const available = variants.some(v => {
-  const parts = v.title.split(' / ')
-  const vSize = isSizeFirst ? parts[0] : (parts[1] || parts[0])
-  const vColor = isSizeFirst ? (parts[1] || 'Default') : parts[0]
-  if (colors.length <= 1) return vSize === size
-  return vSize === size && vColor === selectedColor
-})
+{sizes.length > 0 && (
+  <div style={{ marginBottom: '28px' }}>
+    <p style={{
+      fontFamily: 'Space Mono, monospace', fontSize: '11px',
+      letterSpacing: '1px', marginBottom: '10px',
+      opacity: 0.6, textTransform: 'uppercase',
+    }}>
+      Size: <span style={{ color: style.accent }}>{selectedSize}</span>
+    </p>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+      {sizes.map(size => {
+        const available = variants.some(v => {
+          const parts = v.title.split(' / ')
+          const vSize = isSizeFirst ? parts[0] : (parts[1] || parts[0])
+          const vColor = isSizeFirst ? (parts[1] || 'Default') : parts[0]
+          if (colors.length <= 1) return vSize === size
+          return vSize === size && vColor === selectedColor
+        })
+        return (
+          <button
+            key={size}
+            onClick={() => setSelectedSize(size)}
+            disabled={!available}
+            style={{
+              width: '52px', height: '52px',
+              background: selectedSize === size ? style.accent : 'transparent',
+              border: `1px solid ${selectedSize === size ? style.accent : available ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.08)'}`,
+              color: selectedSize === size ? '#1c1b19' : available ? style.text : 'rgba(255,255,255,0.2)',
+              cursor: available ? 'pointer' : 'not-allowed',
+              fontFamily: 'Space Mono, monospace',
+              fontSize: '11px',
+              transition: 'all 0.2s',
+            }}
+          >
+            {size}
+          </button>
+        )
+      })}
+    </div>
+  </div>
+)}
 
-              })
-              return (
-                <button
-                  key={size}
-                  onClick={() => setSelectedSize(size)}
-                  disabled={!available}
-                  style={{
-                    width: '52px', height: '52px',
-                    background: selectedSize === size ? style.accent : 'transparent',
-                    border: `1px solid ${selectedSize === size ? style.accent : available ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.08)'}`,
-                    color: selectedSize === size ? '#1c1b19' : available ? style.text : 'rgba(255,255,255,0.2)',
-                    cursor: available ? 'pointer' : 'not-allowed',
-                    fontFamily: 'Space Mono, monospace',
-                    fontSize: '11px',
-                    transition: 'all 0.2s',
-                  }}
-                >
-                  {size}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      )}
 
       {/* Price update */}
       {selectedVariant && (
