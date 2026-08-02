@@ -52,16 +52,30 @@ export default async function ProductPage({ params }) {
     return [color, { color, hex: null }]
   })).values()]
 
-  const sizeOrder = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
+  const sizeOrder = ['XS', 'S', 'S/M', 'M', 'M/L', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
+
+const normalizeSize = (s) => s
+  .replace('X-Small', 'XS')
+  .replace('Small', 'S')
+  .replace('Medium', 'M')
+  .replace('Large', 'L')
+  .replace('X-Large', 'XL')
+  .replace('2X-Large', '2XL')
+  .replace('3X-Large', '3XL')
+  .replace('4X-Large', '4XL')
+  .replace('5X-Large', '5XL')
+  .trim()
+
 const sizes = [...new Set(variants.map(v => v.title.split(' / ')[0]))]
   .sort((a, b) => {
-    const ai = sizeOrder.indexOf(a)
-    const bi = sizeOrder.indexOf(b)
+    const ai = sizeOrder.indexOf(normalizeSize(a))
+    const bi = sizeOrder.indexOf(normalizeSize(b))
     if (ai === -1 && bi === -1) return a.localeCompare(b)
     if (ai === -1) return 1
     if (bi === -1) return -1
     return ai - bi
   })
+
 
 
   const price = variants[0]?.price
