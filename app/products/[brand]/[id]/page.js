@@ -72,6 +72,7 @@ const normalizeSize = (s) => {
   const key = s.trim().toUpperCase()
   return SIZE_ALIASES[key] || key
 }
+const rawSizes = variants.map(v => v.title.split(' / ')[0])
 
 const sizes = [...new Set(variants.map(v => v.title.split(' / ')[0]))]
   .sort((a, b) => {
@@ -181,6 +182,12 @@ const sizes = [...new Set(variants.map(v => v.title.split(' / ')[0]))]
           }}>
             {formattedPrice}
           </p>
+<p style={{fontFamily: 'monospace', fontSize: '11px', color: 'red', marginBottom: '8px'}}>
+  RAW SIZES: {JSON.stringify(variants.map(v => v.title.split(' / ')[0]))}
+</p>
+
+{/* Description */}
+{product.description && (
 
           {/* Description */}
           {product.description && (
