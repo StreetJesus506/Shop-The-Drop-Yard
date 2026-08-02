@@ -186,8 +186,7 @@ const sizes = [...new Set(variants.map(v => v.title.split(' / ')[0]))]
   RAW SIZES: {JSON.stringify(variants.map(v => v.title.split(' / ')[0]))}
 </p>
 
-{/* Description */}
-{product.description && (
+
 
           {/* Description */}
           {product.description && (
