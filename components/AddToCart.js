@@ -8,6 +8,7 @@ export default function AddToCart({ product, variants, sizes, colors, style }) {
   const [selectedSize, setSelectedSize] = useState(sizes[0] || '')
   const [selectedColor, setSelectedColor] = useState(colors[0]?.color || '')
   const [added, setAdded] = useState(false)
+if (!variants || variants.length === 0) return null
 
   const selectedVariant = variants.find(v => {
   try {
