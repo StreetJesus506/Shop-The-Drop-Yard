@@ -7,18 +7,23 @@ export default function Cart() {
   const { items, removeItem, updateQuantity, total, isOpen, setIsOpen, clearCart } = useCart()
 
   const handleCheckout = async () => {
-    try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items }),
-      })
-      const data = await res.json()
-      if (data.url) window.location.href = data.url
-    } catch (err) {
-      console.error('Checkout error:', err)
+  try {
+    const res = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items }),
+    })
+    const data = await res.json()
+    if (data.url) {
+      window.location.href = data.url
+    } else {
+      alert('Checkout error: ' + JSON.stringify(data))
     }
+  } catch (err) {
+    alert('Checkout failed: ' + err.message)
   }
+}
+
 
   return (
     <>
