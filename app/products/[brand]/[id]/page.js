@@ -52,7 +52,7 @@ export default async function ProductPage({ params }) {
     return [color, { color, hex: null }]
   })).values()]
 
-  cconst sizeOrder = ['XS', 'S', 'S/M', 'M', 'M/L', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
+  const sizeOrder = ['XS', 'S', 'S/M', 'M', 'M/L', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
 
 const SIZE_ALIASES = {
   'X-SMALL': 'XS', 'XSMALL': 'XS', 'XS': 'XS',
