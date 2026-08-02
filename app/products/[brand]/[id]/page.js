@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import AddToCart from '@/components/AddToCart'
+import CartIcon from '@/components/CartIcon'
 
 const shopIds = {
   pro: process.env.PRINTIFY_SHOP_PRO,
@@ -114,15 +115,18 @@ const sizes = [...new Set(variants.map(v => {
         }}>
           ← {style.name}
         </a>
-        <a href="/" style={{
-          fontFamily: 'Big Shoulders Stencil, sans-serif',
-          fontSize: '14px', fontWeight: 700,
-          color: style.accent, textDecoration: 'none',
-          textTransform: 'uppercase',
-        }}>
-          THE DROP YARD
-        </a>
-      </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+  <a href="/" style={{
+    fontFamily: 'Big Shoulders Stencil, sans-serif',
+    fontSize: '14px', fontWeight: 700,
+    color: style.accent, textDecoration: 'none',
+    textTransform: 'uppercase',
+  }}>
+    THE DROP YARD
+  </a>
+  <CartIcon color={style.text} />
+</div>
+
 
       {/* Product */}
       <div style={{
