@@ -15,11 +15,13 @@ if (!variants || variants.length === 0) return null
     const parts = v.title.split(' / ')
     const size = isSizeFirst ? parts[0] : (parts[1] || parts[0])
     const color = isSizeFirst ? (parts[1] || 'Default') : parts[0]
+    if (colors.length <= 1) return size === selectedSize
     return size === selectedSize && color === selectedColor
   } catch {
     return false
   }
 }) || variants[0]
+
 
 
   const price = selectedVariant?.price
