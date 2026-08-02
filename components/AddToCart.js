@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useCart } from '@/lib/cartContext'
 
-export default function AddToCart({ product, variants, sizes, colors, style }) {
+export default function AddToCart({ product, variants, sizes, colors, style, isSizeFirst = true }) {
+
   const { addItem, setIsOpen } = useCart()
   const [selectedSize, setSelectedSize] = useState(sizes[0] || '')
   const [selectedColor, setSelectedColor] = useState(colors[0]?.color || '')
