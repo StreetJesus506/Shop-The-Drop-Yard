@@ -83,8 +83,13 @@ if (!variants || variants.length === 0) return null
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             {sizes.map(size => {
               const available = variants.some(v => {
-                const parts = v.title.split(' / ')
-                return parts[0] === size && (parts[1] || 'Default') === selectedColor
+  const parts = v.title.split(' / ')
+  const vSize = isSizeFirst ? parts[0] : (parts[1] || parts[0])
+  const vColor = isSizeFirst ? (parts[1] || 'Default') : parts[0]
+  if (colors.length <= 1) return vSize === size
+  return vSize === size && vColor === selectedColor
+})
+
               })
               return (
                 <button
