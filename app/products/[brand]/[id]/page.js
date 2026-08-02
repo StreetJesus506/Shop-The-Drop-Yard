@@ -211,13 +211,19 @@ const sizes = [...new Set(variants.map(v => {
 
           {/* Add to cart — client component */}
           <AddToCart
-  product={{...}}
+  product={{
+    id: product.id,
+    shopId,
+    title: product.title,
+    images: product.images,
+  }}
   variants={variants}
   sizes={sizes}
   colors={colors}
   style={style}
   isSizeFirst={isSizeFirst}
 />
+
 
         </div>
       </div>
