@@ -129,7 +129,7 @@ const price = enabledVariant?.price
           return (
             <a
               key={product.id}
-              href={`/products/${product.id}?shop=${brand.shopId}`}
+              href={`/products/${params.id}/${product.id}`}
               style={{ textDecoration: 'none', color: brand.text }}
             >
               <div style={{
