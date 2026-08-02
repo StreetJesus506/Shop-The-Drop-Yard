@@ -45,12 +45,17 @@ export default async function ProductPage({ params }) {
   // Parse variants into color and size groups
   const variants = product.variants?.filter(v => v.is_enabled) || []
   
-  const colors = [...new Map(variants.map(v => {
-    const parts = v.title.split(' / ')
-    const size = parts[0]
-    const color = parts[1] || 'Default'
-    return [color, { color, hex: null }]
-  })).values()]
+  // Detect variant format — check if first part looks like a size
+const firstPart = variants[0]?.title.split(' / ')[0] || ''
+const isSizeFirst = ['XS','S','M','L','XL','2XL','3XL','4XL','5XL',
+  'Small','Medium','Large','X-Large','2X-Large','3X-Large'].includes(firstPart)
+
+const colors = [...new Map(variants.map(v => {
+  const parts = v.title.split(' / ')
+  const color = isSizeFirst ? (parts[1] || 'Default') : parts[0]
+  return [color, { color, hex: null }]
+})).values()]
+
 
   const sizeOrder = ['XS', 'S', 'S/M', 'M', 'M/L', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
 
@@ -74,7 +79,11 @@ const normalizeSize = (s) => {
 }
 const rawSizes = variants.map(v => v.title.split(' / ')[0])
 
-const sizes = [...new Set(variants.map(v => v.title.split(' / ')[0]))]
+const sizes = [...new Set(variants.map(v => {
+  const parts = v.title.split(' / ')
+  return isSizeFirst ? parts[0] : (parts[1] || parts[0])
+}))]
+
   .sort((a, b) => {
     const ai = sizeOrder.indexOf(normalizeSize(a))
     const bi = sizeOrder.indexOf(normalizeSize(b))
@@ -202,17 +211,14 @@ const sizes = [...new Set(variants.map(v => v.title.split(' / ')[0]))]
 
           {/* Add to cart — client component */}
           <AddToCart
-            product={{
-              id: product.id,
-              shopId,
-              title: product.title,
-              images: product.images,
-            }}
-            variants={variants}
-            sizes={sizes}
-            colors={colors}
-            style={style}
-          />
+  product={{...}}
+  variants={variants}
+  sizes={sizes}
+  colors={colors}
+  style={style}
+  isSizeFirst={isSizeFirst}
+/>
+
         </div>
       </div>
     </main>
