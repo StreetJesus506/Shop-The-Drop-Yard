@@ -10,11 +10,16 @@ export default function AddToCart({ product, variants, sizes, colors, style }) {
   const [added, setAdded] = useState(false)
 
   const selectedVariant = variants.find(v => {
-  const parts = v.title.split(' / ')
-  const size = isSizeFirst ? parts[0] : (parts[1] || parts[0])
-  const color = isSizeFirst ? (parts[1] || 'Default') : parts[0]
-  return size === selectedSize && color === selectedColor
+  try {
+    const parts = v.title.split(' / ')
+    const size = isSizeFirst ? parts[0] : (parts[1] || parts[0])
+    const color = isSizeFirst ? (parts[1] || 'Default') : parts[0]
+    return size === selectedSize && color === selectedColor
+  } catch {
+    return false
+  }
 }) || variants[0]
+
 
   const price = selectedVariant?.price
   const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : ''
