@@ -191,9 +191,7 @@ const sizes = [...new Set(variants.map(v => {
           }}>
             {formattedPrice}
           </p>
-<p style={{fontFamily: 'monospace', fontSize: '11px', color: 'red', marginBottom: '8px'}}>
-  RAW SIZES: {JSON.stringify(variants.map(v => v.title.split(' / ')[0]))}
-</p>
+
 
 
 
