@@ -52,19 +52,26 @@ export default async function ProductPage({ params }) {
     return [color, { color, hex: null }]
   })).values()]
 
-  const sizeOrder = ['XS', 'S', 'S/M', 'M', 'M/L', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
+  cconst sizeOrder = ['XS', 'S', 'S/M', 'M', 'M/L', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
 
-const normalizeSize = (s) => s
-  .replace('X-Small', 'XS')
-  .replace('Small', 'S')
-  .replace('Medium', 'M')
-  .replace('Large', 'L')
-  .replace('X-Large', 'XL')
-  .replace('2X-Large', '2XL')
-  .replace('3X-Large', '3XL')
-  .replace('4X-Large', '4XL')
-  .replace('5X-Large', '5XL')
-  .trim()
+const SIZE_ALIASES = {
+  'X-SMALL': 'XS', 'XSMALL': 'XS', 'XS': 'XS',
+  'SMALL': 'S', 'S': 'S',
+  'S/M': 'S/M',
+  'MEDIUM': 'M', 'M': 'M',
+  'M/L': 'M/L',
+  'LARGE': 'L', 'L': 'L',
+  'X-LARGE': 'XL', 'XLARGE': 'XL', 'XL': 'XL',
+  '2X-LARGE': '2XL', '2XLARGE': '2XL', '2XL': '2XL', 'XXL': '2XL',
+  '3X-LARGE': '3XL', '3XLARGE': '3XL', '3XL': '3XL', 'XXXL': '3XL',
+  '4X-LARGE': '4XL', '4XLARGE': '4XL', '4XL': '4XL',
+  '5X-LARGE': '5XL', '5XLARGE': '5XL', '5XL': '5XL',
+}
+
+const normalizeSize = (s) => {
+  const key = s.trim().toUpperCase()
+  return SIZE_ALIASES[key] || key
+}
 
 const sizes = [...new Set(variants.map(v => v.title.split(' / ')[0]))]
   .sort((a, b) => {
