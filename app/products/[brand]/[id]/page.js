@@ -103,29 +103,31 @@ const sizes = [...new Set(variants.map(v => {
     <main style={{ minHeight: '100vh', background: style.bg, color: style.text }}>
       {/* Header */}
       <div style={{
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '18px 24px', borderBottom: '1px solid rgba(255,255,255,0.1)',
-      }}>
-        <a href={`/brands/${params.brand}`} style={{
-          fontFamily: 'Big Shoulders Stencil, sans-serif',
-          fontSize: '12px', letterSpacing: '1px',
-          border: `1px solid ${style.text}`,
-          color: style.text, padding: '8px 14px',
-          textDecoration: 'none', textTransform: 'uppercase',
-        }}>
-          ← {style.name}
-        </a>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-  <a href="/" style={{
+  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+  padding: '18px 24px', borderBottom: '1px solid rgba(255,255,255,0.1)',
+}}>
+  <a href={`/brands/${params.brand}`} style={{
     fontFamily: 'Big Shoulders Stencil, sans-serif',
-    fontSize: '14px', fontWeight: 700,
-    color: style.accent, textDecoration: 'none',
-    textTransform: 'uppercase',
+    fontSize: '12px', letterSpacing: '1px',
+    border: `1px solid ${style.text}`,
+    color: style.text, padding: '8px 14px',
+    textDecoration: 'none', textTransform: 'uppercase',
   }}>
-    THE DROP YARD
+    ← {style.name}
   </a>
-  <CartIcon color={style.text} />
+  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+    <a href="/" style={{
+      fontFamily: 'Big Shoulders Stencil, sans-serif',
+      fontSize: '14px', fontWeight: 700,
+      color: style.accent, textDecoration: 'none',
+      textTransform: 'uppercase',
+    }}>
+      THE DROP YARD
+    </a>
+    <CartIcon color={style.text} />
+  </div>
 </div>
+
 
 
       {/* Product */}
