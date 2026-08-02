@@ -37,7 +37,7 @@ if (!variants || variants.length === 0) return null
   return (
     <div>
       {/* Color selector */}
-      {colors.length > 1 && (
+      {colors.length >= 1 && (
         <div style={{ marginBottom: '20px' }}>
           <p style={{
             fontFamily: 'Space Mono, monospace', fontSize: '11px',
