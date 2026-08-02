@@ -45,6 +45,14 @@ export async function POST(req) {
           },
         },
       ],
+      metadata: {
+        items: JSON.stringify(items.map(item => ({
+          shopId: item.shopId,
+          productId: item.productId,
+          variantId: item.variantId,
+          quantity: item.quantity,
+        }))),
+      },
     })
 
     return Response.json({ url: session.url })
