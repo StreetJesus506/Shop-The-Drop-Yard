@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import CartIcon from '@/components/CartIcon'
 
 const brands = {
   pro: {
@@ -87,9 +88,8 @@ export default async function BrandPage({ params }) {
         }}>
           {brand.name}
         </span>
-        <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '11px', opacity: 0.5 }}>
-          THE DROP YARD
-        </span>
+        <CartIcon color={brand.text} />
+
       </div>
 
       {/* Hero */}
