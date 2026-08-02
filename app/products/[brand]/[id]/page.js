@@ -52,7 +52,17 @@ export default async function ProductPage({ params }) {
     return [color, { color, hex: null }]
   })).values()]
 
-  const sizes = [...new Set(variants.map(v => v.title.split(' / ')[0]))]
+  const sizeOrder = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
+const sizes = [...new Set(variants.map(v => v.title.split(' / ')[0]))]
+  .sort((a, b) => {
+    const ai = sizeOrder.indexOf(a)
+    const bi = sizeOrder.indexOf(b)
+    if (ai === -1 && bi === -1) return a.localeCompare(b)
+    if (ai === -1) return 1
+    if (bi === -1) return -1
+    return ai - bi
+  })
+
 
   const price = variants[0]?.price
   const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : ''
