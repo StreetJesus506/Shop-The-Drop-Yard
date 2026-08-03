@@ -69,6 +69,22 @@ logoTint: '#8a9e6a',
     trimColor: 0x2ee6d6,
     logo: null,
   },
+  {
+  id: 'streetjesus',
+  lot: '05',
+  name: 'Street Jesus Got Soul',
+  full: 'Street Jesus Got Soul',
+  ethos: 'DJ merch. Graffiti culture. Personal brand.',
+  tag: 'WHAT WOULD STREET JESUS DO',
+  stamp: 'IT WILL FUNK YOU UP',
+  accent: '#f4f1ea',
+  bg: '#0d0d0d',
+  text: '#e8e8e8',
+  containerColor: 0x2a2a2a,
+  trimColor: 0x555555,
+  logo: null,
+},
+
 ]
 
 function ShippingContainer({ brand, isActive, onClick }) {
