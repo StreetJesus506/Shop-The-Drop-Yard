@@ -8,6 +8,7 @@ const shopIds = {
   nudefarmer: process.env.PRINTIFY_SHOP_NUDEFARMER,
   unpopular: process.env.PRINTIFY_SHOP_UNPOPULAR,
   deadair: process.env.PRINTIFY_SHOP_DEADAIR,
+  streetjesus: process.env.PRINTIFY_SHOP_STREETJESUS,
 }
 
 const brandStyles = {
@@ -15,6 +16,7 @@ const brandStyles = {
   nudefarmer: { accent: '#8a9e6a', bg: '#0d0f0a', text: '#f1ead4', name: 'The Nude Farmer' },
   unpopular: { accent: '#c9a24a', bg: '#0b0b0b', text: '#ece4cf', name: 'Unpopular Demand' },
   deadair: { accent: '#2ee6d6', bg: '#08080f', text: '#dfe6f0', name: 'Dead Air' },
+  streetjesus: { accent: '#f4f1ea', bg: '#0d0d0d', text: '#e8e8e8', name: 'Street Jesus Got Soul' },
 }
 
 async function getProduct(shopId, productId) {
