@@ -101,7 +101,36 @@ const sizes = [...new Set(variants.map(v => {
 
   return (
     <main style={{ minHeight: '100vh', background: style.bg, color: style.text }}>
-      {/* Header */}
+     <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.title,
+      description: product.description?.replace(/<[^>]*>/g, '').slice(0, 160),
+      image: product.images?.[0]?.src,
+      brand: {
+        '@type': 'Brand',
+        name: style.name,
+      },
+      offers: {
+        '@type': 'Offer',
+        url: `https://shopthedropyard.com/products/${params.brand}/${params.id}`,
+        priceCurrency: 'USD',
+        price: (variants[0]?.price / 100).toFixed(2),
+        availability: 'https://schema.org/InStock',
+        seller: {
+          '@type': 'Organization',
+          name: 'The Drop Yard',
+        },
+      },
+    }),
+  }}
+/>
+
+
+{/* Header */}
       <div style={{
   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
   padding: '18px 24px', borderBottom: '1px solid rgba(255,255,255,0.1)',
