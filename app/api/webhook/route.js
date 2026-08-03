@@ -98,9 +98,11 @@ export async function POST(req) {
       )
     }
 
-  } catch (err) {
+    } catch (err) {
+    console.error('Webhook signature error:', err.message)
     return new Response(`Webhook Error: ${err.message}`, { status: 400 })
   }
+
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object
