@@ -153,7 +153,7 @@ const price = enabledVariant?.price
                 </p>
                 {formattedPrice && (
                   <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '13px', margin: 0, color: brand.accent }}>
-  {formattedPrice} <span style={{ fontSize: '10px', opacity: 0.6 }}>+ shipping</span>
+  {formattedPrice} 
 </p>
 
                 )}
