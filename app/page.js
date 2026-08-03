@@ -144,7 +144,6 @@ function ShippingContainer({ brand, isActive, onClick }) {
   opacity: 0.9,
   color: new THREE.Color(brand.logoTint || '#ffffff'),
 })
-,
     })
     const logoMesh = new THREE.Mesh(logoGeo, logoMat)
     logoMesh.position.set(0, 0, 0.53)
