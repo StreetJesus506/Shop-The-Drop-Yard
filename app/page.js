@@ -33,7 +33,9 @@ const brands = [
     text: '#f1ead4',
     containerColor: 0x46522f,
     trimColor: 0x8a9e6a,
-    logo: null,
+    logo: '/logos/Farmer-Logo.png',
+logoTint: '#8a9e6a',
+
   },
   {
     id: 'unpopular',
