@@ -90,14 +90,14 @@ export async function POST(req) {
       body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
-      if (event.type === 'checkout.session.completed') {
-  event.data.object = await stripe.checkout.sessions.retrieve(
-    event.data.object.id,
-    { expand: ['shipping_details', 'line_items'] }
-  )
-}
-
     )
+    if (event.type === 'checkout.session.completed') {
+      event.data.object = await stripe.checkout.sessions.retrieve(
+        event.data.object.id,
+        { expand: ['shipping_details', 'line_items'] }
+      )
+    }
+
   } catch (err) {
     return new Response(`Webhook Error: ${err.message}`, { status: 400 })
   }
