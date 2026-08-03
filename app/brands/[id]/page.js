@@ -38,6 +38,16 @@ const brands = {
     text: '#dfe6f0',
     shopId: process.env.PRINTIFY_SHOP_DEADAIR,
   },
+  streetjesus: {
+  name: 'Street Jesus Got Soul',
+  full: 'Street Jesus Got Soul',
+  ethos: '4 Elements Culture',
+  accent: '#f4f1ea',
+  bg: '#0d0d0d',
+  text: '#e8e8e8',
+  shopId: process.env.PRINTIFY_SHOP_STREETJESUS,
+},
+
 }
 
 export async function generateMetadata({ params }) {
