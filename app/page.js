@@ -40,7 +40,7 @@ const brands = [
     lot: '03',
     name: 'Unpopular Demand',
     full: 'Unpopular Demand',
-    ethos: 'Wearing what history tries to bury.',
+    ethos: 'What history tries to bury.',
     tag: 'ACAB',
     stamp: 'CIGS CORNER STORE',
     accent: '#c9a24a',
