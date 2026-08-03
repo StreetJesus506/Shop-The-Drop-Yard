@@ -153,10 +153,7 @@ function ShippingContainer({ brand, isActive, onClick }) {
     door.position.set(0, 0, 0.51)
     group.add(door)
 
-    // Door center line
-    const line = new THREE.Mesh(new THREE.BoxGeometry(0.03, 1.1, 0.03), whiteMat)
-    line.position.set(0, 0, 0.54)
-    group.add(line)
+   
 
     group.rotation.y = 0.25
 group.rotation.x = -0.06
