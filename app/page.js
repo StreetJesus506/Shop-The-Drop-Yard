@@ -49,6 +49,8 @@ const brands = [
     containerColor: 0x1a1a1a,
     trimColor: 0xc9a24a,
     logo: '/logos/Demand.png',
+    logoTint: '#c9a24a',
+
   },
   {
     id: 'deadair',
@@ -137,9 +139,12 @@ function ShippingContainer({ brand, isActive, onClick }) {
     const logoHeight = logoWidth / aspect
     const logoGeo = new THREE.PlaneGeometry(logoWidth, logoHeight)
     const logoMat = new THREE.MeshBasicMaterial({
-      map: texture,
-      transparent: true,
-      opacity: 0.9,
+  map: texture,
+  transparent: true,
+  opacity: 0.9,
+  color: new THREE.Color(brand.logoTint || '#ffffff'),
+})
+,
     })
     const logoMesh = new THREE.Mesh(logoGeo, logoMat)
     logoMesh.position.set(0, 0, 0.53)
