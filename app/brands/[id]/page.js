@@ -32,7 +32,7 @@ const brands = {
   deadair: {
     name: 'Dead Air Vintage',
     full: 'Dead Air Vintage',
-    ethos: 'Cult cinema. Retro pop culture. Channel surf style, rerun energy.',
+    ethos: 'Cult cinema. Retro pop culture. Channel surf style. Rerun energy.',
     accent: '#2ee6d6',
     bg: '#08080f',
     text: '#dfe6f0',
