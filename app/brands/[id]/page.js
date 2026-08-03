@@ -23,7 +23,7 @@ const brands = {
   unpopular: {
     name: 'Unpopular Demand',
     full: 'Unpopular Demand',
-    ethos: 'Wearing what history tries to bury.',
+    ethos: 'What history tries to bury.',
     accent: '#c9a24a',
     bg: '#0b0b0b',
     text: '#ece4cf',
