@@ -39,18 +39,30 @@ export async function POST(req) {
 },
 
       shipping_options: [
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: { amount: 0, currency: 'usd' },
-            display_name: 'Standard Shipping',
-            delivery_estimate: {
-              minimum: { unit: 'business_day', value: 5 },
-              maximum: { unit: 'business_day', value: 10 },
-            },
-          },
-        },
-      ],
+  {
+    shipping_rate_data: {
+      type: 'fixed_amount',
+      fixed_amount: { amount: 599, currency: 'usd' },
+      display_name: 'US Standard Shipping',
+      delivery_estimate: {
+        minimum: { unit: 'business_day', value: 5 },
+        maximum: { unit: 'business_day', value: 10 },
+      },
+    },
+  },
+  {
+    shipping_rate_data: {
+      type: 'fixed_amount',
+      fixed_amount: { amount: 1499, currency: 'usd' },
+      display_name: 'International Shipping',
+      delivery_estimate: {
+        minimum: { unit: 'business_day', value: 10 },
+        maximum: { unit: 'business_day', value: 21 },
+      },
+    },
+  },
+],
+
       metadata: {
         items: JSON.stringify(items.map(item => ({
           shopId: item.shopId,
