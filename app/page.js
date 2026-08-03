@@ -18,6 +18,7 @@ const brands = [
     text: '#f3e9e2',
     containerColor: 0xb01e28,
     trimColor: 0x8e1620,
+    logo: '/logos/Logo-Red.png',
   },
   {
     id: 'nudefarmer',
@@ -32,6 +33,7 @@ const brands = [
     text: '#f1ead4',
     containerColor: 0x46522f,
     trimColor: 0x8a9e6a,
+    logo: null,
   },
   {
     id: 'unpopular',
@@ -46,12 +48,13 @@ const brands = [
     text: '#ece4cf',
     containerColor: 0x1a1a1a,
     trimColor: 0xc9a24a,
+    logo: '/logos/Demand.png',
   },
   {
     id: 'deadair',
     lot: '04',
-    name: 'Dead Air',
-    full: 'Dead Air',
+    name: 'Dead Air Vintage',
+    full: 'Dead Air Vintage',
     ethos: 'Cult cinema. Retro pop culture. Channel surf style, rerun energy.',
     tag: 'BE KIND REWIND',
     stamp: 'HANDLE W/ CARE',
@@ -60,6 +63,7 @@ const brands = [
     text: '#dfe6f0',
     containerColor: 0x11111c,
     trimColor: 0x2ee6d6,
+    logo: null,
   },
 ]
 
@@ -93,6 +97,7 @@ function ShippingContainer({ brand, isActive, onClick }) {
     rim.position.set(-3, 0, -3)
     scene.add(rim)
 
+    const textureLoader = new THREE.TextureLoader()
     const group = new THREE.Group()
     scene.add(group)
 
@@ -125,6 +130,23 @@ function ShippingContainer({ brand, isActive, onClick }) {
     const stripe = new THREE.Mesh(new THREE.BoxGeometry(2.82, 0.15, 0.02), whiteMat)
     stripe.position.set(0, 0.45, 0.55)
     group.add(stripe)
+    if (brand.logo) {
+  textureLoader.load(brand.logo, (texture) => {
+    const aspect = texture.image.width / texture.image.height
+    const logoWidth = 1.2
+    const logoHeight = logoWidth / aspect
+    const logoGeo = new THREE.PlaneGeometry(logoWidth, logoHeight)
+    const logoMat = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      opacity: 0.9,
+    })
+    const logoMesh = new THREE.Mesh(logoGeo, logoMat)
+    logoMesh.position.set(0, 0, 0.53)
+    group.add(logoMesh)
+  })
+}
+
 
     // Door outline
     const door = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.1, 0.02), trimMat)
