@@ -41,34 +41,28 @@ const brands = {
 }
 
 export async function generateMetadata({ params }) {
-  const shopId = shopIds[params.brand]
-  const style = brandStyles[params.brand]
-  if (!shopId || !style) return {}
-
-  const product = await getProduct(shopId, params.id)
-  if (!product) return {}
-
-  const image = product.images?.[0]?.src
+  const brand = brands[params.id]
+  if (!brand) return {}
 
   return {
-    title: `${product.title} | ${style.name} | The Drop Yard`,
-    description: product.description?.replace(/<[^>]*>/g, '').slice(0, 160),
+    title: `${brand.name} | The Drop Yard`,
+    description: brand.ethos,
+    keywords: `${brand.name}, streetwear, clothing, independent brand, The Drop Yard`,
     openGraph: {
-      title: `${product.title} | ${style.name}`,
-      description: product.description?.replace(/<[^>]*>/g, '').slice(0, 160),
-      url: `https://shopthedropyard.com/products/${params.brand}/${params.id}`,
+      title: `${brand.name} | The Drop Yard`,
+      description: brand.ethos,
+      url: `https://shopthedropyard.com/brands/${params.id}`,
       siteName: 'The Drop Yard',
       type: 'website',
-      images: image ? [{ url: image }] : [],
     },
     twitter: {
-      card: 'summary_large_image',
-      title: `${product.title} | ${style.name}`,
-      description: product.description?.replace(/<[^>]*>/g, '').slice(0, 160),
-      images: image ? [image] : [],
+      card: 'summary',
+      title: `${brand.name} | The Drop Yard`,
+      description: brand.ethos,
     },
   }
 }
+
 
 async function getProducts(shopId) {
   try {
