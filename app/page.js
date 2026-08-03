@@ -344,7 +344,7 @@ export default function Home() {
         </div>
         <div style={{ textAlign: 'right' }}>
           <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#6b6b63', margin: 0 }}>
-            LOT {activeBrand.lot} / 04
+            LOT {activeBrand.lot} / 05
           </p>
           <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#6b6b63', margin: '4px 0 0' }}>
             {activeBrand.stamp}
