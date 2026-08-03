@@ -30,8 +30,8 @@ const brands = {
     shopId: process.env.PRINTIFY_SHOP_UNPOPULAR,
   },
   deadair: {
-    name: 'Dead Air',
-    full: 'Dead Air',
+    name: 'Dead Air Cult Classics',
+    full: 'Dead Air Cult Classics',
     ethos: 'Cult cinema. Retro pop culture. Channel surf style, rerun energy.',
     accent: '#2ee6d6',
     bg: '#08080f',
@@ -153,8 +153,9 @@ const price = enabledVariant?.price
                 </p>
                 {formattedPrice && (
                   <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '13px', margin: 0, color: brand.accent }}>
-                    {formattedPrice}
-                  </p>
+  {formattedPrice} <span style={{ fontSize: '10px', opacity: 0.6 }}>+ shipping</span>
+</p>
+
                 )}
               </div>
             </a>
