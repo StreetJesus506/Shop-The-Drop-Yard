@@ -1,4 +1,5 @@
 import Stripe from 'stripe'
+import ClearCart from '@/components/ClearCart'
 
 async function getSession(sessionId) {
   try {
@@ -158,7 +159,8 @@ export default async function OrderConfirmation({ searchParams }) {
             </a>
           </>
         )}
-      </div>
+            </div>
+      <ClearCart />
     </main>
   )
 }
