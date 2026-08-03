@@ -107,6 +107,16 @@ export default async function BrandPage({ params }) {
           {brand.ethos}
         </p>
       </div>
+          
+<p style={{
+        maxWidth: '1180px', margin: '0 auto 16px',
+        padding: '0 24px',
+        fontFamily: 'Space Mono, monospace',
+        fontSize: '11px', color: '#6b6b63',
+        letterSpacing: '1px',
+      }}>
+        PRICES DO NOT INCLUDE SHIPPING — CALCULATED AT CHECKOUT
+      </p>
 
       {/* Products */}
       <div style={{
