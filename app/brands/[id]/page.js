@@ -30,8 +30,8 @@ const brands = {
     shopId: process.env.PRINTIFY_SHOP_UNPOPULAR,
   },
   deadair: {
-    name: 'Dead Air Cult Classics',
-    full: 'Dead Air Cult Classics',
+    name: 'Dead Air Vintage',
+    full: 'Dead Air Vintage',
     ethos: 'Cult cinema. Retro pop culture. Channel surf style, rerun energy.',
     accent: '#2ee6d6',
     bg: '#08080f',
