@@ -30,8 +30,14 @@ export async function POST(req) {
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/order-confirmation?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
       shipping_address_collection: {
-        allowed_countries: ['US'],
-      },
+  allowed_countries: [
+    'US', 'GB', 'CA', 'AU', 'DE', 'FR', 'IT', 'ES', 'NL', 
+    'SE', 'NO', 'DK', 'FI', 'BE', 'AT', 'CH', 'NZ', 'JP',
+    'SG', 'IE', 'PT', 'PL', 'CZ', 'HU', 'RO', 'GR', 'MX',
+    'BR', 'ZA', 'IN', 'KR',
+  ],
+},
+
       shipping_options: [
         {
           shipping_rate_data: {
