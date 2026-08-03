@@ -92,11 +92,12 @@ export async function POST(req) {
       process.env.STRIPE_WEBHOOK_SECRET
     )
     if (event.type === 'checkout.session.completed') {
-      event.data.object = await stripe.checkout.sessions.retrieve(
-        event.data.object.id,
-        { expand: ['shipping_details', 'line_items'] }
-      )
-    }
+  event.data.object = await stripe.checkout.sessions.retrieve(
+    event.data.object.id,
+    { expand: ['line_items'] }
+  )
+}
+
 
     } catch (err) {
     console.error('Webhook signature error:', err.message)
