@@ -78,7 +78,7 @@ if (items.length === 0) return
 
 export async function POST(req) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-  const resend = new Resend(process.env.RESEND_API_KEY)
+
 
   const body = await req.text()
   const sig = req.headers.get('stripe-signature')
@@ -114,7 +114,9 @@ export async function POST(req) {
     const amount = (session.amount_total / 100).toFixed(2)
     const currency = session.currency.toUpperCase()
 
-    await resend.emails.send({
+    const resend = new Resend(process.env.RESEND_API_KEY)
+await resend.emails.send({
+
       from: 'onboarding@resend.dev',
       to: process.env.NOTIFICATION_EMAIL,
       subject: `💰 New Sale — $${amount} ${currency}`,
