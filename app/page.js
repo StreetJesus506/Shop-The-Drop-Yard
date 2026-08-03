@@ -82,7 +82,8 @@ logoTint: '#8a9e6a',
   text: '#e8e8e8',
   containerColor: 0x2a2a2a,
   trimColor: 0x555555,
-  logo: null,
+  logo: '/logos/Swiss-Throwie.png',
+
 },
 
 ]
