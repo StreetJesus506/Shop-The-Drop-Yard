@@ -7,7 +7,11 @@ export const dynamic = 'force-dynamic'
 async function createPrintifyOrder(session) {
   try {
     const items = JSON.parse(session.metadata?.items || '[]')
-    if (items.length === 0) return
+console.log('Printify order items:', JSON.stringify(items))
+console.log('Shipping details:', JSON.stringify(session.shipping_details))
+console.log('Customer details:', JSON.stringify(session.customer_details))
+if (items.length === 0) return
+
 
     // Group items by shop
     const byShop = {}
@@ -86,6 +90,13 @@ export async function POST(req) {
       body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
+      if (event.type === 'checkout.session.completed') {
+  event.data.object = await stripe.checkout.sessions.retrieve(
+    event.data.object.id,
+    { expand: ['shipping_details', 'line_items'] }
+  )
+}
+
     )
   } catch (err) {
     return new Response(`Webhook Error: ${err.message}`, { status: 400 })
