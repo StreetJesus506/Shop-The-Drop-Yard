@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import AddToCart from '@/components/AddToCart'
 import CartIcon from '@/components/CartIcon'
+import ImageGallery from '@/components/ImageGallery'
 
 const shopIds = {
   pro: process.env.PRINTIFY_SHOP_PRO,
@@ -168,39 +169,8 @@ const sizes = [...new Set(variants.map(v => {
         gap: '48px',
       }}>
         {/* Images */}
-        <div>
-          {/* Main image */}
-          <div style={{
-            aspectRatio: '4/5', background: 'rgba(255,255,255,0.05)',
-            marginBottom: '12px', overflow: 'hidden',
-          }}>
-            {uniqueImages[0] && (
-              <img
-                src={uniqueImages[0].src}
-                alt={product.title}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            )}
-          </div>
-          {/* Thumbnail row */}
-          {uniqueImages.length > 1 && (
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              {uniqueImages.slice(1).map((img, i) => (
-                <div key={i} style={{
-                  width: '72px', height: '72px',
-                  background: 'rgba(255,255,255,0.05)',
-                  overflow: 'hidden', flexShrink: 0,
-                }}>
-                  <img
-                    src={img.src}
-                    alt={`${product.title} ${i + 2}`}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+<ImageGallery images={uniqueImages} title={product.title} />
+
 
         {/* Info + Add to cart */}
         <div>
