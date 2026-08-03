@@ -139,18 +139,16 @@ function ShippingContainer({ brand, isActive, onClick }) {
     const logoHeight = logoWidth / aspect
     const logoGeo = new THREE.PlaneGeometry(logoWidth, logoHeight)
     const logoMat = new THREE.MeshBasicMaterial({
-  map: texture,
-  transparent: true,
-  opacity: 0.9,
-  color: new THREE.Color(brand.logoTint || '#ffffff'),
-})
+      map: texture,
+      transparent: true,
+      opacity: 0.9,
+      color: new THREE.Color(brand.logoTint || '#ffffff'),
     })
     const logoMesh = new THREE.Mesh(logoGeo, logoMat)
     logoMesh.position.set(0, 0, 0.53)
     group.add(logoMesh)
   })
 }
-
 
     // Door outline
     const door = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.1, 0.02), trimMat)
