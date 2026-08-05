@@ -342,6 +342,15 @@ export default function Home() {
           <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#6b6b63', marginTop: '6px' }}>
             EST. 2026
           </p>
+              <a href="/about" style={{
+  fontFamily: 'Space Mono, monospace',
+  fontSize: '10px', color: '#6b6b63',
+  textDecoration: 'none', letterSpacing: '1px',
+  marginTop: '6px', display: 'block',
+}}>
+  ABOUT / CONTACT
+</a>
+
         </div>
         <div style={{ textAlign: 'right' }}>
           <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#6b6b63', margin: 0 }}>
