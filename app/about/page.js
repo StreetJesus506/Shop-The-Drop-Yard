@@ -1,4 +1,5 @@
 import CartIcon from '@/components/CartIcon'
+import ContactForm from '@/components/ContactForm'
 
 export const metadata = {
   title: 'About | The Drop Yard',
@@ -141,16 +142,18 @@ export default function AboutPage() {
             Drop us a line.
           </p>
 
-                    <div>
-            <p style={{
-              fontFamily: 'Space Mono, monospace', fontSize: '13px',
-              color: '#6b6b63', marginBottom: '24px',
-            }}>
-              OR EMAIL US DIRECTLY AT{' '}
-              <a href="mailto:contact@shopthedropyard.com" style={{ color: '#ff5a1f' }}>
-                CONTACT@SHOPTHEDROPYARD.COM
-              </a>
-            </p>
+                              <ContactForm />
+
+          <p style={{
+            fontFamily: 'Space Mono, monospace', fontSize: '12px',
+            color: '#6b6b63', marginTop: '24px',
+          }}>
+            OR EMAIL US DIRECTLY AT{' '}
+            <a href="mailto:contact@shopthedropyard.com" style={{ color: '#ff5a1f' }}>
+              CONTACT@SHOPTHEDROPYARD.COM
+            </a>
+          </p>
+
           </div>
         </section>
 
