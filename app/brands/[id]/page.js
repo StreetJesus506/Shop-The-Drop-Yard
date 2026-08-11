@@ -76,17 +76,34 @@ export async function generateMetadata({ params }) {
 
 async function getProducts(shopId) {
   try {
-    const res = await fetch(
-      `https://api.printify.com/v1/shops/${shopId}/products.json?limit=50`,
-      {
-        headers: {
-          'Authorization': `Bearer ${process.env.PRINTIFY_API_KEY}`,
-        },
-        next: { revalidate: 0 },
-      }
+    let allProducts = []
+    let page = 1
+    let hasMore = true
+
+    while (hasMore) {
+      const res = await fetch(
+        `https://api.printify.com/v1/shops/${shopId}/products.json?limit=50&page=${page}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${process.env.PRINTIFY_API_KEY}`,
+          },
+          next: { revalidate: 300 },
+        }
       )
-    const data = await res.json()
-return (data.data || []).filter(p => p.visible === true).sort((a, b) => a.title.localeCompare(b.title))
+      const data = await res.json()
+      const products = data.data || []
+      allProducts = [...allProducts, ...products]
+      
+      if (products.length < 50) {
+        hasMore = false
+      } else {
+        page++
+      }
+    }
+
+    return allProducts
+      .filter(p => p.visible === true)
+      .sort((a, b) => a.title.localeCompare(b.title))
 
   } catch (err) {
     return []
