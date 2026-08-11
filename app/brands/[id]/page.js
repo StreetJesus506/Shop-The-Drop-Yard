@@ -84,10 +84,9 @@ async function getProducts(shopId) {
         },
         next: { revalidate: 0 },
       }
-    )
     const data = await res.json()
-    return (data.data || []).filter(p => p.visible === true).sort((a, b) => a.title.localeCompare(b.title))
-
+console.log('Printify response:', JSON.stringify(data).slice(0, 500))
+return (data.data || []).filter(p => p.visible === true).sort((a, b) => a.title.localeCompare(b.title))
 
   } catch (err) {
     return []
