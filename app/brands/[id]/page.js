@@ -77,7 +77,7 @@ export async function generateMetadata({ params }) {
 async function getProducts(shopId) {
   try {
     const res = await fetch(
-      `https://api.printify.com/v1/shops/${shopId}/products.json?limit=20`,
+      `https://api.printify.com/v1/shops/${shopId}/products.json?limit=100`,
       {
         headers: {
           'Authorization': `Bearer ${process.env.PRINTIFY_API_KEY}`,
