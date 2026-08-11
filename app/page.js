@@ -386,7 +386,7 @@ width: '95vw',
           <ShippingContainer
             brand={activeBrand}
             isActive={true}
-            onClick={() => openBrand(activeBrand)}
+            onClick={() => window.location.href = `/brands/${activeBrand.id}`}
           />
         </motion.div>
       </AnimatePresence>
