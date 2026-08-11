@@ -77,7 +77,7 @@ export async function generateMetadata({ params }) {
 async function getProducts(shopId) {
   try {
     const res = await fetch(
-      `https://api.printify.com/v1/shops/${shopId}/products.json?limit=100`,
+      `https://api.printify.com/v1/shops/${shopId}/products.json?limit=50`,
       {
         headers: {
           'Authorization': `Bearer ${process.env.PRINTIFY_API_KEY}`,
@@ -86,7 +86,6 @@ async function getProducts(shopId) {
       }
       )
     const data = await res.json()
-console.log('Printify response:', JSON.stringify(data).slice(0, 500))
 return (data.data || []).filter(p => p.visible === true).sort((a, b) => a.title.localeCompare(b.title))
 
   } catch (err) {
