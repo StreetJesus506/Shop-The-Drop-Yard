@@ -82,7 +82,7 @@ async function getProducts(shopId) {
         headers: {
           'Authorization': `Bearer ${process.env.PRINTIFY_API_KEY}`,
         },
-        next: { revalidate: 300 },
+        next: { revalidate: 0 },
       }
     )
     const data = await res.json()
