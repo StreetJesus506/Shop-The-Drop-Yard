@@ -282,9 +282,8 @@ const handleTouchEnd = (e) => {
 }
 
     window.addEventListener('wheel', handleWheel, { passive: false })
-    window.addEventListener('touchstart', handleTouchStart, { passive: true })
-    window.addEventListener('touchend', handleTouchEnd, { passive: true })
-
+    window.addEventListener('touchstart', handleTouchStart, { passive: false })
+window.addEventListener('touchend', handleTouchEnd, { passive: false })
     return () => {
       window.removeEventListener('wheel', handleWheel)
       window.removeEventListener('touchstart', handleTouchStart)
@@ -483,10 +482,10 @@ width: '95vw',
 
       {/* Dot indicators */}
       <div style={{
-        position: 'absolute', left: '18px', top: '50%',
-        transform: 'translateY(-50%)',
-        display: 'flex', flexDirection: 'column', gap: '10px', zIndex: 10,
-      }}>
+        position: 'absolute', bottom: '100px', left: '50%',
+  transform: 'translateX(-50%)',
+  display: 'flex', flexDirection: 'row', gap: '10px', zIndex: 10,
+}}}>
         {brands.map((b, i) => (
           <button
             key={b.id}
