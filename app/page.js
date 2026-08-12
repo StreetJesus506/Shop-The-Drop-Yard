@@ -485,7 +485,7 @@ width: '95vw',
         position: 'absolute', bottom: '100px', left: '50%',
   transform: 'translateX(-50%)',
   display: 'flex', flexDirection: 'row', gap: '10px', zIndex: 10,
-}}}>
+}}>
         {brands.map((b, i) => (
           <button
             key={b.id}
