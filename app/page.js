@@ -278,7 +278,7 @@ const handleTouchEnd = (e) => {
     if (diff > 0) goToNext()
     else goToPrev()
   }
-  startYRef.current = null
+  const startYRef = useRef(null) // now tracks X for horizontal swipe
 }
 
     window.addEventListener('wheel', handleWheel, { passive: false })
