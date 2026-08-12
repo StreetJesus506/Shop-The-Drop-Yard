@@ -259,31 +259,32 @@ export default function Home() {
     let lastScroll = 0
 
     const handleWheel = (e) => {
-  e.preventDefault()
-  const now = Date.now()
-  if (now - lastScroll < 800) return
-  lastScroll = now
-  if (e.deltaX > 0 || e.deltaY > 0) goToNext()
-  else goToPrev()
-}
+      e.preventDefault()
+      const now = Date.now()
+      if (now - lastScroll < 800) return
+      lastScroll = now
+      if (e.deltaX > 0 || e.deltaY > 0) goToNext()
+      else goToPrev()
+    }
 
     const handleTouchStart = (e) => {
-  startYRef.current = e.touches[0].clientX
-}
+      startYRef.current = e.touches[0].clientX
+    }
 
-const handleTouchEnd = (e) => {
-  if (startYRef.current === null) return
-  const diff = startYRef.current - e.changedTouches[0].clientX
-  if (Math.abs(diff) > 50) {
-    if (diff > 0) goToNext()
-    else goToPrev()
-  }
-  const startYRef = useRef(null) // now tracks X for horizontal swipe
-}
+    const handleTouchEnd = (e) => {
+      if (startYRef.current === null) return
+      const diff = startYRef.current - e.changedTouches[0].clientX
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) goToNext()
+        else goToPrev()
+      }
+      startYRef.current = null
+    }
 
     window.addEventListener('wheel', handleWheel, { passive: false })
     window.addEventListener('touchstart', handleTouchStart, { passive: false })
-window.addEventListener('touchend', handleTouchEnd, { passive: false })
+    window.addEventListener('touchend', handleTouchEnd, { passive: false })
+
     return () => {
       window.removeEventListener('wheel', handleWheel)
       window.removeEventListener('touchstart', handleTouchStart)
