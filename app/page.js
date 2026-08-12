@@ -453,10 +453,11 @@ width: '95vw',
       </motion.button>
 
       {/* Nav arrows */}
-      <div style={{
-        position: 'absolute', bottom: '40px', right: '28px',
-        display: 'flex', gap: '12px', zIndex: 10,
-      }}>
+<div style={{
+  position: 'absolute', left: '18px', top: '50%',
+  transform: 'translateY(-50%)',
+  display: 'flex', flexDirection: 'column', gap: '12px', zIndex: 10,
+}}>
         <button
           onClick={goToPrev}
           style={{
