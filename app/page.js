@@ -268,18 +268,18 @@ export default function Home() {
 }
 
     const handleTouchStart = (e) => {
-      startYRef.current = e.touches[0].clientY
-    }
+  startYRef.current = e.touches[0].clientX
+}
 
-    const handleTouchEnd = (e) => {
-      if (startYRef.current === null) return
-      const diff = startYRef.current - e.changedTouches[0].clientY
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) goToNext()
-        else goToPrev()
-      }
-      startYRef.current = null
-    }
+const handleTouchEnd = (e) => {
+  if (startYRef.current === null) return
+  const diff = startYRef.current - e.changedTouches[0].clientX
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) goToNext()
+    else goToPrev()
+  }
+  startYRef.current = null
+}
 
     window.addEventListener('wheel', handleWheel, { passive: false })
     window.addEventListener('touchstart', handleTouchStart, { passive: true })
