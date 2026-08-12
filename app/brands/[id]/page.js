@@ -219,59 +219,86 @@ const groupedProducts = categorizeProducts(products)
         PRICES DO NOT INCLUDE SHIPPING — CALCULATED AT CHECKOUT
       </p>
 
-      {/* Products */}
-      <div style={{
-        maxWidth: '1180px', margin: '0 auto', padding: '0 24px 80px',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-        gap: '28px',
-      }}>
+      {/* Products by category */}
+      <div style={{ maxWidth: '1180px', margin: '0 auto', padding: '0 24px 80px' }}>
         {products.length === 0 && (
           <p style={{ opacity: 0.5, fontFamily: 'Space Mono, monospace', fontSize: '13px' }}>
             No products found. Make sure products are published in Printify.
           </p>
         )}
-        {products.map(product => {
-          const image = product.images?.[0]?.src || null
-          const enabledVariant = product.variants?.find(v => v.is_enabled)
-const price = enabledVariant?.price
-
-          const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
-
-          return (
-            <a
-              key={product.id}
-              href={`/products/${params.id}/${product.id}`}
-              style={{ textDecoration: 'none', color: brand.text }}
-            >
-              <div style={{
-                aspectRatio: '4/5',
-                background: 'rgba(255,255,255,0.05)',
-                marginBottom: '12px',
-                overflow: 'hidden',
+        {CATEGORY_ORDER.filter(cat => groupedProducts[cat]).map(category => (
+          <div key={category} style={{ marginBottom: '48px' }}>
+            {/* Category header */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '16px',
+              marginBottom: '24px',
+              borderBottom: `1px solid ${brand.accent}33`,
+              paddingBottom: '12px',
+            }}>
+              <h2 style={{
+                fontFamily: 'Big Shoulders Stencil, sans-serif',
+                fontSize: '20px', fontWeight: 700,
+                textTransform: 'uppercase', letterSpacing: '2px',
+                color: brand.accent, margin: 0,
               }}>
-                {image && (
-                  <img
-                    src={image}
-                    alt={product.title}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                )}
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <p style={{ fontFamily: 'Work Sans, sans-serif', fontSize: '14px', margin: 0, maxWidth: '75%' }}>
-                  {product.title}
-                </p>
-                {formattedPrice && (
-                  <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '13px', margin: 0, color: brand.accent }}>
-  {formattedPrice} 
-</p>
+                {category}
+              </h2>
+              <span style={{
+                fontFamily: 'Space Mono, monospace',
+                fontSize: '11px', color: '#6b6b63',
+              }}>
+                {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
+              </span>
+            </div>
 
-                )}
-              </div>
-            </a>
-          )
-        })}
+            {/* Product grid */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+              gap: '28px',
+            }}>
+              {groupedProducts[category].map(product => {
+                const image = product.images?.[0]?.src || null
+                const enabledVariant = product.variants?.find(v => v.is_enabled)
+                const price = enabledVariant?.price
+                const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
+
+                return (
+                  <a
+                    key={product.id}
+                    href={`/products/${params.id}/${product.id}`}
+                    style={{ textDecoration: 'none', color: brand.text }}
+                  >
+                    <div style={{
+                      aspectRatio: '4/5',
+                      background: 'rgba(255,255,255,0.05)',
+                      marginBottom: '12px',
+                      overflow: 'hidden',
+                    }}>
+                      {image && (
+                        <img
+                          src={image}
+                          alt={product.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <p style={{ fontFamily: 'Work Sans, sans-serif', fontSize: '14px', margin: 0, maxWidth: '75%' }}>
+                        {product.title}
+                      </p>
+                      {formattedPrice && (
+                        <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '13px', margin: 0, color: brand.accent }}>
+                          {formattedPrice}
+                        </p>
+                      )}
+                    </div>
+                  </a>
+                )
+              })}
+            </div>
+          </div>
+        ))}
       </div>
     </main>
   )
