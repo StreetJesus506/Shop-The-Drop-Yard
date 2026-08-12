@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import CartIcon from '@/components/CartIcon'
+import CategoryBar from '@/components/CategoryBar'
 
 const brands = {
   pro: {
@@ -222,15 +223,27 @@ const groupedProducts = categorizeProducts(products)
         PRICES DO NOT INCLUDE SHIPPING — CALCULATED AT CHECKOUT
       </p>
 
-      {/* Products by category */}
-      <div style={{ maxWidth: '1180px', margin: '0 auto', padding: '0 24px 80px' }}>
+      {/* Category navigation bar */}
+{Object.keys(groupedProducts).length > 1 && (
+  <CategoryBar 
+    categories={CATEGORY_ORDER.filter(cat => groupedProducts[cat])} 
+    accent={brand.accent} 
+  />
+)}
+
+{/* Products by category */}
+<div style={{ maxWidth: '1180px', margin: '0 auto', padding: '0 24px 80px' }}>
         {products.length === 0 && (
           <p style={{ opacity: 0.5, fontFamily: 'Space Mono, monospace', fontSize: '13px' }}>
             No products found. Make sure products are published in Printify.
           </p>
         )}
         {CATEGORY_ORDER.filter(cat => groupedProducts[cat]).map(category => (
-          <div key={category} style={{ marginBottom: '48px' }}>
+          <div 
+  key={category} 
+  id={category.replace(/\s+/g, '-').replace(/&/g, 'and')}
+  style={{ marginBottom: '48px' }}
+>
             {/* Category header */}
             <div style={{
               display: 'flex', alignItems: 'center', gap: '16px',
