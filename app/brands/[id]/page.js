@@ -165,7 +165,8 @@ export default async function BrandPage({ params }) {
   if (!brand) notFound()
 
   const products = await getProducts(brand.shopId)
-
+const groupedProducts = categorizeProducts(products)
+  
   return (
     <main style={{ minHeight: '100vh', background: brand.bg, color: brand.text }}>
       {/* Header */}
