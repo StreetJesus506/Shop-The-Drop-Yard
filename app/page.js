@@ -486,7 +486,7 @@ width: '95vw',
       <div style={{
   position: 'absolute', bottom: '40px', right: '28px',
   display: 'flex', flexDirection: 'row', gap: '10px', zIndex: 10,
-}}
+}}>
         {brands.map((b, i) => (
           <button
             key={b.id}
