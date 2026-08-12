@@ -152,6 +152,15 @@ export default function AboutPage() {
             <a href="mailto:contact@shopthedropyard.com" style={{ color: '#ff5a1f' }}>
               CONTACT@SHOPTHEDROPYARD.COM
             </a>
+             <p style={{ marginTop: '24px' }}>
+  <a href="/policies" style={{
+    fontFamily: 'Space Mono, monospace',
+    fontSize: '12px', color: '#6b6b63',
+    textDecoration: 'none', letterSpacing: '1px',
+  }}>
+    SHIPPING & RETURN POLICIES →
+  </a>
+</p>   
           </p>
 
         </section>
