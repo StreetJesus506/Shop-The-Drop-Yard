@@ -508,7 +508,7 @@ width: '95vw',
         animate={{ opacity: [0.4, 1, 0.4] }}
         transition={{ duration: 2, repeat: Infinity }}
         style={{
-          position: 'absolute', top: '88px',
+          position: 'absolute', top: '168px',
 left: '50%', transform: 'translateX(-50%)',
           fontFamily: 'Space Mono, monospace', fontSize: '10px',
           color: '#6b6b63', letterSpacing: '2px',
