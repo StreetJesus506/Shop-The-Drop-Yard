@@ -466,7 +466,7 @@ width: '95vw',
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
         >
-          ↑
+          ←
         </button>
         <button
           onClick={goToNext}
@@ -477,7 +477,7 @@ width: '95vw',
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
         >
-          ↓
+          →
         </button>
       </div>
 
