@@ -110,6 +110,56 @@ async function getProducts(shopId) {
   }
 }
 
+const CATEGORY_ORDER = [
+  'T-SHIRTS',
+  'HOODIES & SWEATSHIRTS',
+  'HEADWEAR',
+  'BOTTOMS',
+  'SWIMWEAR',
+  'FOOTWEAR',
+  'KIDS',
+  'HOME & LIVING',
+  'ACCESSORIES',
+  'EVERYTHING ELSE',
+]
+
+const CATEGORY_KEYWORDS = {
+  'T-SHIRTS': ['tee', 't-shirt', 'tank', 'top', 'crop'],
+  'HOODIES & SWEATSHIRTS': ['hoodie', 'sweatshirt', 'crewneck', 'pullover', 'zip-up', 'fleece'],
+  'HEADWEAR': ['hat', 'cap', 'beanie', 'snapback', 'trucker', 'bucket hat', 'dad hat', 'visor', 'beret'],
+  'BOTTOMS': ['shorts', 'joggers', 'sweatpants', 'pants', 'leggings', 'skirt'],
+  'SWIMWEAR': ['swimsuit', 'bikini', 'board shorts', 'swim', 'trunks'],
+  'FOOTWEAR': ['sneakers', 'slides', 'boots', 'shoes', 'slippers', 'socks'],
+  'KIDS': ['kids', 'youth', 'toddler', 'baby', 'infant', 'children'],
+  'HOME & LIVING': ['pillow', 'mug', 'blanket', 'poster', 'print', 'canvas', 'tapestry', 'towel', 'rug', 'coaster', 'bottle', 'tumbler'],
+  'ACCESSORIES': ['tote', 'bag', 'backpack', 'case', 'sticker', 'patch', 'pin', 'lanyard', 'wallet', 'belt', 'mask', 'keychain', 'jewelry', 'necklace', 'bracelet'],
+}
+
+function categorizeProducts(products) {
+  const grouped = {}
+  const assigned = new Set()
+
+  // Assign products to categories
+  for (const category of CATEGORY_ORDER.slice(0, -1)) {
+    const keywords = CATEGORY_KEYWORDS[category]
+    const matches = products.filter(p => {
+      const title = p.title.toLowerCase()
+      return keywords.some(k => title.includes(k))
+    })
+    if (matches.length > 0) {
+      grouped[category] = matches
+      matches.forEach(p => assigned.add(p.id))
+    }
+  }
+
+  // Everything else
+  const remainder = products.filter(p => !assigned.has(p.id))
+  if (remainder.length > 0) {
+    grouped['EVERYTHING ELSE'] = remainder
+  }
+
+  return grouped
+}
 export default async function BrandPage({ params }) {
   const brand = brands[params.id]
   if (!brand) notFound()
