@@ -144,7 +144,10 @@ function categorizeProducts(products) {
     const keywords = CATEGORY_KEYWORDS[category]
     const matches = products.filter(p => {
       const title = p.title.toLowerCase()
-      return keywords.some(k => title.includes(k))
+      return keywords.some(k => {
+        const regex = new RegExp(`\\b${k}\\b`, 'i')
+        return regex.test(title)
+      })
     })
     if (matches.length > 0) {
       grouped[category] = matches
