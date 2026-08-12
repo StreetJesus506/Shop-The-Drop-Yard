@@ -106,12 +106,13 @@ export default async function OrderConfirmation({ searchParams }) {
 
             {/* Shipping note */}
             <p style={{
-              fontFamily: 'Space Mono, monospace',
-              fontSize: '11px', color: '#6b6b63',
-              lineHeight: 1.6, marginBottom: '32px',
-            }}>
-              YOUR ORDER WILL BE FULFILLED VIA PRINTIFY AND SHIPPED WITHIN 5–10 BUSINESS DAYS.
-            </p>
+  fontFamily: 'Space Mono, monospace',
+  fontSize: '11px', color: '#6b6b63',
+  lineHeight: 1.6, marginBottom: '32px',
+}}>
+  YOUR ORDER WILL BE FULFILLED AND SHIPPED WITHIN 5–10 BUSINESS DAYS.{' '}
+  <a href="/policies" style={{ color: '#ff5a1f' }}>VIEW SHIPPING & RETURN POLICIES →</a>
+</p>
 
             {/* Back to shop */}
             <a href="/" style={{
