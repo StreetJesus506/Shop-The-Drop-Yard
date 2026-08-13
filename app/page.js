@@ -68,7 +68,7 @@ logoTint: '#8a9e6a',
     containerColor: 0x11111c,
     trimColor: 0x2ee6d6,
     logo: '/logos/Dead-Air-Logo-Web.png',
-    logoTint: '#2ee6d6',
+    
   },
   {
   id: 'streetjesus',
