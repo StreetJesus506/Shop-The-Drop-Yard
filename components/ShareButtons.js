@@ -79,11 +79,11 @@ export default function ShareButtons({ url, title, image }) {
           onClick={handleNativeShare}
           title="Share"
           style={{
-            width: '34px', height: '34px',
+            width: '26px', height: '26px',
             background: 'rgba(255,255,255,0.08)',
             border: '1px solid rgba(255,255,255,0.15)',
             color: '#f4f1ea', cursor: 'pointer',
-            fontSize: '14px', display: 'flex',
+            fontSize: '11px', display: 'flex',
             alignItems: 'center', justifyContent: 'center',
             borderRadius: '2px',
           }}
@@ -101,11 +101,11 @@ export default function ShareButtons({ url, title, image }) {
           rel="noopener noreferrer"
           title={`Share on ${name}`}
           style={{
-            width: '34px', height: '34px',
+            width: '26px', height: '26px',
             background: 'rgba(255,255,255,0.08)',
             border: '1px solid rgba(255,255,255,0.15)',
             color: '#f4f1ea', cursor: 'pointer',
-            fontSize: '12px', fontWeight: 700,
+            fontSize: '10px', fontWeight: 700,
             display: 'flex', alignItems: 'center',
             justifyContent: 'center', textDecoration: 'none',
             borderRadius: '2px', fontFamily: 'monospace',
@@ -129,7 +129,7 @@ export default function ShareButtons({ url, title, image }) {
         onClick={handleCopy}
         title="Copy link"
         style={{
-          padding: '0 12px', height: '34px',
+          padding: '0 8px', height: '26px',
           background: copied ? 'rgba(46,230,214,0.15)' : 'rgba(255,255,255,0.08)',
           border: `1px solid ${copied ? '#2ee6d6' : 'rgba(255,255,255,0.15)'}`,
           color: copied ? '#2ee6d6' : '#f4f1ea',
