@@ -63,7 +63,7 @@ export default function ShareButtons({ url, title, image }) {
   }
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap' }}>
       <span style={{
         fontFamily: 'Space Mono, monospace',
         fontSize: '10px', letterSpacing: '2px',
