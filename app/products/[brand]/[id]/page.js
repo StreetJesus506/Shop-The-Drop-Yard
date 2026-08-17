@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import AddToCart from '@/components/AddToCart'
 import CartIcon from '@/components/CartIcon'
 import ImageGallery from '@/components/ImageGallery'
+import ShareButtons from '@/components/ShareButtons'
 
 const shopIds = {
   pro: process.env.PRINTIFY_SHOP_PRO,
@@ -228,6 +229,15 @@ const sizes = [...new Set(variants.map(v => {
   style={style}
   isSizeFirst={isSizeFirst}
 />
+
+        <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <ShareButtons
+            url={`https://shopthedropyard.com/products/${params.brand}/${params.id}`}
+            title={`${product.title} — ${style.name} | The Drop Yard`}
+            image={product.images?.[0]?.src}
+          />
+        </div>
+
 
 
         </div>
