@@ -352,7 +352,14 @@ export default function Home() {
 }}>
   ABOUT / CONTACT
 </a>
-
+<div style={{ marginTop: '12px' }}>
+  <ShareButtons
+    url={`https://shopthedropyard.com/brands/${activeBrand.id}`}
+    title={`${activeBrand.name} | The Drop Yard`}
+    image={null}
+  />
+</div>
+    
         </div>
         <div style={{ textAlign: 'right' }}>
           <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#6b6b63', margin: 0 }}>
@@ -431,13 +438,7 @@ width: '95vw',
           }}>
             {activeBrand.tag}
           </p>
-            <div style={{ marginTop: '16px' }}>
-  <ShareButtons
-    url={`https://shopthedropyard.com/brands/${activeBrand.id}`}
-    title={`${activeBrand.name} | The Drop Yard`}
-    image={null}
-  />
-</div>
+            
         </motion.div>
       </AnimatePresence>
 
