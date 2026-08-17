@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import CartIcon from '@/components/CartIcon'
 import CategoryBar from '@/components/CategoryBar'
+import ShareButtons from '@/components/ShareButtons'
 
 const brands = {
   pro: {
@@ -211,7 +212,13 @@ const groupedProducts = categorizeProducts(products)
         <p style={{ fontSize: '16px', opacity: 0.8, maxWidth: '480px' }}>
           {brand.ethos}
         </p>
-      </div>
+      <div style={{ marginTop: '24px' }}>
+  <ShareButtons
+    url={`https://shopthedropyard.com/brands/${params.id}`}
+    title={`${brand.name} | The Drop Yard`}
+    image={null}
+  />
+</div>
           
 <p style={{
         maxWidth: '1180px', margin: '0 auto 16px',
