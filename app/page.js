@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { motion, AnimatePresence } from 'framer-motion'
+import ShareButtons from '@/components/ShareButtons'
 
 const brands = [
   {
@@ -430,6 +431,13 @@ width: '95vw',
           }}>
             {activeBrand.tag}
           </p>
+            <div style={{ marginTop: '16px' }}>
+  <ShareButtons
+    url={`https://shopthedropyard.com/brands/${activeBrand.id}`}
+    title={`${activeBrand.name} | The Drop Yard`}
+    image={null}
+  />
+</div>
         </motion.div>
       </AnimatePresence>
 
