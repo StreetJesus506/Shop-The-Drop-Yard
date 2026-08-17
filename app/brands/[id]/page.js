@@ -212,13 +212,14 @@ const groupedProducts = categorizeProducts(products)
         <p style={{ fontSize: '16px', opacity: 0.8, maxWidth: '480px' }}>
           {brand.ethos}
         </p>
-      <div style={{ marginTop: '24px' }}>
-  <ShareButtons
-    url={`https://shopthedropyard.com/brands/${params.id}`}
-    title={`${brand.name} | The Drop Yard`}
-    image={null}
-  />
-</div>
+        <div style={{ marginTop: '24px' }}>
+          <ShareButtons
+            url={`https://shopthedropyard.com/brands/${params.id}`}
+            title={`${brand.name} | The Drop Yard`}
+            image={null}
+          />
+        </div>
+      </div>
           
 <p style={{
         maxWidth: '1180px', margin: '0 auto 16px',
