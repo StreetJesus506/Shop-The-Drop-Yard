@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { generateProductImageAlt } from '@/lib/altText'
 
-export default function ImageGallery({ images, title }) {
+export default function ImageGallery({ images, title, brandName = '' }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [touchStart, setTouchStart] = useState(null)
   const [touchEnd, setTouchEnd] = useState(null)
@@ -57,7 +57,7 @@ export default function ImageGallery({ images, title }) {
             src={img.src}
             alt={generateProductImageAlt({
   title,
-  brandName: '',
+  brandName,
   index: i,
 })}
             style={{
@@ -151,7 +151,7 @@ export default function ImageGallery({ images, title }) {
                 src={img.src}
                 alt={generateProductImageAlt({
   title,
-  brandName: '',
+  brandName,
   index: i,
 })}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
