@@ -302,7 +302,7 @@ const groupedProducts = categorizeProducts(products)
                       {image && (
                         <img
                           src={image}
-                          alt={product.title}
+                          alt={`${product.title} — ${brand.name} independent streetwear | The Drop Yard`}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       )}
