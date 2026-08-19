@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { generateProductImageAlt } from '@/lib/altText'
 
 export default function ImageGallery({ images, title }) {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -54,7 +55,11 @@ export default function ImageGallery({ images, title }) {
           <img
             key={i}
             src={img.src}
-            alt={`${title} ${i + 1}`}
+            alt={generateProductImageAlt({
+  title,
+  brandName: '',
+  index: i,
+})}
             style={{
               position: 'absolute',
               inset: 0,
@@ -144,7 +149,11 @@ export default function ImageGallery({ images, title }) {
             >
               <img
                 src={img.src}
-                alt={`${title} ${i + 1}`}
+                alt={generateProductImageAlt({
+  title,
+  brandName: '',
+  index: i,
+})}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </button>
