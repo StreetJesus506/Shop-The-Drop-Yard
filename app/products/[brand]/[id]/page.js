@@ -172,7 +172,7 @@ const sizes = [...new Set(variants.map(v => {
         gap: '48px',
       }}>
         {/* Images */}
-<ImageGallery images={uniqueImages} title={product.title} />
+<ImageGallery images={uniqueImages} title={product.title} brandName={style.name} />
 
 
         {/* Info + Add to cart */}
