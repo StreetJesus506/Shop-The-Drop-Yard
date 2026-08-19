@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import CartIcon from '@/components/CartIcon'
 import CategoryBar from '@/components/CategoryBar'
 import ShareButtons from '@/components/ShareButtons'
+import { generateAltText } from '@/lib/altText'
 
 const brands = {
   pro: {
@@ -302,7 +303,16 @@ const groupedProducts = categorizeProducts(products)
                       {image && (
                         <img
                           src={image}
-                          alt={`${product.title} — ${brand.name} independent streetwear | The Drop Yard`}
+                          alt={generateAltText({
+  title: product.title,
+  brandName: brand.name,
+  category: CATEGORY_ORDER.find(cat =>
+    CATEGORY_KEYWORDS[cat]?.some(k => {
+      const regex = new RegExp(`\\b${k}\\b`, 'i')
+      return regex.test(product.title)
+    })
+  ),
+})}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       )}
