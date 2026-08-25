@@ -44,8 +44,7 @@ export default async function ProductPage({ params }) {
   const product = await getProduct(shopId, params.id)
   if (!product) notFound()
 
-  const images = product.images?.filter(img => img.is_default || img.position === 'front') || product.images || []
-  const uniqueImages = images.slice(0, 6)
+  const uniqueImages = (product.images || []).slice(0, 20)
 
   // Parse variants into color and size groups
   const variants = product.variants?.filter(v => v.is_enabled) || []
