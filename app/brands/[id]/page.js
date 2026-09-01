@@ -189,12 +189,25 @@ const groupedProducts = categorizeProducts(products)
         }}>
           ← BACK TO THE YARD
         </a>
-        <span style={{
-          fontFamily: 'Big Shoulders Stencil, sans-serif',
-          fontSize: '22px', fontWeight: 700, textTransform: 'uppercase',
-        }}>
-          {brand.name}
-        </span>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+  <span style={{
+    fontFamily: 'Big Shoulders Stencil, sans-serif',
+    fontSize: '22px', fontWeight: 700, textTransform: 'uppercase',
+  }}>
+    {brand.name}
+  </span>
+  {params.id === 'streetjesus' && (
+    <a href="/about/streetjesus" style={{
+      fontFamily: 'Space Mono, monospace',
+      fontSize: '10px', letterSpacing: '1px',
+      color: '#6b6b63', textDecoration: 'none',
+      textTransform: 'uppercase',
+    }}>
+      DJ BIO & BOOKING →
+    </a>
+  )}
+</div>
+
         <CartIcon color={brand.text} />
 
       </div>
