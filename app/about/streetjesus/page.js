@@ -238,8 +238,8 @@ export default function StreetJesusBioPage() {
             TC Izlam, Murs, Novalima & many others.
           </p>
           <p style={{ fontSize: '15px', lineHeight: 1.8, color: '#cfcac0' }}>
-            Extensive festival experience including SXSW (USA), Comic Con (Belgium), Bamboo Bass (Costa Rica), Mana Fest (Costa Rica),
-            Get Freaky(USA), Meeting Of Styles (USA, Costa Rica), ADE (Netherlands), Audio Circus (USA), Sundance Film Festival (USA),
+            Extensive festival experience including SXSW (USA), Comic Con (USA, Belgium), Bamboo Bass (Costa Rica), Mana Fest (Costa Rica),
+            Get Freaky (USA), Meeting Of Styles (USA, Costa Rica), ADE (Netherlands), Audio Circus (USA), Sundance Film Festival (USA),
             Utah Arts Festival (USA), and others.
           </p>
         </section>
