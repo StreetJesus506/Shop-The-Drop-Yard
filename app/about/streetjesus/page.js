@@ -231,11 +231,16 @@ export default function StreetJesusBioPage() {
           <p style={{ fontSize: '15px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '16px' }}>
             Opened, toured with, and/or served as backing DJ for:
           </p>
-          <p style={{ fontSize: '15px', lineHeight: 1.8, color: '#cfcac0' }}>
+          <p style={{ fontSize: '15px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '16px' }}>
             De La Soul, The Pharcyde, Hieroglyphics, Edo G, Masta Ace, DJ Qbert, RJD2, 
             Thievery Corporation, R.A. the Rugged Man, Slaine, Sean Price, Bone Thugs, 
             Monophonics, Ziggy Marley, DJ Shortkut, Atmosphere, Aesop Rock, Blueprint, 
             TC Izlam, Murs, Novalima & many others.
+          </p>
+          <p style={{ fontSize: '15px', lineHeight: 1.8, color: '#cfcac0' }}>
+            Extensive festival experience including SXSW (USA), Comic Con (Belgium), Bamboo Bass (Costa Rica), Mana Fest (Costa Rica),
+            Get Freaky(USA), Meeting Of Styles (USA, Costa Rica), ADE (Netherlands), Audio Circus (USA), Sundance Film Festival (USA),
+            Utah Arts Festival (USA), and others.
           </p>
         </section>
 
