@@ -53,7 +53,7 @@ export default function StreetJesusBioPage() {
           color: '#6b6b63', marginBottom: '32px',
           textTransform: 'uppercase',
         }}>
-          International DJ — Salt Lake City, Utah
+          International DJ
         </p>
 
         {/* Social links */}
@@ -117,18 +117,18 @@ export default function StreetJesusBioPage() {
           <p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
             International DJ and Salt Lake City, Utah Hip-Hop Pioneer with over 25 years of experience. 
             Starting on vinyl in bars and Bboy battles, and evolving through digital into festivals, 
-            tours, and corporate events — available for bookings in America and abroad including concerts, 
+            tours, and corporate events — available for bookings in the US and abroad including concerts, 
             weddings, corporate events, trade shows, festivals, and private parties.
           </p>
 
           <p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
             Creator and manager of several long-running Salt Lake City events including Vibras Del Lago 
             Cumbia Collective, Motown On Mondays, and various Hip Hop & Reggae nights across the city. 
-            Former owner and operator of a Hip Hop community center for 15 years.
+            Former owner and operator of Uprok Hip Hop community center for 15 years.
           </p>
 
           <p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
-            Co-creator of Urban Arts Festival, Urban Arts at the Utah Arts Festival, and Breakdance — 
+            Contributor to the creation of Utah Urban Arts Festival, Urban Arts at the Utah Arts Festival, and Breakdance — 
             a Hip Hop based film festival satellite during Sundance Film Festival. 
             Played and toured in over 15 countries.
           </p>
