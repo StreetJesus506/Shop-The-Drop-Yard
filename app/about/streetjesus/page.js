@@ -117,18 +117,23 @@ export default function StreetJesusBioPage() {
           <p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
             International DJ and Salt Lake City, Utah Hip-Hop Pioneer with over 25 years of experience. 
             Starting on vinyl in bars and Bboy battles, and evolving through digital into festivals, 
-            tours, and corporate events — available for bookings in the US and abroad including concerts, 
+            tours, and corporate events. Available for bookings in the US and abroad including concerts, 
             weddings, corporate events, trade shows, festivals, and private parties.
           </p>
 
           <p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
             Creator and manager of several long-running Salt Lake City events including Vibras Del Lago 
             Cumbia Collective, Motown On Mondays, and various Hip Hop & Reggae nights across the city. 
-            Former owner and operator of Uprok Hip Hop community center for 15 years.
           </p>
 
           <p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
-            Contributor to the creation of Utah Urban Arts Festival, Urban Arts at the Utah Arts Festival, and Breakdance — 
+              Former owner and operator of Uprok Hip Hop community center for 15 years. 
+              Creating several graffiti, Bboy, music, and community service events throughout the city during that time.
+              Also participating in several city sponsored events as an attraction through art, dance, & music. 
+          </p>
+
+          <p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
+            Contributor to the creation of Utah Urban Arts Festival, Urban Arts at the Utah Arts Festival, and Breakdance, 
             a Hip Hop based film festival satellite during Sundance Film Festival. 
             Played and toured in over 15 countries.
           </p>
