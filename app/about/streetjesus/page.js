@@ -287,7 +287,7 @@ export default function StreetJesusBioPage() {
           <iframe
             width="100%"
             height="120"
-            src="https://www.mixcloud.com/widget/iframe/?hide_cover=1&feed=%2Fjesus-de-la-calle%2F"
+            src="https://www.mixcloud.com/widget/iframe/?hide_cover=1&feed=%2Fjesus-de-la-calle%2F1063-cumbia-mix-122918%2F"
             frameBorder="0"
             allow="autoplay"
             style={{ border: 'none' }}
