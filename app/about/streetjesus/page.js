@@ -114,10 +114,29 @@ export default function StreetJesusBioPage() {
             ABOUT
           </h2>
 
+              <p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
+  Music is in the blood. With a grandfather that played piano/organ, and a father that played drums, Street Jesus grew up around music.
+</p>
+
+<p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
+  Before ever touching a record, friends introduced graffiti expos, Bboy battles, and Hip Hop events. A culture more than a style of music. Eventually taking up turntables and practicing scratching in the bedroom.
+</p>
+
+<p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
+  What followed was 25 years of more practice. Bedroom turned into bars. Then to Bboy battles. Bars and battles gave way to festivals, tours, and stages across more than 15 countries. But the thread never changed — play the music that resonates. Let the music lead. The crowd will follow.
+</p>
+
+<p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
+  Salt Lake City isn't necessarily known as a Hip Hop city, and while others came before, Street Jesus helped advance that. Not by fighting against what the city was, but by building what it could be — creating free community events, inheriting a record store turned cultural hub, providing spaces where Bboys could stand alongside painters and muralists as legitimate artists. Graffiti went from something the city frowned upon to something it celebrated. Hip Hop went from the margins to the main stage of the broader arts community.
+</p>
+
+<p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
+  And he kept doing that year after year. Not because it made financial sense, because it was fun.
+</p>
+
+
           <p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
-            International DJ and Salt Lake City, Utah Hip-Hop Pioneer with over 25 years of experience. 
-            Starting on vinyl in bars and Bboy battles, and evolving through digital into festivals, 
-            tours, and corporate events. Available for bookings in the US and abroad including concerts, 
+            Available for bookings in the US and abroad including concerts, 
             weddings, corporate events, trade shows, festivals, and private parties.
           </p>
 
