@@ -153,8 +153,7 @@ export default function StreetJesusBioPage() {
 
           <p style={{ fontSize: '16px', lineHeight: 1.8, color: '#cfcac0', marginBottom: '20px' }}>
             Contributor to the creation of Utah Urban Arts Festival, Urban Arts at the Utah Arts Festival, and Breakdance, 
-            a Hip Hop based film festival satellite during Sundance Film Festival. 
-            Played and toured in over 15 countries.
+            a Hip Hop based film festival satellite during Sundance Film Festival.
           </p>
         </section>
 
