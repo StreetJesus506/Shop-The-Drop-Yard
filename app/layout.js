@@ -3,7 +3,6 @@ import { CartProvider } from '@/lib/cartContext'
 import Cart from '@/components/Cart'
 import EmailSignup from '@/components/EmailSignup'
 
-
 export const metadata = {
   title: 'The Drop Yard',
   description: 'One yard. Every label. P.R.O., The Nude Farmer, Unpopular Demand, Dead Air.',
@@ -24,15 +23,9 @@ export default function RootLayout({ children }) {
         <CartProvider>
           {children}
           <Cart />
+          <EmailSignup />
         </CartProvider>
       </body>
     </html>
   )
-
-  <CartProvider>
-  {children}
-  <Cart />
-  <EmailSignup />
-</CartProvider>
-
 }
