@@ -1,6 +1,8 @@
 import './globals.css'
 import { CartProvider } from '@/lib/cartContext'
 import Cart from '@/components/Cart'
+import EmailSignup from '@/components/EmailSignup'
+
 
 export const metadata = {
   title: 'The Drop Yard',
@@ -26,4 +28,11 @@ export default function RootLayout({ children }) {
       </body>
     </html>
   )
+
+  <CartProvider>
+  {children}
+  <Cart />
+  <EmailSignup />
+</CartProvider>
+
 }
