@@ -352,6 +352,15 @@ export default function Home() {
 }}>
   ABOUT / CONTACT
 </a>
+    <a href="/subscribe" style={{
+  fontFamily: 'Space Mono, monospace',
+  fontSize: '10px', color: '#6b6b63',
+  textDecoration: 'none', letterSpacing: '1px',
+  marginTop: '6px', display: 'block',
+}}>
+  JOIN THE YARD
+</a>
+
 <div style={{ marginTop: '12px' }}>
   <ShareButtons
     url={`https://shopthedropyard.com/brands/${activeBrand.id}`}
