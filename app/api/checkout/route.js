@@ -27,9 +27,11 @@ export async function POST(req) {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
+      allow_promotion_codes: true,
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/order-confirmation?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
       shipping_address_collection: {
+
   allowed_countries: [
     'US', 'GB', 'CA', 'AU', 'DE', 'FR', 'IT', 'ES', 'NL', 
     'SE', 'NO', 'DK', 'FI', 'BE', 'AT', 'CH', 'NZ', 'JP',
