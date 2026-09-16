@@ -1,7 +1,7 @@
 import './globals.css'
 import { CartProvider } from '@/lib/cartContext'
 import Cart from '@/components/Cart'
-
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata = {
   title: 'The Drop Yard',
@@ -21,10 +21,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <CartProvider>
-  {children}
-  <Cart />
-</CartProvider>
-
+          {children}
+          <Cart />
+        </CartProvider>
+        <GoogleAnalytics gaId="G-5753CFE3GB" />
       </body>
     </html>
   )
