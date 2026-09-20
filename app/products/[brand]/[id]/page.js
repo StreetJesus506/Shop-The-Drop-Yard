@@ -132,6 +132,34 @@ const sizes = [...new Set(variants.map(v => {
   }}
 />
 
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://shopthedropyard.com',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: style.name,
+        item: `https://shopthedropyard.com/brands/${params.brand}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: product.title,
+        item: `https://shopthedropyard.com/products/${params.brand}/${params.id}`,
+      },
+    ],
+  })}}
+/>
+
 
 {/* Header */}
       <div style={{
