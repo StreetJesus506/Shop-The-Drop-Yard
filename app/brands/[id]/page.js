@@ -7,9 +7,9 @@ import ShareButtons from '@/components/ShareButtons'
 import { generateAltText } from '@/lib/altText'
 
 export const dynamic = 'force-dynamic'
-export const revalidate = 0
 
-const brands = {
+// Keep this object purely for static layout values
+const staticBrandData = {
   pro: {
     name: 'P.R.O.',
     full: 'Proletariat Revolution Outfitters',
@@ -17,7 +17,6 @@ const brands = {
     accent: '#b01e28',
     bg: '#0f0a0a',
     text: '#f3e9e2',
-    shopId: process.env.PRINTIFY_SHOP_PRO,
   },
   nudefarmer: {
     name: 'The Nude Farmer',
@@ -26,7 +25,6 @@ const brands = {
     accent: '#8a9e6a',
     bg: '#0d0f0a',
     text: '#f1ead4',
-    shopId: process.env.PRINTIFY_SHOP_NUDEFARMER,
   },
   unpopular: {
     name: 'Unpopular Demand',
@@ -35,7 +33,6 @@ const brands = {
     accent: '#c9a24a',
     bg: '#0b0b0b',
     text: '#ece4cf',
-    shopId: process.env.PRINTIFY_SHOP_UNPOPULAR,
   },
   deadair: {
     name: 'Dead Air Vintage',
@@ -44,7 +41,6 @@ const brands = {
     accent: '#2ee6d6',
     bg: '#08080f',
     text: '#dfe6f0',
-    shopId: process.env.PRINTIFY_SHOP_DEADAIR,
   },
   streetjesus: {
     name: 'Street Jesus Got Soul',
@@ -53,12 +49,31 @@ const brands = {
     accent: '#f4f1ea',
     bg: '#0d0d0d',
     text: '#e8e8e8',
-    shopId: process.env.PRINTIFY_SHOP_STREETJESUS,
   },
 }
 
+// Map the environment keys dynamically inside an execution map function
+function getActiveBrandConfig(id) {
+  const base = staticBrandData[id]
+  if (!base) return null
+
+  const shopIds = {
+    pro: process.env.PRINTIFY_SHOP_PRO,
+    nudefarmer: process.env.PRINTIFY_SHOP_NUDEFARMER,
+    unpopular: process.env.PRINTIFY_SHOP_UNPOPULAR,
+    deadair: process.env.PRINTIFY_SHOP_DEADAIR,
+    streetjesus: process.env.PRINTIFY_SHOP_STREETJESUS,
+  }
+
+  return {
+    ...base,
+    shopId: shopIds[id],
+  }
+}
+
+
 export async function generateMetadata({ params }) {
-  const brand = brands[params.id]
+  const brand = getActiveBrandConfig(params.id)
   if (!brand) return {}
 
   return {
@@ -79,6 +94,15 @@ export async function generateMetadata({ params }) {
     },
   }
 }
+
+export default async function BrandPage({ params }) {
+  const brand = getActiveBrandConfig(params.id)
+  if (!brand) notFound()
+
+  const products = await getProducts(brand.shopId)
+  const groupedProducts = categorizeProducts(products)
+  
+  let globalImageIndex = 0
 
 async function getProducts(shopId) {
   try {
