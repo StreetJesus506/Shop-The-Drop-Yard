@@ -1,9 +1,14 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import * as THREE from 'three'
 import { motion, AnimatePresence } from 'framer-motion'
+import dynamic from 'next/dynamic'
 import ShareButtons from '@/components/ShareButtons'
+
+const ShippingContainer = dynamic(() => import('@/components/ShippingContainer'), {
+  ssr: false,
+  loading: () => <div className="animate-pulse bg-neutral-800 rounded-lg w-full h-64" />
+})
 
 const brands = [
   {
@@ -35,8 +40,7 @@ const brands = [
     containerColor: 0x46522f,
     trimColor: 0x8a9e6a,
     logo: '/logos/Farmer-Logo.png',
-logoTint: '#8a9e6a',
-
+    logoTint: '#8a9e6a',
   },
   {
     id: 'unpopular',
@@ -53,7 +57,6 @@ logoTint: '#8a9e6a',
     trimColor: 0xc9a24a,
     logo: '/logos/Demand.png',
     logoTint: '#c9a24a',
-
   },
   {
     id: 'deadair',
@@ -72,22 +75,20 @@ logoTint: '#8a9e6a',
     logoTint: '#2ee6d6',
   },
   {
-  id: 'streetjesus',
-  lot: '05',
-  name: 'Street Jesus Got Soul',
-  full: 'Street Jesus Got Soul',
-  ethos: '4 Elements Culture',
-  tag: 'WHAT WOULD STREET JESUS DO',
-  stamp: 'IT WILL FUNK YOU UP',
-  accent: '#f4f1ea',
-  bg: '#0d0d0d',
-  text: '#e8e8e8',
-  containerColor: 0x2a2a2a,
-  trimColor: 0x555555,
-  logo: '/logos/Swiss-Throwie.png',
-
-},
-
+    id: 'streetjesus',
+    lot: '05',
+    name: 'Street Jesus Got Soul',
+    full: 'Street Jesus Got Soul',
+    ethos: '4 Elements Culture',
+    tag: 'WHAT WOULD STREET JESUS DO',
+    stamp: 'IT WILL FUNK YOU UP',
+    accent: '#f4f1ea',
+    bg: '#0d0d0d',
+    text: '#e8e8e8',
+    containerColor: 0x2a2a2a,
+    trimColor: 0x555555,
+    logo: '/logos/Swiss-Throwie.png',
+  },
 ]
 
 function ShippingContainer({ brand, isActive, onClick }) {
