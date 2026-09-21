@@ -90,13 +90,12 @@ async function getProducts(shopId) {
       const res = await fetch(
         `https://printify.com{shopId}/products.json?limit=50&page=${page}`,
         {
+          method: 'GET',
           headers: {
             'Authorization': `Bearer ${process.env.PRINTIFY_API_KEY}`,
+            'Content-Type': 'application/json'
           },
-          next: { 
-            revalidate: 3600,
-            tags: ['products']
-          },
+          cache: 'no-store'
         }
       )
       const data = await res.json()
@@ -118,6 +117,7 @@ async function getProducts(shopId) {
     return []
   }
 }
+
 
 const CATEGORY_ORDER = [
   'T-SHIRTS',
