@@ -312,7 +312,7 @@ export default async function BrandPage({ params }) {
                 fontFamily: 'Space Mono, monospace',
                 fontSize: '11px', color: '#a3a39c',
               }}>
-              {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
+                            {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
             </span>
           </div>
 
@@ -323,9 +323,21 @@ export default async function BrandPage({ params }) {
             gap: '28px',
           }}>
             {groupedProducts[category].map(product => {
-              const image = product.images && product.images.length > 0 && product.images[0] ? product.images[0].src : null;
-              const enabledVariant = product.variants ? product.variants.find(v => v.is_enabled) : null
-              const price = enabledVariant ? enabledVariant.price : null
+              let image = null
+              if (product && product.images && product.images.length > 0 && product.images[0]) {
+                image = product.images[0].src
+              }
+
+              let enabledVariant = null
+              if (product && product.variants) {
+                enabledVariant = product.variants.find(v => v.is_enabled)
+              }
+
+              let price = null
+              if (enabledVariant) {
+                price = enabledVariant.price
+              }
+
               const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
               
               if (image) {
