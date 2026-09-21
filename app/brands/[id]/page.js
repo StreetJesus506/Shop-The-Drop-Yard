@@ -1,6 +1,3 @@
-export const dynamic = 'force-dynamic'
-
-
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -8,6 +5,8 @@ import CartIcon from '@/components/CartIcon'
 import CategoryBar from '@/components/CategoryBar'
 import ShareButtons from '@/components/ShareButtons'
 import { generateAltText } from '@/lib/altText'
+
+export const dynamic = 'force-dynamic'
 
 const brands = {
   pro: {
@@ -68,7 +67,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: `${brand.name} | The Drop Yard`,
       description: brand.ethos,
-      url: `https://shopthedropyard.com/brands/${params.id}`,
+      url: `https://shopthedropyard.com{params.id}`,
       siteName: 'The Drop Yard',
       type: 'website',
     },
@@ -117,7 +116,6 @@ async function getProducts(shopId) {
     return []
   }
 }
-
 
 const CATEGORY_ORDER = [
   'T-SHIRTS',
@@ -198,7 +196,7 @@ export default async function BrandPage({ params }) {
               '@type': 'ListItem',
               position: 2,
               name: brand.name,
-              item: `https://shopthedropyard.com/brands/${params.id}`,
+              item: `https://shopthedropyard.com{params.id}`,
             },
           ],
         })}}
@@ -255,7 +253,7 @@ export default async function BrandPage({ params }) {
         </p>
         <div style={{ marginTop: '24px' }}>
           <ShareButtons
-            url={`https://shopthedropyard.com/brands/${params.id}`}
+            url={`https://shopthedropyard.com{params.id}`}
             title={`${brand.name} | The Drop Yard`}
             image={null}
           />
@@ -312,11 +310,10 @@ export default async function BrandPage({ params }) {
                 fontFamily: 'Space Mono, monospace',
                 fontSize: '11px', color: '#a3a39c',
               }}>
-                {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
-              </span>
+              {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
             </div>
 
-                      {/* Product grid */}
+                        {/* Product grid */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
@@ -386,4 +383,3 @@ export default async function BrandPage({ params }) {
     </main>
   )
 }
-
