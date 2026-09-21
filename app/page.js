@@ -194,6 +194,7 @@ export default function Home() {
             position: 'absolute', inset: 0,
             background: activeBrand.accent,
             pointerEvents: 'none',
+            willChange: 'opacity',
           }}
         />
       </AnimatePresence>
@@ -280,6 +281,7 @@ export default function Home() {
             maxWidth: '700px',
             maxHeight: '380px',
             zIndex: 5,
+            willChange: 'transform, opacity',
           }}
         >
           <Link href={`/brands/${activeBrand.id}`} style={{ display: 'block', width: '100%', height: '100%' }} aria-label={`View ${activeBrand.name} Brand details`}>
@@ -303,6 +305,7 @@ export default function Home() {
             position: 'absolute',
             bottom: '120px', left: '28px', right: '28px',
             zIndex: 10,
+            willChange: 'transform, opacity',
           }}
         >
           <h2 style={{
