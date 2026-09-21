@@ -85,12 +85,15 @@ async function getProducts(shopId) {
 
     while (hasMore) {
       const res = await fetch(
-        `https://api.printify.com/v1/shops/${shopId}/products.json?limit=50&page=${page}`,
+        `https://printify.com{shopId}/products.json?limit=50&page=${page}`,
         {
           headers: {
             'Authorization': `Bearer ${process.env.PRINTIFY_API_KEY}`,
           },
-          next: { revalidate: 300 },
+          next: { 
+            revalidate: 3600,
+            tags: ['products']
+          },
         }
       )
       const data = await res.json()
