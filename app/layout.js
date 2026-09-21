@@ -1,23 +1,6 @@
 import './globals.css'
 import { CartProvider } from '@/lib/cartContext'
-import { Inter, Big_Shoulders_Display } from 'next/font/google'
-import dynamic from 'next/dynamic'
-
-const inter = Inter({ 
-  subsets: ['latin'],
-  display: 'swap', 
-})
-
-const bigShoulders = Big_Shoulders_Display({
-  subsets: ['latin'],
-  weight: ['900'],
-  variable: '--font-stencil',
-  display: 'swap',
-})
-
-const Cart = dynamic(() => import('@/components/Cart'), {
-  ssr: false,
-})
+import Cart from '@/components/Cart'
 
 export const metadata = {
   title: 'The Drop Yard',
@@ -29,10 +12,6 @@ export const metadata = {
     url: 'https://shopthedropyard.com',
     siteName: 'The Drop Yard',
     type: 'website',
-  },
-  other: {
-    rel: 'preconnect',
-    url: 'https://printify.com',
   }
 }
 
@@ -60,13 +39,18 @@ const storeSchema = {
   description: 'Independent multi-brand streetwear platform. P.R.O., The Nude Farmer, Unpopular Demand, Dead Air Cult Classics, Street Jesus Got Soul.',
   currenciesAccepted: 'USD',
   paymentAccepted: 'Credit Card, Apple Pay, Google Pay',
-  priceRange: '\$\$',
-  email: 'contact@shoptropdyard.com',
+  priceRange: '$$',
+  email: 'contact@shopthedropyard.com',
 }
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.className} ${bigShoulders.variable}`}>
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://googleapis.com" />
+        <link rel="preconnect" href="https://gstatic.com" crossOrigin="anonymous" />
+        <link href="https://googleapis.com/css2?family=Big+Shoulders+Stencil:wght@900&family=Space+Mono&family=Work+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+      </head>
       <body>
         <script
           type="application/ld+json"
