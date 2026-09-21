@@ -340,18 +340,19 @@ export default function Home() {
         </motion.a>
       </Link>
 
-      {/* Nav arrows */}
-<div style={{
-  position: 'absolute', left: '18px', top: '50%',
-  transform: 'translateY(-50%)',
-  display: 'flex', flexDirection: 'column', gap: '12px', zIndex: 10,
-}}>
+            {/* Nav arrows */}
+      <div style={{
+        position: 'absolute', left: '18px', top: '50%',
+        transform: 'translateY(-50%)',
+        display: 'flex', flexDirection: 'column', gap: '12px', zIndex: 10,
+      }}>
         <button
           onClick={goToPrev}
+          aria-label="Previous Brand"
           style={{
             fontFamily: 'Space Mono, monospace', fontSize: '18px',
-            background: 'none', border: '1px solid #6b6b63',
-            color: '#6b6b63', width: '44px', height: '44px',
+            background: 'none', border: '1px solid #a3a39c',
+            color: '#a3a39c', width: '44px', height: '44px',
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
         >
@@ -359,10 +360,11 @@ export default function Home() {
         </button>
         <button
           onClick={goToNext}
+          aria-label="Next Brand"
           style={{
             fontFamily: 'Space Mono, monospace', fontSize: '18px',
-            background: 'none', border: '1px solid #6b6b63',
-            color: '#6b6b63', width: '44px', height: '44px',
+            background: 'none', border: '1px solid #a3a39c',
+            color: '#a3a39c', width: '44px', height: '44px',
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
         >
@@ -371,19 +373,26 @@ export default function Home() {
       </div>
 
       {/* Dot indicators */}
-      <div style={{
-  position: 'absolute', bottom: '40px', right: '28px',
-  display: 'flex', flexDirection: 'row', gap: '10px', zIndex: 10,
-}}>
+      <div 
+        role="tablist"
+        aria-label="Brand Selection"
+        style={{
+          position: 'absolute', bottom: '40px', right: '28px',
+          display: 'flex', flexDirection: 'row', gap: '10px', zIndex: 10,
+        }}
+      >
         {brands.map((b, i) => (
           <button
             key={b.id}
+            role="tab"
+            aria-selected={i === activeIndex}
+            aria-label={`Go to brand ${b.name}`}
             onClick={() => setActiveIndex(i)}
             style={{
               width: i === activeIndex ? '10px' : '6px',
               height: i === activeIndex ? '10px' : '6px',
               borderRadius: '50%',
-              background: i === activeIndex ? activeBrand.accent : '#6b6b63',
+              background: i === activeIndex ? activeBrand.accent : '#a3a39c',
               border: 'none', cursor: 'pointer',
               transition: 'all 0.3s ease',
             }}
@@ -397,9 +406,9 @@ export default function Home() {
         transition={{ duration: 2, repeat: Infinity }}
         style={{
           position: 'absolute', top: '168px',
-left: '50%', transform: 'translateX(-50%)',
+          left: '50%', transform: 'translateX(-50%)',
           fontFamily: 'Space Mono, monospace', fontSize: '10px',
-          color: '#6b6b63', letterSpacing: '2px',
+          color: '#a3a39c', letterSpacing: '2px',
           zIndex: 10, whiteSpace: 'nowrap',
         }}
       >
