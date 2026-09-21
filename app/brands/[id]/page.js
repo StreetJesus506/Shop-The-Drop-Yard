@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic'
+
+
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -383,16 +386,4 @@ export default async function BrandPage({ params }) {
     </main>
   )
 }
-
-export async function generateStaticParams() {
-  return [
-    { id: 'pro' },
-    { id: 'nudefarmer' },
-    { id: 'unpopular' },
-    { id: 'deadair' },
-    { id: 'streetjesus' }
-  ]
-}
-
-
 
