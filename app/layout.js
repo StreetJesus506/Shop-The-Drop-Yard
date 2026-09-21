@@ -1,6 +1,6 @@
 import './globals.css'
 import { CartProvider } from '@/lib/cartContext'
-import { Inter, Big_Shoulders_Stencil } from 'next/font/google'
+import { Inter, Big_Shoulders_Display } from 'next/font/google'
 import dynamic from 'next/dynamic'
 
 const inter = Inter({ 
@@ -8,7 +8,7 @@ const inter = Inter({
   display: 'swap', 
 })
 
-const bigShoulders = Big_Shoulders_Stencil({
+const bigShoulders = Big_Shoulders_Display({
   subsets: ['latin'],
   weight: ['900'],
   variable: '--font-stencil',
