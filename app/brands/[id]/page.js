@@ -1,6 +1,4 @@
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import Image from 'next/image'
 import CartIcon from '@/components/CartIcon'
 import CategoryBar from '@/components/CategoryBar'
 import ShareButtons from '@/components/ShareButtons'
@@ -8,7 +6,7 @@ import { generateAltText } from '@/lib/altText'
 
 export const dynamic = 'force-dynamic'
 
-const staticBrandData = {
+const brands = {
   pro: {
     name: 'P.R.O.',
     full: 'Proletariat Revolution Outfitters',
@@ -16,6 +14,7 @@ const staticBrandData = {
     accent: '#b01e28',
     bg: '#0f0a0a',
     text: '#f3e9e2',
+    shopId: process.env.PRINTIFY_SHOP_PRO,
   },
   nudefarmer: {
     name: 'The Nude Farmer',
@@ -24,6 +23,7 @@ const staticBrandData = {
     accent: '#8a9e6a',
     bg: '#0d0f0a',
     text: '#f1ead4',
+    shopId: process.env.PRINTIFY_SHOP_NUDEFARMER,
   },
   unpopular: {
     name: 'Unpopular Demand',
@@ -32,6 +32,7 @@ const staticBrandData = {
     accent: '#c9a24a',
     bg: '#0b0b0b',
     text: '#ece4cf',
+    shopId: process.env.PRINTIFY_SHOP_UNPOPULAR,
   },
   deadair: {
     name: 'Dead Air Vintage',
@@ -40,6 +41,7 @@ const staticBrandData = {
     accent: '#2ee6d6',
     bg: '#08080f',
     text: '#dfe6f0',
+    shopId: process.env.PRINTIFY_SHOP_DEADAIR,
   },
   streetjesus: {
     name: 'Street Jesus Got Soul',
@@ -48,29 +50,12 @@ const staticBrandData = {
     accent: '#f4f1ea',
     bg: '#0d0d0d',
     text: '#e8e8e8',
+    shopId: process.env.PRINTIFY_SHOP_STREETJESUS,
   },
 }
 
-function getActiveBrandConfig(id) {
-  const base = staticBrandData[id]
-  if (!base) return null
-
-  const shopIds = {
-    pro: process.env.PRINTIFY_SHOP_PRO,
-    nudefarmer: process.env.PRINTIFY_SHOP_NUDEFARMER,
-    unpopular: process.env.PRINTIFY_SHOP_UNPOPULAR,
-    deadair: process.env.PRINTIFY_SHOP_DEADAIR,
-    streetjesus: process.env.PRINTIFY_SHOP_STREETJESUS,
-  }
-
-  return {
-    ...base,
-    shopId: shopIds[id],
-  }
-}
-
 export async function generateMetadata({ params }) {
-  const brand = getActiveBrandConfig(params.id)
+  const brand = brands[params.id]
   if (!brand) return {}
 
   return {
@@ -128,7 +113,6 @@ async function getProducts(shopId) {
   }
 }
 
-
 const CATEGORY_ORDER = [
   'T-SHIRTS',
   'HOODIES & SWEATSHIRTS',
@@ -179,13 +163,11 @@ function categorizeProducts(products) {
 }
 
 export default async function BrandPage({ params }) {
-  const brand = getActiveBrandConfig(params.id)
+  const brand = brands[params.id]
   if (!brand) notFound()
 
   const products = await getProducts(brand.shopId)
   const groupedProducts = categorizeProducts(products)
-  
-  let globalImageIndex = 0
 
   return (
     <main style={{ minHeight: '100vh', background: brand.bg, color: brand.text }}>
@@ -212,11 +194,11 @@ export default async function BrandPage({ params }) {
       />
       
       {/* Header */}
-      <header style={{
+      <div style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         padding: '18px 24px', borderBottom: '1px solid rgba(255,255,255,0.1)',
       }}>
-        <Link href="/" style={{
+        <a href="/" style={{
           fontFamily: 'Big Shoulders Stencil, sans-serif',
           fontSize: '12px', letterSpacing: '1px',
           background: 'none', border: `1px solid ${brand.text}`,
@@ -224,7 +206,7 @@ export default async function BrandPage({ params }) {
           textDecoration: 'none', textTransform: 'uppercase',
         }}>
           ← BACK TO THE YARD
-        </Link>
+        </a>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
           <span style={{
             fontFamily: 'Big Shoulders Stencil, sans-serif',
@@ -233,18 +215,18 @@ export default async function BrandPage({ params }) {
             {brand.name}
           </span>
           {params.id === 'streetjesus' && (
-            <Link href="/about/streetjesus" style={{
+            <a href="/about/streetjesus" style={{
               fontFamily: 'Space Mono, monospace',
               fontSize: '10px', letterSpacing: '1px',
-              color: '#a3a39c', textDecoration: 'none',
+              color: '#6b6b63', textDecoration: 'none',
               textTransform: 'uppercase',
             }}>
               DJ BIO & BOOKING →
-            </Link>
+            </a>
           )}
         </div>
         <CartIcon color={brand.text} />
-      </header>
+      </div>
 
       {/* Hero */}
       <div style={{ padding: '60px 24px 40px', maxWidth: '1180px', margin: '0 auto' }}>
@@ -273,7 +255,7 @@ export default async function BrandPage({ params }) {
         maxWidth: '1180px', margin: '0 auto 16px',
         padding: '0 24px',
         fontFamily: 'Space Mono, monospace',
-        fontSize: '11px', color: '#a3a39c',
+        fontSize: '11px', color: '#6b6b63',
         letterSpacing: '1px',
       }}>
         PRICES DO NOT INCLUDE SHIPPING — CALCULATED AT CHECKOUT
@@ -295,7 +277,7 @@ export default async function BrandPage({ params }) {
           </p>
         )}
         {CATEGORY_ORDER.filter(cat => groupedProducts[cat]).map(category => (
-          <section 
+          <div 
             key={category} 
             id={category.replace(/\s+/g, '-').replace(/&/g, 'and')}
             style={{ marginBottom: '48px' }}
@@ -317,36 +299,28 @@ export default async function BrandPage({ params }) {
               </h2>
               <span style={{
                 fontFamily: 'Space Mono, monospace',
-                fontSize: '11px', color: '#a3a39c',
+                fontSize: '11px', color: '#6b6b63',
               }}>
                 {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
               </span>
             </div>
 
-                                    {/* Product grid */}
+            {/* Product grid */}
+            <div style={{
+              display: 'grid',
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
               gap: '28px',
             }}>
               {groupedProducts[category].map(product => {
-                let image = null
-                if (product && product.images && product.images.length > 0) {
-                  const firstImg = product.images.at(0)
-                  if (firstImg) image = firstImg.src || null
-                }
-
+                const image = product.images && product.images.length > 0 ? product.images.src : null
                 const enabledVariant = product.variants ? product.variants.find(v => v.is_enabled) : null
                 const price = enabledVariant ? enabledVariant.price : null
                 const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
-                
-                if (image) {
-                  globalImageIndex++
-                }
-                const isPriorityImage = globalImageIndex <= 4
 
                 return (
-                  <Link
+                  <a
                     key={product.id}
                     href={`/products/${params.id}/${product.id}`}
                     style={{ textDecoration: 'none', color: brand.text }}
@@ -356,23 +330,18 @@ export default async function BrandPage({ params }) {
                       background: 'rgba(255,255,255,0.05)',
                       marginBottom: '12px',
                       overflow: 'hidden',
-                      position: 'relative'
                     }}>
                       {image && (
-                        <Image
+                        <img
                           src={image}
                           alt={generateAltText({
                             title: product.title,
                             brandName: brand.name,
-                            category: CATEGORY_ORDER.find(cat => {
-                              const keywords = CATEGORY_KEYWORDS[cat]
-                              return keywords ? keywords.some(k => new RegExp(`\\b${k}\\b`, 'i').test(product.title)) : false
-                            }),
+                            category: CATEGORY_ORDER.find(cat =>
+                              CATEGORY_KEYWORDS[cat] ? CATEGORY_KEYWORDS[cat].some(k => new RegExp(`\\b${k}\\b`, 'i').test(product.title)) : false
+                            ),
                           })}
-                          fill
-                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                          priority={isPriorityImage}
-                          style={{ objectFit: 'cover' }}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       )}
                     </div>
@@ -386,11 +355,11 @@ export default async function BrandPage({ params }) {
                         </p>
                       )}
                     </div>
-                  </Link>
+                  </a>
                 )
               })}
             </div>
-          </section>
+          </div>
         ))}
       </div>
     </main>
