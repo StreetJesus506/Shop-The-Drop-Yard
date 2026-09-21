@@ -1,5 +1,3 @@
-'use client'
-
 import './globals.css'
 import { CartProvider } from '@/lib/cartContext'
 import { Inter, Big_Shoulders_Stencil } from 'next/font/google'
