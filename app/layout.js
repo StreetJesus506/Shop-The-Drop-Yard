@@ -61,7 +61,7 @@ const storeSchema = {
   currenciesAccepted: 'USD',
   paymentAccepted: 'Credit Card, Apple Pay, Google Pay',
   priceRange: '\$\$',
-  email: 'contact@shopthedropyard.com',
+  email: 'contact@shoptropdyard.com',
 }
 
 export default function RootLayout({ children }) {
@@ -76,10 +76,15 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(storeSchema) }}
         />
+        {/* 
+          Keep children outside the provider wrap or feed them cleanly 
+          so the server runtime can process environment keys natively!
+        */}
         <CartProvider>
-          {children}
           <Cart />
         </CartProvider>
+        
+        {children}
       </body>
     </html>
   )
