@@ -314,16 +314,28 @@ export default async function BrandPage({ params }) {
               </span>
             </div>
 
-            {/* Product grid */}
+                        {/* Product grid */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
               gap: '28px',
             }}>
               {groupedProducts[category].map(product => {
-                const image = product.images?.[0]?.src || null
-                const enabledVariant = product.variants?.find(v => v.is_enabled)
-                const price = enabledVariant?.price
+                let image = null
+                if (product && product.images && product.images[0]) {
+                  image = product.images[0].src
+                }
+
+                let enabledVariant = null
+                if (product && product.variants) {
+                  enabledVariant = product.variants.find(v => v.is_enabled)
+                }
+
+                let price = null
+                if (enabledVariant) {
+                  price = enabledVariant.price
+                }
+
                 const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
                 
                 if (image) {
@@ -350,12 +362,14 @@ export default async function BrandPage({ params }) {
                           alt={generateAltText({
                             title: product.title,
                             brandName: brand.name,
-                            category: CATEGORY_ORDER.find(cat =>
-                              CATEGORY_KEYWORDS[cat]?.some(k => {
+                            category: CATEGORY_ORDER.find(cat => {
+                              const keywords = CATEGORY_KEYWORDS[cat]
+                              if (!keywords) return false
+                              return keywords.some(k => {
                                 const regex = new RegExp(`\\b${k}\\b`, 'i')
                                 return regex.test(product.title)
                               })
-                            ),
+                            }),
                           })}
                           fill
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
