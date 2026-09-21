@@ -2,28 +2,28 @@
 
 import { useCart } from '@/lib/cartContext'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image' // 👈 Added Next.js Image Optimization engine
 
 export default function Cart() {
   const { items, removeItem, updateQuantity, total, isOpen, setIsOpen, clearCart } = useCart()
 
   const handleCheckout = async () => {
-  try {
-    const res = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items }),
-    })
-    const data = await res.json()
-    if (data.url) {
-      window.location.href = data.url
-    } else {
-      alert('Checkout error: ' + JSON.stringify(data))
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items }),
+      })
+      const data = await res.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        alert('Checkout error: ' + JSON.stringify(data))
+      }
+    } catch (err) {
+      alert('Checkout failed: ' + err.message)
     }
-  } catch (err) {
-    alert('Checkout failed: ' + err.message)
   }
-}
-
 
   return (
     <>
@@ -75,6 +75,7 @@ export default function Cart() {
                 </span>
                 <button
                   onClick={() => setIsOpen(false)}
+                  aria-label="Close Shopping Cart"
                   style={{
                     background: 'none', border: 'none',
                     color: '#f4f1ea', fontSize: '24px',
@@ -90,7 +91,7 @@ export default function Cart() {
                 {items.length === 0 && (
                   <p style={{
                     fontFamily: 'Space Mono, monospace',
-                    fontSize: '13px', color: '#6b6b63',
+                    fontSize: '13px', color: '#a3a39c', // 👈 Boosted contrast
                     marginTop: '40px', textAlign: 'center',
                   }}>
                     YOUR CART IS EMPTY
@@ -107,12 +108,15 @@ export default function Cart() {
                       width: '80px', height: '80px',
                       background: 'rgba(255,255,255,0.05)',
                       flexShrink: 0, overflow: 'hidden',
+                      position: 'relative' // 👈 Required for Next.js relative layout fill
                     }}>
                       {item.image && (
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          fill
+                          sizes="80px"
+                          style={{ objectFit: 'cover' }}
                         />
                       )}
                     </div>
@@ -124,7 +128,7 @@ export default function Cart() {
                       </p>
                       <p style={{
                         margin: '0 0 10px', fontSize: '12px',
-                        color: '#6b6b63', fontFamily: 'Space Mono, monospace',
+                        color: '#a3a39c', fontFamily: 'Space Mono, monospace', // 👈 Boosted contrast
                       }}>
                         {item.variantTitle}
                       </p>
@@ -133,6 +137,7 @@ export default function Cart() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
+                          aria-label={`Decrease quantity of ${item.title}`}
                           style={{
                             background: 'rgba(255,255,255,0.1)',
                             border: 'none', color: '#f4f1ea',
@@ -145,6 +150,7 @@ export default function Cart() {
                         </span>
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
+                          aria-label={`Increase quantity of ${item.title}`}
                           style={{
                             background: 'rgba(255,255,255,0.1)',
                             border: 'none', color: '#f4f1ea',
@@ -156,7 +162,7 @@ export default function Cart() {
                           onClick={() => removeItem(item.variantId)}
                           style={{
                             background: 'none', border: 'none',
-                            color: '#6b6b63', cursor: 'pointer',
+                            color: '#a3a39c', cursor: 'pointer', // 👈 Boosted contrast
                             fontSize: '12px', marginLeft: 'auto',
                             fontFamily: 'Space Mono, monospace',
                           }}
@@ -170,7 +176,7 @@ export default function Cart() {
                       fontSize: '14px', color: '#ff5a1f',
                       flexShrink: 0,
                     }}>
-                      ${((item.price * item.quantity) / 100).toFixed(2)}
+                      \${((item.price * item.quantity) / 100).toFixed(2)}
                     </div>
                   </div>
                 ))}
@@ -193,7 +199,7 @@ export default function Cart() {
                       fontFamily: 'Space Mono, monospace',
                       fontSize: '16px', color: '#ff5a1f',
                     }}>
-                      ${(total / 100).toFixed(2)}
+                      \${(total / 100).toFixed(2)}
                     </span>
                   </div>
                   <button
@@ -214,7 +220,7 @@ export default function Cart() {
                     style={{
                       width: '100%', padding: '10px',
                       background: 'none', border: 'none',
-                      color: '#6b6b63', cursor: 'pointer',
+                      color: '#a3a39c', cursor: 'pointer', // 👈 Boosted contrast
                       fontFamily: 'Space Mono, monospace',
                       fontSize: '11px', marginTop: '8px',
                       letterSpacing: '1px',
@@ -231,3 +237,4 @@ export default function Cart() {
     </>
   )
 }
+
