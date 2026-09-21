@@ -326,7 +326,7 @@ export default async function BrandPage({ params }) {
               </span>
             </div>
 
-                        {/* Product grid */}
+                                    {/* Product grid */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
@@ -335,7 +335,7 @@ export default async function BrandPage({ params }) {
               {groupedProducts[category].map(product => {
                 let image = null
                 if (product && product.images && product.images.length > 0) {
-                  const firstImg = product.images
+                  const firstImg = product.images.at(0)
                   if (firstImg) image = firstImg.src || null
                 }
 
