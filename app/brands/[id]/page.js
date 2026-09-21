@@ -8,7 +8,6 @@ import { generateAltText } from '@/lib/altText'
 
 export const dynamic = 'force-dynamic'
 
-// Keep this object purely for static layout values
 const staticBrandData = {
   pro: {
     name: 'P.R.O.',
@@ -52,7 +51,6 @@ const staticBrandData = {
   },
 }
 
-// Map the environment keys dynamically inside an execution map function
 function getActiveBrandConfig(id) {
   const base = staticBrandData[id]
   if (!base) return null
@@ -70,7 +68,6 @@ function getActiveBrandConfig(id) {
     shopId: shopIds[id],
   }
 }
-
 
 export async function generateMetadata({ params }) {
   const brand = getActiveBrandConfig(params.id)
@@ -95,20 +92,9 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function BrandPage({ params }) {
-  const brand = getActiveBrandConfig(params.id)
-  if (!brand) notFound()
-
-  const products = await getProducts(brand.shopId)
-  const groupedProducts = categorizeProducts(products)
-  
-  let globalImageIndex = 0
-
 async function getProducts(shopId) {
   try {
-    if (!shopId || !process.env.PRINTIFY_API_KEY) {
-      return []
-    }
+    if (!shopId || !process.env.PRINTIFY_API_KEY) return []
 
     let allProducts = []
     let page = 1
@@ -196,7 +182,7 @@ function categorizeProducts(products) {
 }
 
 export default async function BrandPage({ params }) {
-  const brand = brands[params.id]
+  const brand = getActiveBrandConfig(params.id)
   if (!brand) notFound()
 
   const products = await getProducts(brand.shopId)
@@ -336,90 +322,74 @@ export default async function BrandPage({ params }) {
                 fontFamily: 'Space Mono, monospace',
                 fontSize: '11px', color: '#a3a39c',
               }}>
-                           {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
-            </span>
-          </div>
+                {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
+              </span>
+            </div>
 
-          {/* Product grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-            gap: '28px',
-          }}>
-            {groupedProducts[category].map(product => {
-              let image = null
-              if (product && product.images && product.images.length > 0) {
-                const firstImg = product.images.at(0)
-                if (firstImg) {
-                  image = firstImg.src || null
+            {/* Product grid */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+              gap: '28px',
+            }}>
+              {groupedProducts[category].map(product => {
+                let image = null
+                if (product && product.images && product.images.length > 0) {
+                  const firstImg = product.images[0]
+                  if (firstImg) image = firstImg.src || null
                 }
-              }
 
-              let enabledVariant = null
-              if (product && product.variants) {
-                enabledVariant = product.variants.find(v => v.is_enabled)
-              }
+                const enabledVariant = product.variants ? product.variants.find(v => v.is_enabled) : null
+                const price = enabledVariant ? enabledVariant.price : null
+                const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
+                
+                if (image) {
+                  globalImageIndex++
+                }
+                const isPriorityImage = globalImageIndex <= 4
 
-              let price = null
-              if (enabledVariant) {
-                price = enabledVariant.price
-              }
-
-              const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
-              
-              if (image) {
-                globalImageIndex++
-              }
-              const isPriorityImage = globalImageIndex <= 4
-
-              return (
-                <Link
-                  key={product.id}
-                  href={`/products/${params.id}/${product.id}`}
-                  style={{ textDecoration: 'none', color: brand.text }}
-                >
-                  <div style={{
-                    aspectRatio: '4/5',
-                    background: 'rgba(255,255,255,0.05)',
-                    marginBottom: '12px',
-                    overflow: 'hidden',
-                    position: 'relative'
-                  }}>
-                    {image && (
-                      <Image
-                        src={image}
-                        alt={generateAltText({
-                          title: product.title,
-                          brandName: brand.name,
-                          category: CATEGORY_ORDER.find(cat => {
-                            const keywords = CATEGORY_KEYWORDS[cat]
-                            return keywords ? keywords.some(k => new RegExp(`\\b${k}\\b`, 'i').test(product.title)) : false
-                          }),
-                        })}
-                        fill
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                        priority={isPriorityImage}
-                        style={{ objectFit: 'cover' }}
-                      />
-                    )}
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <p style={{ fontFamily: 'Work Sans, sans-serif', fontSize: '14px', margin: 0, maxWidth: '75%' }}>
-                      {product.title}
-                    </p>
-                    {formattedPrice && (
-                      <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '13px', margin: 0, color: brand.accent }}>
-                        {formattedPrice}
+                return (
+                  <Link
+                    key={product.id}
+                    href={`/products/${params.id}/${product.id}`}
+                    style={{ textDecoration: 'none', color: brand.text }}
+                  >
+                    <div style={{
+                      aspectRatio: '4/5',
+                      background: 'rgba(255,255,255,0.05)',
+                      marginBottom: '12px',
+                      overflow: 'hidden',
+                      position: 'relative'
+                    }}>
+                      {image && (
+                        <Image
+                          src={image}
+                          alt={generateAltText({
+                            title: product.title,
+                            brandName: brand.name,
+                            category: CATEGORY_ORDER.find(cat => {
+                              const keywords = CATEGORY_KEYWORDS[cat]
+                              return keywords ? keywords.some(k => new RegExp(`\\b${k}\\b`, 'i').test(product.title)) : false
+                            }),
+                          })}
+                          fill
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                          priority={isPriorityImage}
+                          style={{ objectFit: 'cover' }}
+                        />
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <p style={{ fontFamily: 'Work Sans, sans-serif', fontSize: '14px', margin: 0, maxWidth: '75%' }}>
+                        {product.title}
                       </p>
-                    )}
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-        </section>
-      ))}
-    </div>
-  </main>
-)
-}
+                      {formattedPrice && (
+                        <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '13px', margin: 0, color: brand.accent }}>
+                          {formattedPrice}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
