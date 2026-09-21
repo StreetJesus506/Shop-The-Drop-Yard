@@ -80,10 +80,8 @@ export async function generateMetadata({ params }) {
 }
 
 function getFirstProductImage(product) {
-  if (!product || !product.images) return null
-  const imagesArray = product.images
-  if (imagesArray.length === 0) return null
-  const firstImageObject = imagesArray.shift()
+  if (!product || !product.images || product.images.length === 0) return null
+  const firstImageObject = product.images[0]
   if (!firstImageObject) return null
   return firstImageObject.src || null
 }
