@@ -314,7 +314,7 @@ export default async function BrandPage({ params }) {
               </span>
             </div>
 
-                        {/* Product grid */}
+                                    {/* Product grid */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
@@ -322,12 +322,12 @@ export default async function BrandPage({ params }) {
             }}>
               {groupedProducts[category].map(product => {
                 let image = null
-                if (product && product.images && product.images[0]) {
+                if (product && product.images && product.images.length > 0 && product.images[0]) {
                   image = product.images[0].src
                 }
 
                 let enabledVariant = null
-                if (product && product.variants) {
+                if (product && product.variants && product.variants.length > 0) {
                   enabledVariant = product.variants.find(v => v.is_enabled)
                 }
 
