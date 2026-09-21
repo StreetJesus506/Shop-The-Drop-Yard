@@ -383,3 +383,16 @@ export default async function BrandPage({ params }) {
     </main>
   )
 }
+
+export async function generateStaticParams() {
+  return [
+    { id: 'pro' },
+    { id: 'nudefarmer' },
+    { id: 'unpopular' },
+    { id: 'deadair' },
+    { id: 'streetjesus' }
+  ]
+}
+
+
+
