@@ -1,6 +1,18 @@
 import './globals.css'
 import { CartProvider } from '@/lib/cartContext'
-import Cart from '@/components/Cart'
+import { Inter } from 'next/font/google' // 1. Add optimized Google Font
+import dynamic from 'next/dynamic' // 2. Add Dynamic Import utility
+
+// This sets up your font to download efficiently without blocking rendering
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap', 
+})
+
+// 3. Lazily load the Cart component so it doesn't block the initial page paint
+const Cart = dynamic(() => import('@/components/Cart'), {
+  ssr: false, // Prevents server-rendering code the user can't see yet
+})
 
 export const metadata = {
   title: 'The Drop Yard',
@@ -45,7 +57,8 @@ const storeSchema = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    // 4. Added the optimized font class to the HTML container
+    <html lang="en" className={inter.className}>
       <body>
         <script
           type="application/ld+json"
@@ -57,6 +70,7 @@ export default function RootLayout({ children }) {
         />
         <CartProvider>
           {children}
+          {/* This now only hydrates/runs code when necessary, lowering Main Thread work */}
           <Cart />
         </CartProvider>
       </body>
