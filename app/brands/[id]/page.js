@@ -310,7 +310,7 @@ export default async function BrandPage({ params }) {
                 fontFamily: 'Space Mono, monospace',
                 fontSize: '11px', color: '#a3a39c',
               }}>
-              {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
+                            {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
             </span>
           </div>
 
