@@ -291,7 +291,7 @@ export default async function BrandPage({ params }) {
             id={category.replace(/\s+/g, '-').replace(/&/g, 'and')}
             style={{ marginBottom: '48px' }}
           >
-            {/* Category header */}
+                        {/* Category header */}
             <div style={{
               display: 'flex', alignItems: 'center', gap: '16px',
               marginBottom: '24px',
@@ -310,10 +310,11 @@ export default async function BrandPage({ params }) {
                 fontFamily: 'Space Mono, monospace',
                 fontSize: '11px', color: '#a3a39c',
               }}>
-              {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
+                {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
+              </span>
             </div>
 
-                        {/* Product grid */}
+            {/* Product grid */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
