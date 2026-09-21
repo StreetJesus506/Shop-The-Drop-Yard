@@ -6,10 +6,28 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import ShareButtons from '@/components/ShareButtons'
 
-// Lazily load the heavy 3D engine elements safely after initial layout paint
 const ShippingContainer = dynamic(() => import('@/components/ShippingContainer'), {
   ssr: false,
-  loading: () => <div className="animate-pulse bg-neutral-800 rounded-lg w-full h-64" />
+  loading: () => (
+    <div 
+      className="animate-pulse bg-neutral-800 rounded-lg" 
+      style={{ 
+        width: '100%', 
+        height: '100%', 
+        minHeight: '220px', 
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      <img 
+        src="/logos/Logo-Red.png" 
+        alt="Loading The Drop Yard..." 
+        style={{ width: 'auto', height: '60px', opacity: 0.3, objectFit: 'contain' }} 
+      />
+    </div>
+  )
 })
 
 const brands = [
@@ -92,6 +110,7 @@ const brands = [
     logo: '/logos/Swiss-Throwie.png',
   },
 ]
+
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0)
