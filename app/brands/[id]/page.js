@@ -94,8 +94,6 @@ export async function generateMetadata({ params }) {
 
 async function getProducts(shopId) {
   try {
-    if (!shopId || !process.env.PRINTIFY_API_KEY) return []
-
     let allProducts = []
     let page = 1
     let hasMore = true
@@ -104,12 +102,10 @@ async function getProducts(shopId) {
       const res = await fetch(
         `https://printify.com{shopId}/products.json?limit=50&page=${page}`,
         {
-          method: 'GET',
           headers: {
             'Authorization': `Bearer ${process.env.PRINTIFY_API_KEY}`,
-            'Content-Type': 'application/json'
           },
-          cache: 'no-store'
+          next: { revalidate: 0 },
         }
       )
       const data = await res.json()
@@ -131,6 +127,7 @@ async function getProducts(shopId) {
     return []
   }
 }
+
 
 const CATEGORY_ORDER = [
   'T-SHIRTS',
