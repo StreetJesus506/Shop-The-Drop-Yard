@@ -300,7 +300,7 @@ export default async function BrandPage({ params }) {
             id={category.replace(/\s+/g, '-').replace(/&/g, 'and')}
             style={{ marginBottom: '48px' }}
           >
-            {/* Category header */}
+                        {/* Category header */}
             <div style={{
               display: 'flex', alignItems: 'center', gap: '16px',
               marginBottom: '24px',
@@ -312,89 +312,96 @@ export default async function BrandPage({ params }) {
                 fontSize: '20px', fontWeight: 700,
                 textTransform: 'uppercase', letterSpacing: '2px',
                 color: brand.accent, margin: 0,
-              {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
-            </span>
-          </div>
+              }}>
+                {category}
+              </h2>
+              <span style={{
+                fontFamily: 'Space Mono, monospace',
+                fontSize: '11px', color: '#a3a39c',
+              }}>
+                {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
+              </span>
+            </div>
 
-          {/* Product grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-            gap: '28px',
-          }}>
-            {groupedProducts[category].map(product => {
-              const image = getFirstProductImage(product)
-              
-              let enabledVariant = null
-              if (product && product.variants) {
-                const variantsList = product.variants
-                enabledVariant = variantsList.find(v => v.is_enabled)
-              }
+            {/* Product grid */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+              gap: '28px',
+            }}>
+              {groupedProducts[category].map(product => {
+                const image = getFirstProductImage(product)
+                
+                let enabledVariant = null
+                if (product && product.variants) {
+                  const variantsList = product.variants
+                  enabledVariant = variantsList.find(v => v.is_enabled)
+                }
 
-              let price = null
-              if (enabledVariant) {
-                price = enabledVariant.price
-              }
+                let price = null
+                if (enabledVariant) {
+                  price = enabledVariant.price
+                }
 
-              const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
-              
-              if (image) {
-                globalImageIndex++
-              }
-              const isPriorityImage = globalImageIndex <= 4
+                const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
+                
+                if (image) {
+                  globalImageIndex++
+                }
+                const isPriorityImage = globalImageIndex <= 4
 
-              return (
-                <Link
-                  key={product.id}
-                  href={`/products/${params.id}/${product.id}`}
-                  style={{ textDecoration: 'none', color: brand.text }}
-                >
-                  <div style={{
-                    aspectRatio: '4/5',
-                    background: 'rgba(255,255,255,0.05)',
-                    marginBottom: '12px',
-                    overflow: 'hidden',
-                    position: 'relative'
-                  }}>
-                    {image && (
-                      <Image
-                        src={image}
-                        alt={generateAltText({
-                          title: product.title,
-                          brandName: brand.name,
-                          category: CATEGORY_ORDER.find(cat => {
-                            const keywords = CATEGORY_KEYWORDS[cat]
-                            if (!keywords) return false
-                            return keywords.some(k => {
-                              const regex = new RegExp(`\\b${k}\\b`, 'i')
-                              return regex.test(product.title)
-                            })
-                          }),
-                        })}
-                        fill
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                        priority={isPriorityImage}
-                        style={{ objectFit: 'cover' }}
-                      />
-                    )}
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <p style={{ fontFamily: 'Work Sans, sans-serif', fontSize: '14px', margin: 0, maxWidth: '75%' }}>
-                      {product.title}
-                    </p>
-                    {formattedPrice && (
-                      <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '13px', margin: 0, color: brand.accent }}>
-                        {formattedPrice}
+                return (
+                  <Link
+                    key={product.id}
+                    href={`/products/${params.id}/${product.id}`}
+                    style={{ textDecoration: 'none', color: brand.text }}
+                  >
+                    <div style={{
+                      aspectRatio: '4/5',
+                      background: 'rgba(255,255,255,0.05)',
+                      marginBottom: '12px',
+                      overflow: 'hidden',
+                      position: 'relative'
+                    }}>
+                      {image && (
+                        <Image
+                          src={image}
+                          alt={generateAltText({
+                            title: product.title,
+                            brandName: brand.name,
+                            category: CATEGORY_ORDER.find(cat => {
+                              const keywords = CATEGORY_KEYWORDS[cat]
+                              if (!keywords) return false
+                              return keywords.some(k => {
+                                const regex = new RegExp(`\\b${k}\\b`, 'i')
+                                return regex.test(product.title)
+                              })
+                            }),
+                          })}
+                          fill
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                          priority={isPriorityImage}
+                          style={{ objectFit: 'cover' }}
+                        />
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <p style={{ fontFamily: 'Work Sans, sans-serif', fontSize: '14px', margin: 0, maxWidth: '75%' }}>
+                        {product.title}
                       </p>
-                    )}
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-        </section>
-      ))}
-    </div>
-  </main>
-)
+                      {formattedPrice && (
+                        <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '13px', margin: 0, color: brand.accent }}>
+                          {formattedPrice}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </section>
+        ))}
+      </div>
+    </main>
+  )
 }
