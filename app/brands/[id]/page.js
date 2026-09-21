@@ -276,7 +276,7 @@ export default async function BrandPage({ params }) {
             No products found. Make sure products are published in Printify.
           </p>
         )}
-        {CATEGORY_ORDER.filter(cat => groupedProducts[cat]).map(category => (
+                {CATEGORY_ORDER.filter(cat => groupedProducts[cat]).map(category => (
           <div 
             key={category} 
             id={category.replace(/\s+/g, '-').replace(/&/g, 'and')}
@@ -308,13 +308,11 @@ export default async function BrandPage({ params }) {
             {/* Product grid */}
             <div style={{
               display: 'grid',
-            <div style={{
-              display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
               gap: '28px',
             }}>
               {groupedProducts[category].map(product => {
-                const image = product.images && product.images.length > 0 ? product.images.src : null
+                const image = product.images && product.images.length > 0 ? product.images[0].src : null
                 const enabledVariant = product.variants ? product.variants.find(v => v.is_enabled) : null
                 const price = enabledVariant ? enabledVariant.price : null
                 const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
