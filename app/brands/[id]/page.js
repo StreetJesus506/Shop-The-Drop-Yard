@@ -312,7 +312,7 @@ export default async function BrandPage({ params }) {
                 fontFamily: 'Space Mono, monospace',
                 fontSize: '11px', color: '#a3a39c',
               }}>
-                            {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
+                           {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
             </span>
           </div>
 
@@ -324,8 +324,11 @@ export default async function BrandPage({ params }) {
           }}>
             {groupedProducts[category].map(product => {
               let image = null
-              if (product && product.images && product.images.length > 0 && product.images[0]) {
-                image = product.images[0].src
+              if (product && product.images && product.images.length > 0) {
+                const firstImg = product.images.at(0)
+                if (firstImg) {
+                  image = firstImg.src || null
+                }
               }
 
               let enabledVariant = null
