@@ -1,6 +1,8 @@
+'use client'
+
 import './globals.css'
 import { CartProvider } from '@/lib/cartContext'
-import { Inter, Big_Shoulders_Stencil } from 'next/font/google' 
+import { Inter, Big_Shoulders_Stencil } from 'next/font/google'
 import dynamic from 'next/dynamic'
 
 const inter = Inter({ 
@@ -11,14 +13,13 @@ const inter = Inter({
 const bigShoulders = Big_Shoulders_Stencil({
   subsets: ['latin'],
   weight: ['900'],
-  variable: '--font-stencil', 
+  variable: '--font-stencil',
   display: 'swap',
 })
 
 const Cart = dynamic(() => import('@/components/Cart'), {
   ssr: false,
 })
-
 
 export const metadata = {
   title: 'The Drop Yard',
@@ -31,6 +32,10 @@ export const metadata = {
     siteName: 'The Drop Yard',
     type: 'website',
   },
+  other: {
+    rel: 'preconnect',
+    url: 'https://printify.com',
+  }
 }
 
 const organizationSchema = {
@@ -38,14 +43,14 @@ const organizationSchema = {
   '@type': 'Organization',
   name: 'The Drop Yard',
   url: 'https://shopthedropyard.com',
-  logo: 'https://shopthedropyard.com/logos/Logo-Red.png',
+  logo: 'https://shopthedropyard.com',
   contactPoint: {
     '@type': 'ContactPoint',
     email: 'contact@shopthedropyard.com',
     contactType: 'customer service',
   },
   sameAs: [
-    'https://www.instagram.com/streetjesusgotsoul',
+    'https://instagram.com',
   ],
 }
 
@@ -57,7 +62,7 @@ const storeSchema = {
   description: 'Independent multi-brand streetwear platform. P.R.O., The Nude Farmer, Unpopular Demand, Dead Air Cult Classics, Street Jesus Got Soul.',
   currenciesAccepted: 'USD',
   paymentAccepted: 'Credit Card, Apple Pay, Google Pay',
-  priceRange: '$$',
+  priceRange: '\$\$',
   email: 'contact@shopthedropyard.com',
 }
 
@@ -81,4 +86,3 @@ export default function RootLayout({ children }) {
     </html>
   )
 }
-
