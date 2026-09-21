@@ -7,6 +7,7 @@ import ShareButtons from '@/components/ShareButtons'
 import { generateAltText } from '@/lib/altText'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 const brands = {
   pro: {
@@ -81,6 +82,10 @@ export async function generateMetadata({ params }) {
 
 async function getProducts(shopId) {
   try {
+    if (!shopId || !process.env.PRINTIFY_API_KEY) {
+      return []
+    }
+
     let allProducts = []
     let page = 1
     let hasMore = true
@@ -150,10 +155,7 @@ function categorizeProducts(products) {
     const keywords = CATEGORY_KEYWORDS[category]
     const matches = products.filter(p => {
       const title = p.title.toLowerCase()
-      return keywords.some(k => {
-        const regex = new RegExp(`\\b${k}\\b`, 'i')
-        return regex.test(title)
-      })
+      return keywords.some(k => new RegExp(`\\b${k}\\b`, 'i').test(title))
     })
     if (matches.length > 0) {
       grouped[category] = matches
@@ -201,6 +203,7 @@ export default async function BrandPage({ params }) {
           ],
         })}}
       />
+      
       {/* Header */}
       <header style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -233,7 +236,6 @@ export default async function BrandPage({ params }) {
             </Link>
           )}
         </div>
-
         <CartIcon color={brand.text} />
       </header>
 
@@ -310,7 +312,7 @@ export default async function BrandPage({ params }) {
                 fontFamily: 'Space Mono, monospace',
                 fontSize: '11px', color: '#a3a39c',
               }}>
-                            {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
+              {groupedProducts[category].length} {groupedProducts[category].length === 1 ? 'ITEM' : 'ITEMS'}
             </span>
           </div>
 
@@ -321,7 +323,7 @@ export default async function BrandPage({ params }) {
             gap: '28px',
           }}>
             {groupedProducts[category].map(product => {
-              const image = product.images && product.images.length > 0 ? product.images[0].src : null
+              const image = product.images && product.images.length > 0 && product.images[0] ? product.images[0].src : null;
               const enabledVariant = product.variants ? product.variants.find(v => v.is_enabled) : null
               const price = enabledVariant ? enabledVariant.price : null
               const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
