@@ -94,7 +94,7 @@ const brands = [
     bg: '#46522f',
     text: '#f1ead4',
     containerColor: 0x46522f,
-    trimColor: 0x8a9e6a',
+    trimColor: 0x8a9e6a,
     logo: '/logos/Farmer-Logo.png',
     logoTint: '#8a9e6a',
   },
@@ -146,7 +146,6 @@ const brands = [
     logo: '/logos/Swiss-Throwie.png',
   },
 ]
-
 
 
 export default function Home() {
