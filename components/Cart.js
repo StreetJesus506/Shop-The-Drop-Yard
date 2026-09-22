@@ -2,7 +2,8 @@
 
 import { useCart } from '@/lib/cartContext'
 import { motion, AnimatePresence } from 'framer-motion'
-import Image from 'next/image' // 👈 Added Next.js Image Optimization engine
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Cart() {
   const { items, removeItem, updateQuantity, total, isOpen, setIsOpen, clearCart } = useCart()
@@ -89,13 +90,62 @@ export default function Cart() {
               {/* Items */}
               <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
                 {items.length === 0 && (
-                  <p style={{
-                    fontFamily: 'Space Mono, monospace',
-                    fontSize: '13px', color: '#a3a39c', // 👈 Boosted contrast
-                    marginTop: '40px', textAlign: 'center',
-                  }}>
-                    YOUR CART IS EMPTY
-                  </p>
+                  <div style={{ padding: '40px 0', textAlign: 'center' }}>
+                    <p style={{
+                      fontFamily: 'Space Mono, monospace',
+                      fontSize: '13px', color: '#a3a39c',
+                      margin: '0 0 40px 0',
+                    }}>
+                      YOUR CART IS EMPTY
+                    </p>
+                    
+                    {/* Navigation Links inside Drawer */}
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '12px',
+                      alignItems: 'center',
+                      borderTop: '1px solid rgba(244,241,234,0.05)',
+                      paddingTop: '32px'
+                    }}>
+                      <Link 
+                        href="/about" 
+                        onClick={() => setIsOpen(false)}
+                        style={{
+                          fontFamily: 'Space Mono, monospace',
+                          fontSize: '12px',
+                          color: '#f4f1ea',
+                          textDecoration: 'none',
+                          letterSpacing: '1px',
+                          padding: '14px 24px',
+                          display: 'block',
+                          width: '80%',
+                          border: '1px solid rgba(244,241,234,0.1)',
+                          textAlign: 'center'
+                        }}
+                      >
+                        ABOUT / CONTACT
+                      </Link>
+                      <Link 
+                        href="/subscribe" 
+                        onClick={() => setIsOpen(false)}
+                        style={{
+                          fontFamily: 'Space Mono, monospace',
+                          fontSize: '12px',
+                          color: '#f4f1ea',
+                          textDecoration: 'none',
+                          letterSpacing: '1px',
+                          padding: '14px 24px',
+                          display: 'block',
+                          width: '80%',
+                          border: '1px solid rgba(244,241,234,0.1)',
+                          textAlign: 'center'
+                        }}
+                      >
+                        JOIN THE YARD
+                      </Link>
+                    </div>
+                  </div>
                 )}
                 {items.map(item => (
                   <div key={item.variantId} style={{
@@ -108,7 +158,7 @@ export default function Cart() {
                       width: '80px', height: '80px',
                       background: 'rgba(255,255,255,0.05)',
                       flexShrink: 0, overflow: 'hidden',
-                      position: 'relative' // 👈 Required for Next.js relative layout fill
+                      position: 'relative'
                     }}>
                       {item.image && (
                         <Image
@@ -128,7 +178,7 @@ export default function Cart() {
                       </p>
                       <p style={{
                         margin: '0 0 10px', fontSize: '12px',
-                        color: '#a3a39c', fontFamily: 'Space Mono, monospace', // 👈 Boosted contrast
+                        color: '#a3a39c', fontFamily: 'Space Mono, monospace',
                       }}>
                         {item.variantTitle}
                       </p>
@@ -162,7 +212,7 @@ export default function Cart() {
                           onClick={() => removeItem(item.variantId)}
                           style={{
                             background: 'none', border: 'none',
-                            color: '#a3a39c', cursor: 'pointer', // 👈 Boosted contrast
+                            color: '#a3a39c', cursor: 'pointer',
                             fontSize: '12px', marginLeft: 'auto',
                             fontFamily: 'Space Mono, monospace',
                           }}
@@ -176,13 +226,13 @@ export default function Cart() {
                       fontSize: '14px', color: '#ff5a1f',
                       flexShrink: 0,
                     }}>
-                      \${((item.price * item.quantity) / 100).toFixed(2)}
+                      ${((item.price * item.quantity) / 100).toFixed(2)}
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Footer */}
+                            {/* Footer */}
               {items.length > 0 && (
                 <div style={{
                   padding: '20px 24px',
@@ -199,7 +249,7 @@ export default function Cart() {
                       fontFamily: 'Space Mono, monospace',
                       fontSize: '16px', color: '#ff5a1f',
                     }}>
-                      \${(total / 100).toFixed(2)}
+                      ${(total / 100).toFixed(2)}
                     </span>
                   </div>
                   <button
@@ -220,7 +270,7 @@ export default function Cart() {
                     style={{
                       width: '100%', padding: '10px',
                       background: 'none', border: 'none',
-                      color: '#a3a39c', cursor: 'pointer', // 👈 Boosted contrast
+                      color: '#a3a39c', cursor: 'pointer',
                       fontFamily: 'Space Mono, monospace',
                       fontSize: '11px', marginTop: '8px',
                       letterSpacing: '1px',
@@ -237,4 +287,3 @@ export default function Cart() {
     </>
   )
 }
-
