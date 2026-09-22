@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ShippingContainer from '@/components/ShippingContainer'
 
 const availableBrands = [
@@ -52,6 +52,20 @@ const availableBrands = [
 export default function StudioPage() {
   const [activeIndex, setActiveIndex] = useState(0)
   const activeBrand = availableBrands[activeIndex]
+
+  // Inject a small stylesheet override to reposition the internal Three.js coordinates for centering
+  useEffect(() => {
+    const style = document.createElement('style')
+    style.innerHTML = `
+      canvas {
+        transform: scale(0.85) translateX(45px) translateY(-10px) !important;
+      }
+    `
+    document.head.appendChild(style)
+    return () => {
+      document.head.removeChild(style)
+    }
+  }, [])
 
   return (
     <main style={{ minHeight: '100vh', background: '#111', color: '#fff', padding: '40px 24px', fontFamily: 'sans-serif' }}>
