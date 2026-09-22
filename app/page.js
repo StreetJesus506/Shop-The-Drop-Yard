@@ -504,14 +504,15 @@ width: '95vw',
       </div>
 
 
-            {/* Dot indicators */}
+                  {/* Dot indicators */}
       <div 
         role="tablist"
         aria-label="Brand Selection"
         style={{
           position: 'absolute', bottom: '40px', right: '28px',
-          display: 'flex', flexDirection: 'row', gap: '4px', zIndex: 10,
-          alignItems: 'center'
+          display: 'flex', flexDirection: 'row', gap: '14px', zIndex: 10,
+          alignItems: 'center',
+          height: '48px' // Enforces the full 48px touch safety zone height globally
         }}
       >
         {brands.map((b, i) => (
@@ -522,22 +523,23 @@ width: '95vw',
             aria-label={`Go to brand ${b.name}`}
             onClick={() => setActiveIndex(i)}
             style={{
-              // Keeping visual circle dimensions exactly how you designed them
               width: i === activeIndex ? '10px' : '6px',
               height: i === activeIndex ? '10px' : '6px',
               borderRadius: '50%',
               background: i === activeIndex ? activeBrand.accent : '#6b6b63',
-              border: 'none', 
               cursor: 'pointer',
               transition: 'all 0.3s ease',
-              // Invisible padding expansion to meet the 48px mobile touch safety parameter
-              padding: '12px',
-              margin: '-12px',
-              boxSizing: 'content-box'
+              // Use an invisible transparent border boundary instead of padding & margins
+              border: '14px solid transparent',
+              backgroundClip: 'padding-box',
+              padding: 0,
+              boxSizing: 'content-box',
+              display: 'block'
             }}
           />
         ))}
       </div>
+
 
 
       {/* Scroll hint */}
