@@ -17,7 +17,7 @@ const availableBrands = [
     name: 'The Nude Farmer',
     accent: '#46522f',
     containerColor: 0x46522f,
-    trimColor: 0x8a9e6a',
+    trimColor: 0x8a9e6a,
     logo: '/logos/Farmer-Logo.png',
     logoTint: '#8a9e6a',
   },
@@ -57,7 +57,6 @@ export default function StudioPage() {
     <main style={{ minHeight: '100vh', background: '#111', color: '#fff', padding: '40px 24px', fontFamily: 'sans-serif' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         
-        {/* Lab Header */}
         <div style={{ borderBottom: '1px solid #333', paddingBottom: '20px', marginBottom: '40px' }}>
           <h1 style={{ margin: 0, fontSize: '24px', letterSpacing: '1px' }}>🛠️ INTERNAL ASSET STUDIO</h1>
           <p style={{ margin: '8px 0 0 0', fontSize: '13px', color: '#888' }}>
@@ -65,7 +64,6 @@ export default function StudioPage() {
           </p>
         </div>
 
-        {/* Viewport Frame */}
         <div style={{ 
           width: '100%', 
           height: '400px', 
@@ -82,7 +80,6 @@ export default function StudioPage() {
           <ShippingContainer brand={activeBrand} isActive={true} />
         </div>
 
-        {/* Studio Controls Grid */}
         <div style={{ marginTop: '40px' }}>
           <h2 style={{ fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', color: '#666', marginBottom: '16px' }}>
             Select Target Brand Template
@@ -110,7 +107,6 @@ export default function StudioPage() {
           </div>
         </div>
 
-        {/* Instructions Panel */}
         <div style={{ marginTop: '40px', background: '#161616', padding: '20px', borderRadius: '6px', border: '1px solid #222' }}>
           <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#fff' }}>Capture Protocol:</h3>
           <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: '#aaa', lineHeight: '1.6' }}>
