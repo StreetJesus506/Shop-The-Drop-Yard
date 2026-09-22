@@ -178,11 +178,11 @@ export default function Home() {
     ...(liveProductsMap.unpopular || []).slice(0, 2).map(p => ({ ...p, brandId: 'unpopular' })),
   ].slice(0, 8)
 
-  return (
-    <main style={{ minHeight: '100vh', background: '#1c1b19', color: '#ede9e0', overflowX: 'hidden', position: 'relative' }}>
+    return (
+    <main style={{ width: '100%', minHeight: '100vh', background: '#1c1b19', color: '#ede9e0', overflowX: 'hidden', position: 'relative', paddingBottom: '80px' }}>
       
       {/* Container display backdrop block segment */}
-      <div style={{ position: 'relative', width: '100%', height: '80vh', overflow: 'hidden' }} touchstart={handleTouchStart} touchend={handleTouchEnd}>
+      <div style={{ position: 'relative', width: '100%', height: '80vh', overflow: 'hidden' }} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex}
@@ -210,6 +210,14 @@ export default function Home() {
             <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', marginTop: '6px' }}>EST. 2026 // ONE YARD.</p>
             <Link href="/about" style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', textDecoration: 'none', display: 'block', marginTop: '6px' }}>ABOUT / CONTACT</Link>
             <Link href="/subscribe" style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', textDecoration: 'none', display: 'block', marginTop: '4px' }}>JOIN THE YARD</Link>
+
+            <div style={{ marginTop: '12px' }}>
+              <ShareButtons
+                url={`https://shopthedropyard.com{activeBrand.id}`}
+                title={`${activeBrand.name} | The Drop Yard`}
+                image={null}
+              />
+            </div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', margin: 0 }}>LOT {activeBrand.lot} / 05</p>
@@ -247,6 +255,9 @@ export default function Home() {
             <p style={{ fontFamily: 'Work Sans, sans-serif', fontSize: '14px', color: '#cfcac0', margin: '0 0 4px', maxWidth: '440px' }}>
               {activeBrand.ethos}
             </p>
+            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '11px', color: '#a3a39c', letterSpacing: '1px' }}>
+              {activeBrand.tag}
+            </p>
           </motion.div>
         </AnimatePresence>
 
@@ -254,6 +265,8 @@ export default function Home() {
           <button onClick={goToPrev} style={{ background: 'none', border: '1px solid #a3a39c', color: '#a3a39c', width: '36px', height: '36px', cursor: 'pointer', borderRadius: '4px' }}>←</button>
           <button onClick={goToNext} style={{ background: 'none', border: '1px solid #a3a39c', color: '#a3a39c', width: '36px', height: '36px', cursor: 'pointer', borderRadius: '4px' }}>→</button>
         </div>
+      </div>
+
       {/* Row 1: Curated Multi-Brand Featured Drops Scroll Area */}
       {featuredDrops.length > 0 && (
         <section style={{ padding: '40px 24px 20px' }}>
