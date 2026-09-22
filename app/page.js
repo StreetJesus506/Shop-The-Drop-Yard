@@ -34,7 +34,6 @@ const ShippingContainer = ({ brand, isActive }) => {
   const [threeJsReady, setThreeJsReady] = useState(false)
 
   useEffect(() => {
-    // Check if the browser has finished its initial layout execution window
     const handle = requestAnimationFrame(() => {
       setThreeJsReady(true)
     })
@@ -43,7 +42,7 @@ const ShippingContainer = ({ brand, isActive }) => {
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-      {/* 1. Permanent Static Visual Asset Asset Layer */}
+      {/* 1. Permanent Static Visual Asset Layer */}
       <div
         style={{
           position: 'absolute', inset: 0,
@@ -75,10 +74,6 @@ const ShippingContainer = ({ brand, isActive }) => {
       )}
     </div>
   )
-}
-
-
-  return <DynamicShippingContainer brand={brand} isActive={isActive} />
 }
 
 const brands = [
@@ -161,6 +156,7 @@ const brands = [
     logo: '/logos/Swiss-Throwie.png',
   },
 ]
+
 
 
 export default function Home() {
