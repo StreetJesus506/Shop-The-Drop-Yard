@@ -53,22 +53,36 @@ export default function StudioPage() {
   const [activeIndex, setActiveIndex] = useState(0)
   const activeBrand = availableBrands[activeIndex]
 
-  // Clear out any previous outer CSS hacks so the canvas can render un-warped
+  // Enforces structural camera adjustments and forces the WebGL canvas scene graph position to center layout parameters
   useEffect(() => {
-    const style = document.createElement('style')
-    style.innerHTML = `
-      canvas {
-        transform: none !important;
-        width: 130% !important;
-        height: 130% !important;
-        margin-left: -15% !important;
-        margin-top: -15% !important;
-      }
-    `
-    document.head.appendChild(style)
-    return () => {
-      document.head.removeChild(style)
-    }
+    const overrideInterval = setInterval(() => {
+      const canvases = document.querySelectorAll('canvas')
+      canvases.forEach(canvas => {
+        // Enforces full boundary containment styles directly to the native element view profiles
+        canvas.style.transform = 'scale(0.72) translateX(0px) translateY(0px)'
+        canvas.style.width = '100%'
+        canvas.style.height = '100%'
+        canvas.style.marginLeft = '0'
+        canvas.style.marginTop = '0'
+        
+        // Internal data bridge accessing the background scene graph variables directly from memory cache pipelines
+        try {
+          const fiberKey = Object.keys(canvas).find(key => key.startsWith('__reactFiber$') || key.startsWith('__reactInternalInstance$'))
+          if (fiberKey && canvas[fiberKey]?.return?.memoizedState?.memoizedProps?.scene) {
+            const scene = canvas[fiberKey].return.memoizedState.memoizedProps.scene
+            const group = scene.children.find(child => child.type === 'Group')
+            if (group) {
+              group.position.x = 0 // Removes the layout offset to pull the asset right back into view center boundaries
+              group.position.y = 0
+            }
+          }
+        } catch (e) {
+          // Silent fallback preservation loop
+        }
+      })
+    }, 100)
+
+    return () => clearInterval(overrideInterval)
   }, [])
 
   return (
@@ -95,7 +109,7 @@ export default function StudioPage() {
           justifyContent: 'center',
           boxShadow: '0 12px 40px rgba(0,0,0,0.5)'
         }}>
-          <div style={{ width: '100%', height: '100%', transform: 'scale(0.8) translateX(60px)' }}>
+          <div style={{ width: '100%', height: '100%' }}>
             <ShippingContainer brand={activeBrand} isActive={true} />
           </div>
         </div>
