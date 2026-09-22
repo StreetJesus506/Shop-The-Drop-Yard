@@ -4,8 +4,6 @@ import CategoryBar from '@/components/CategoryBar'
 import ShareButtons from '@/components/ShareButtons'
 import { generateAltText } from '@/lib/altText'
 
-export const dynamic = 'force-dynamic'
-
 const brands = {
   pro: {
     name: 'P.R.O.',
@@ -44,14 +42,15 @@ const brands = {
     shopId: process.env.PRINTIFY_SHOP_DEADAIR,
   },
   streetjesus: {
-    name: 'Street Jesus Got Soul',
-    full: 'Street Jesus Got Soul',
-    ethos: '4 Elements Culture',
-    accent: '#f4f1ea',
-    bg: '#0d0d0d',
-    text: '#e8e8e8',
-    shopId: process.env.PRINTIFY_SHOP_STREETJESUS,
-  },
+  name: 'Street Jesus Got Soul',
+  full: 'Street Jesus Got Soul',
+  ethos: '4 Elements Culture',
+  accent: '#f4f1ea',
+  bg: '#0d0d0d',
+  text: '#e8e8e8',
+  shopId: process.env.PRINTIFY_SHOP_STREETJESUS,
+},
+
 }
 
 export async function generateMetadata({ params }) {
@@ -65,7 +64,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: `${brand.name} | The Drop Yard`,
       description: brand.ethos,
-      url: `https://shopthedropyard.com{params.id}`,
+      url: `https://shopthedropyard.com/brands/${params.id}`,
       siteName: 'The Drop Yard',
       type: 'website',
     },
@@ -77,6 +76,7 @@ export async function generateMetadata({ params }) {
   }
 }
 
+
 async function getProducts(shopId) {
   try {
     let allProducts = []
@@ -85,12 +85,12 @@ async function getProducts(shopId) {
 
     while (hasMore) {
       const res = await fetch(
-        `https://printify.com{shopId}/products.json?limit=50&page=${page}`,
+        `https://api.printify.com/v1/shops/${shopId}/products.json?limit=50&page=${page}`,
         {
           headers: {
             'Authorization': `Bearer ${process.env.PRINTIFY_API_KEY}`,
           },
-          next: { revalidate: 0 },
+          next: { revalidate: 300 },
         }
       )
       const data = await res.json()
@@ -142,11 +142,15 @@ function categorizeProducts(products) {
   const grouped = {}
   const assigned = new Set()
 
+  // Assign products to categories
   for (const category of CATEGORY_ORDER.slice(0, -1)) {
     const keywords = CATEGORY_KEYWORDS[category]
     const matches = products.filter(p => {
       const title = p.title.toLowerCase()
-      return keywords.some(k => new RegExp(`\\b${k}\\b`, 'i').test(title))
+      return keywords.some(k => {
+        const regex = new RegExp(`\\b${k}\\b`, 'i')
+        return regex.test(title)
+      })
     })
     if (matches.length > 0) {
       grouped[category] = matches
@@ -154,6 +158,7 @@ function categorizeProducts(products) {
     }
   }
 
+  // Everything else
   const remainder = products.filter(p => !assigned.has(p.id))
   if (remainder.length > 0) {
     grouped['EVERYTHING ELSE'] = remainder
@@ -161,14 +166,13 @@ function categorizeProducts(products) {
 
   return grouped
 }
-
 export default async function BrandPage({ params }) {
   const brand = brands[params.id]
   if (!brand) notFound()
 
   const products = await getProducts(brand.shopId)
-  const groupedProducts = categorizeProducts(products)
-
+const groupedProducts = categorizeProducts(products)
+  
   return (
     <main style={{ minHeight: '100vh', background: brand.bg, color: brand.text }}>
       <script
@@ -187,12 +191,11 @@ export default async function BrandPage({ params }) {
               '@type': 'ListItem',
               position: 2,
               name: brand.name,
-              item: `https://shopthedropyard.com{params.id}`,
+              item: `https://shopthedropyard.com/brands/${params.id}`,
             },
           ],
         })}}
       />
-      
       {/* Header */}
       <div style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -208,24 +211,26 @@ export default async function BrandPage({ params }) {
           ← BACK TO THE YARD
         </a>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-          <span style={{
-            fontFamily: 'Big Shoulders Stencil, sans-serif',
-            fontSize: '22px', fontWeight: 700, textTransform: 'uppercase',
-          }}>
-            {brand.name}
-          </span>
-          {params.id === 'streetjesus' && (
-            <a href="/about/streetjesus" style={{
-              fontFamily: 'Space Mono, monospace',
-              fontSize: '10px', letterSpacing: '1px',
-              color: '#6b6b63', textDecoration: 'none',
-              textTransform: 'uppercase',
-            }}>
-              DJ BIO & BOOKING →
-            </a>
-          )}
-        </div>
+  <span style={{
+    fontFamily: 'Big Shoulders Stencil, sans-serif',
+    fontSize: '22px', fontWeight: 700, textTransform: 'uppercase',
+  }}>
+    {brand.name}
+  </span>
+  {params.id === 'streetjesus' && (
+    <a href="/about/streetjesus" style={{
+      fontFamily: 'Space Mono, monospace',
+      fontSize: '10px', letterSpacing: '1px',
+      color: '#6b6b63', textDecoration: 'none',
+      textTransform: 'uppercase',
+    }}>
+      DJ BIO & BOOKING →
+    </a>
+  )}
+</div>
+
         <CartIcon color={brand.text} />
+
       </div>
 
       {/* Hero */}
@@ -244,14 +249,14 @@ export default async function BrandPage({ params }) {
         </p>
         <div style={{ marginTop: '24px' }}>
           <ShareButtons
-            url={`https://shopthedropyard.com{params.id}`}
+            url={`https://shopthedropyard.com/brands/${params.id}`}
             title={`${brand.name} | The Drop Yard`}
             image={null}
           />
         </div>
       </div>
           
-      <p style={{
+<p style={{
         maxWidth: '1180px', margin: '0 auto 16px',
         padding: '0 24px',
         fontFamily: 'Space Mono, monospace',
@@ -262,26 +267,26 @@ export default async function BrandPage({ params }) {
       </p>
 
       {/* Category navigation bar */}
-      {Object.keys(groupedProducts).length > 1 && (
-        <CategoryBar 
-          categories={CATEGORY_ORDER.filter(cat => groupedProducts[cat])} 
-          accent={brand.accent} 
-        />
-      )}
+{Object.keys(groupedProducts).length > 1 && (
+  <CategoryBar 
+    categories={CATEGORY_ORDER.filter(cat => groupedProducts[cat])} 
+    accent={brand.accent} 
+  />
+)}
 
-      {/* Products by category */}
-      <div style={{ maxWidth: '1180px', margin: '0 auto', padding: '0 24px 80px' }}>
+{/* Products by category */}
+<div style={{ maxWidth: '1180px', margin: '0 auto', padding: '0 24px 80px' }}>
         {products.length === 0 && (
           <p style={{ opacity: 0.5, fontFamily: 'Space Mono, monospace', fontSize: '13px' }}>
             No products found. Make sure products are published in Printify.
           </p>
         )}
-                {CATEGORY_ORDER.filter(cat => groupedProducts[cat]).map(category => (
+        {CATEGORY_ORDER.filter(cat => groupedProducts[cat]).map(category => (
           <div 
-            key={category} 
-            id={category.replace(/\s+/g, '-').replace(/&/g, 'and')}
-            style={{ marginBottom: '48px' }}
-          >
+  key={category} 
+  id={category.replace(/\s+/g, '-').replace(/&/g, 'and')}
+  style={{ marginBottom: '48px' }}
+>
             {/* Category header */}
             <div style={{
               display: 'flex', alignItems: 'center', gap: '16px',
@@ -312,9 +317,9 @@ export default async function BrandPage({ params }) {
               gap: '28px',
             }}>
               {groupedProducts[category].map(product => {
-                const image = product.images && product.images.length > 0 ? product.images[0].src : null
-                const enabledVariant = product.variants ? product.variants.find(v => v.is_enabled) : null
-                const price = enabledVariant ? enabledVariant.price : null
+                const image = product.images?.[0]?.src || null
+                const enabledVariant = product.variants?.find(v => v.is_enabled)
+                const price = enabledVariant?.price
                 const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : null
 
                 return (
@@ -333,12 +338,15 @@ export default async function BrandPage({ params }) {
                         <img
                           src={image}
                           alt={generateAltText({
-                            title: product.title,
-                            brandName: brand.name,
-                            category: CATEGORY_ORDER.find(cat =>
-                              CATEGORY_KEYWORDS[cat] ? CATEGORY_KEYWORDS[cat].some(k => new RegExp(`\\b${k}\\b`, 'i').test(product.title)) : false
-                            ),
-                          })}
+  title: product.title,
+  brandName: brand.name,
+  category: CATEGORY_ORDER.find(cat =>
+    CATEGORY_KEYWORDS[cat]?.some(k => {
+      const regex = new RegExp(`\\b${k}\\b`, 'i')
+      return regex.test(product.title)
+    })
+  ),
+})}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       )}
