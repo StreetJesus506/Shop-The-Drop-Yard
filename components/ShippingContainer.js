@@ -19,7 +19,7 @@ export default function ShippingContainer({ brand, isActive, onClick }) {
     camera.position.set(-2.8, 0.3, 5)
     camera.lookAt(0, 0, 0)
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true })
     renderer.setSize(w, h)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     mount.appendChild(renderer.domElement)
