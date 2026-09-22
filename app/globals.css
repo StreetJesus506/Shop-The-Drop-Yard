@@ -37,3 +37,15 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #6b6b63;
 }
+
+h1, h2, h3, .font-stencil {
+  font-family: var(--font-stencil), sans-serif !important;
+}
+
+code, .font-mono {
+  font-family: var(--font-mono), monospace !important;
+}
+
+body, p, .font-sans {
+  font-family: var(--font-sans), sans-serif !important;
+}
