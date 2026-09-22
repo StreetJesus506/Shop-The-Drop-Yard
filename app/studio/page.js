@@ -53,12 +53,16 @@ export default function StudioPage() {
   const [activeIndex, setActiveIndex] = useState(0)
   const activeBrand = availableBrands[activeIndex]
 
-  // Inject a small stylesheet override to reposition the internal Three.js coordinates for centering
+  // Clear out any previous outer CSS hacks so the canvas can render un-warped
   useEffect(() => {
     const style = document.createElement('style')
     style.innerHTML = `
       canvas {
-        transform: scale(0.85) translateX(45px) translateY(-10px) !important;
+        transform: none !important;
+        width: 130% !important;
+        height: 130% !important;
+        margin-left: -15% !important;
+        margin-top: -15% !important;
       }
     `
     document.head.appendChild(style)
@@ -91,7 +95,9 @@ export default function StudioPage() {
           justifyContent: 'center',
           boxShadow: '0 12px 40px rgba(0,0,0,0.5)'
         }}>
-          <ShippingContainer brand={activeBrand} isActive={true} />
+          <div style={{ width: '100%', height: '100%', transform: 'scale(0.8) translateX(60px)' }}>
+            <ShippingContainer brand={activeBrand} isActive={true} />
+          </div>
         </div>
 
         <div style={{ marginTop: '40px' }}>
