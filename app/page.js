@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import ShareButtons from '@/components/ShareButtons'
 
-const ShippingContainer = dynamic(() => import('@/components/ShippingContainer'), {
+const DynamicShippingContainer = dynamic(() => import('@/components/ShippingContainer'), {
   ssr: false,
   loading: () => (
     <div 
@@ -29,6 +29,42 @@ const ShippingContainer = dynamic(() => import('@/components/ShippingContainer')
     </div>
   )
 })
+
+const ShippingContainer = ({ brand, isActive }) => {
+  const [shouldLoad3D, setShouldLoad3D] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShouldLoad3D(true)
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (!shouldLoad3D) {
+    return (
+      <div 
+        className="animate-pulse bg-neutral-800 rounded-lg" 
+        style={{ 
+          width: '100%', 
+          height: '100%', 
+          minHeight: '220px', 
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <img 
+          src="/logos/Logo-Red.png" 
+          alt="Loading The Drop Yard..." 
+          style={{ width: 'auto', height: '60px', opacity: 0.3, objectFit: 'contain' }} 
+        />
+      </div>
+    )
+  }
+
+  return <DynamicShippingContainer brand={brand} isActive={isActive} />
+}
 
 const brands = [
   {
@@ -58,7 +94,7 @@ const brands = [
     bg: '#46522f',
     text: '#f1ead4',
     containerColor: 0x46522f,
-    trimColor: 0x8a9e6a,
+    trimColor: 0x8a9e6a',
     logo: '/logos/Farmer-Logo.png',
     logoTint: '#8a9e6a',
   },
@@ -110,6 +146,7 @@ const brands = [
     logo: '/logos/Swiss-Throwie.png',
   },
 ]
+
 
 
 export default function Home() {
