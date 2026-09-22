@@ -10,7 +10,7 @@ const DynamicShippingContainer = dynamic(() => import('@/components/ShippingCont
   ssr: false,
   loading: () => (
     <div 
-      className="animate-pulse bg-neutral-800 rounded-lg" 
+      className="animate-pulse" 
       style={{ 
         width: '100%', 
         height: '100%', 
@@ -18,17 +18,19 @@ const DynamicShippingContainer = dynamic(() => import('@/components/ShippingCont
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        background: 'transparent' // 👈 Force the internal Next.js dynamic chunk wrapper to stay clear
       }}
     >
       <img 
         src="/logos/Logo-Red.png" 
         alt="Loading The Drop Yard..." 
-        style={{ width: 'auto', height: '60px', opacity: 0.3, objectFit: 'contain' }} 
+        style={{ width: 'auto', height: '60px', opacity: 0.2, objectFit: 'contain' }} 
       />
     </div>
   )
 })
+
 
 const ShippingContainer = ({ brand, isActive }) => {
   const [threeJsReady, setThreeJsReady] = useState(false)
