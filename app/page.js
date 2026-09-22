@@ -31,37 +31,52 @@ const DynamicShippingContainer = dynamic(() => import('@/components/ShippingCont
 })
 
 const ShippingContainer = ({ brand, isActive }) => {
-  const [shouldLoad3D, setShouldLoad3D] = useState(false)
+  const [threeJsReady, setThreeJsReady] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShouldLoad3D(true)
-    }, 400)
-    return () => clearTimeout(timer)
+    // Check if the browser has finished its initial layout execution window
+    const handle = requestAnimationFrame(() => {
+      setThreeJsReady(true)
+    })
+    return () => cancelAnimationFrame(handle)
   }, [])
 
-  if (!shouldLoad3D) {
-    return (
-      <div 
-        className="animate-pulse bg-neutral-800 rounded-lg" 
-        style={{ 
-          width: '100%', 
-          height: '100%', 
-          minHeight: '220px', 
-          position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
+  return (
+    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+      {/* 1. Permanent Static Visual Asset Asset Layer */}
+      <div
+        style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          opacity: threeJsReady ? 0 : 1,
+          transition: 'opacity 0.5s ease-in-out',
+          pointerEvents: threeJsReady ? 'none' : 'auto',
+          zIndex: 1
         }}
       >
         <img 
-          src="/logos/Logo-Red.png" 
-          alt="Loading The Drop Yard..." 
-          style={{ width: 'auto', height: '60px', opacity: 0.3, objectFit: 'contain' }} 
+          src={brand.logo} 
+          alt={`${brand.name} Core Display`}
+          style={{ 
+            width: '80%', 
+            height: 'auto', 
+            maxHeight: '180px', 
+            objectFit: 'contain',
+            opacity: 0.8 
+          }} 
         />
       </div>
-    )
-  }
+
+      {/* 2. Interactive WebGL Engine Layer */}
+      {threeJsReady && (
+        <div style={{ width: '100%', height: '100%', zIndex: 2 }}>
+          <DynamicShippingContainer brand={brand} isActive={isActive} />
+        </div>
+      )}
+    </div>
+  )
+}
+
 
   return <DynamicShippingContainer brand={brand} isActive={isActive} />
 }
