@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import ShippingContainer from '@/components/ShippingContainer'
 
 const availableBrands = [
@@ -53,38 +53,6 @@ export default function StudioPage() {
   const [activeIndex, setActiveIndex] = useState(0)
   const activeBrand = availableBrands[activeIndex]
 
-  // Enforces structural camera adjustments and forces the WebGL canvas scene graph position to center layout parameters
-  useEffect(() => {
-    const overrideInterval = setInterval(() => {
-      const canvases = document.querySelectorAll('canvas')
-      canvases.forEach(canvas => {
-        // Enforces full boundary containment styles directly to the native element view profiles
-        canvas.style.transform = 'scale(0.72) translateX(0px) translateY(0px)'
-        canvas.style.width = '100%'
-        canvas.style.height = '100%'
-        canvas.style.marginLeft = '0'
-        canvas.style.marginTop = '0'
-        
-        // Internal data bridge accessing the background scene graph variables directly from memory cache pipelines
-        try {
-          const fiberKey = Object.keys(canvas).find(key => key.startsWith('__reactFiber$') || key.startsWith('__reactInternalInstance$'))
-          if (fiberKey && canvas[fiberKey]?.return?.memoizedState?.memoizedProps?.scene) {
-            const scene = canvas[fiberKey].return.memoizedState.memoizedProps.scene
-            const group = scene.children.find(child => child.type === 'Group')
-            if (group) {
-              group.position.x = 0 // Removes the layout offset to pull the asset right back into view center boundaries
-              group.position.y = 0
-            }
-          }
-        } catch (e) {
-          // Silent fallback preservation loop
-        }
-      })
-    }, 100)
-
-    return () => clearInterval(overrideInterval)
-  }, [])
-
   return (
     <main style={{ minHeight: '100vh', background: '#111', color: '#fff', padding: '40px 24px', fontFamily: 'sans-serif' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
@@ -96,6 +64,7 @@ export default function StudioPage() {
           </p>
         </div>
 
+        {/* Outer Frame Box */}
         <div style={{ 
           width: '100%', 
           height: '400px', 
@@ -109,7 +78,13 @@ export default function StudioPage() {
           justifyContent: 'center',
           boxShadow: '0 12px 40px rgba(0,0,0,0.5)'
         }}>
-          <div style={{ width: '100%', height: '100%' }}>
+          {/* Inner offset transformation container that centers the shifted Three.js output */}
+          <div style={{ 
+            width: '100%', 
+            height: '100%', 
+            transform: 'scale(0.85) translateX(70px)', 
+            transformOrigin: 'center center' 
+          }}>
             <ShippingContainer brand={activeBrand} isActive={true} />
           </div>
         </div>
