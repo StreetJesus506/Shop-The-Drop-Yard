@@ -325,8 +325,8 @@ export default function Home() {
         `
       }} />
 
-      {/* Header */}
-      <div style={{
+            {/* Header */}
+      <header style={{
         position: 'absolute', top: 0, left: 0, right: 0,
         padding: '20px 28px',
         display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
@@ -341,44 +341,29 @@ export default function Home() {
           }}>
             THE DROP<br /><span style={{ color: '#ff5a1f' }}>YARD</span>
           </h1>
-          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#6b6b63', marginTop: '6px' }}>
+          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', marginTop: '6px' }}>
             EST. 2026
           </p>
-              <a href="/about" style={{
-  fontFamily: 'Space Mono, monospace',
-  fontSize: '10px', color: '#6b6b63',
-  textDecoration: 'none', letterSpacing: '1px',
-  marginTop: '6px', display: 'block',
-}}>
-  ABOUT / CONTACT
-</a>
-    <a href="/subscribe" style={{
-  fontFamily: 'Space Mono, monospace',
-  fontSize: '10px', color: '#6b6b63',
-  textDecoration: 'none', letterSpacing: '1px',
-  marginTop: '6px', display: 'block',
-}}>
-  JOIN THE YARD
-</a>
 
-<div style={{ marginTop: '12px' }}>
-  <ShareButtons
-    url={`https://shopthedropyard.com/brands/${activeBrand.id}`}
-    title={`${activeBrand.name} | The Drop Yard`}
-    image={null}
-  />
-</div>
-    
+          <div style={{ marginTop: '12px' }}>
+            <ShareButtons
+              url={`https://shopthedropyard.com{activeBrand.id}`}
+              title={`${activeBrand.name} | The Drop Yard`}
+              image={null}
+            />
+          </div>
         </div>
-        <div style={{ textAlign: 'right' }}>
-          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#6b6b63', margin: 0 }}>
+        
+        <div style={{ textAlign: 'right' }} aria-live="polite">
+          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', margin: 0 }}>
             LOT {activeBrand.lot} / 05
           </p>
-          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#6b6b63', margin: '4px 0 0' }}>
+          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', margin: '4px 0 0' }}>
             {activeBrand.stamp}
           </p>
         </div>
-      </div>
+      </header>
+
 
       {/* 3D Container */}
       <AnimatePresence mode="wait">
