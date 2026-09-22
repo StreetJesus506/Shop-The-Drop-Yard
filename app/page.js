@@ -2,81 +2,30 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import ShareButtons from '@/components/ShareButtons'
+import HomeTabbedCarousel from '@/components/HomeTabbedCarousel'
 
-const DynamicShippingContainer = dynamic(() => import('@/components/ShippingContainer'), {
+// Client-side dynamic import of the 3D renderer setup
+const ShippingContainer = dynamic(() => import('@/components/ShippingContainer'), {
   ssr: false,
   loading: () => (
     <div 
-      className="animate-pulse" 
+      className="animate-pulse bg-neutral-800 rounded-lg" 
       style={{ 
-        width: '100%', 
-        height: '100%', 
-        minHeight: '220px', 
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'transparent' // 👈 Force the internal Next.js dynamic chunk wrapper to stay clear
+        width: '100%', height: '100%', minHeight: '220px', 
+        position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' 
       }}
     >
       <img 
         src="/logos/Logo-Red.png" 
         alt="Loading The Drop Yard..." 
-        style={{ width: 'auto', height: '60px', opacity: 0.2, objectFit: 'contain' }} 
+        style={{ width: 'auto', height: '60px', opacity: 0.3, objectFit: 'contain' }} 
       />
     </div>
   )
 })
-
-
-const ShippingContainer = ({ brand, isActive }) => {
-  const [threeJsReady, setThreeJsReady] = useState(false)
-
-  useEffect(() => {
-    const handle = requestAnimationFrame(() => {
-      setThreeJsReady(true)
-    })
-    return () => cancelAnimationFrame(handle)
-  }, [])
-
-  return (
-    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-      {/* 1. Permanent Static Visual Asset Layer */}
-      <div
-        style={{
-          position: 'absolute', inset: 0,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          opacity: threeJsReady ? 0 : 1,
-          transition: 'opacity 0.5s ease-in-out',
-          pointerEvents: threeJsReady ? 'none' : 'auto',
-          zIndex: 1
-        }}
-      >
-        <img 
-          src={brand.logo} 
-          alt={`${brand.name} Core Display`}
-          style={{ 
-            width: '80%', 
-            height: 'auto', 
-            maxHeight: '180px', 
-            objectFit: 'contain',
-            opacity: 0.8 
-          }} 
-        />
-      </div>
-
-      {/* 2. Interactive WebGL Engine Layer */}
-      {threeJsReady && (
-        <div style={{ width: '100%', height: '100%', zIndex: 2 }}>
-          <DynamicShippingContainer brand={brand} isActive={isActive} />
-        </div>
-      )}
-    </div>
-  )
-}
 
 const brands = [
   {
@@ -88,7 +37,7 @@ const brands = [
     tag: 'NO WAR BUT CLASS WAR',
     stamp: 'FRAGILE: IDEAS',
     accent: '#b01e28',
-    bg: '#b01e28',
+    bg: '#0f0a0a',
     text: '#f3e9e2',
     containerColor: 0xb01e28,
     trimColor: 0x8e1620,
@@ -103,7 +52,7 @@ const brands = [
     tag: 'GIRLS GROW TOO',
     stamp: 'HERBAL',
     accent: '#46522f',
-    bg: '#46522f',
+    bg: '#0d0f0a',
     text: '#f1ead4',
     containerColor: 0x46522f,
     trimColor: 0x8a9e6a,
@@ -135,7 +84,7 @@ const brands = [
     tag: 'BE KIND REWIND',
     stamp: 'HANDLE W/ CARE',
     accent: '#2ee6d6',
-    bg: '#11111c',
+    bg: '#08080f',
     text: '#dfe6f0',
     containerColor: 0x11111c,
     trimColor: 0x2ee6d6,
@@ -159,16 +108,34 @@ const brands = [
   },
 ]
 
-
-
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [selectedBrand, setSelectedBrand] = useState(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const containerRef = useRef(null)
+  const [liveProductsMap, setLiveProductsMap] = useState({
+    pro: [], nudefarmer: [], unpopular: [], deadair: [], streetjesus: []
+  })
   const startYRef = useRef(null)
-
   const activeBrand = brands[activeIndex]
+
+  // Dynamic on-load catalog acquisition mapping via client-side endpoints
+  useEffect(() => {
+    async function populateHomeStorefront() {
+      const endpoints = ['pro', 'nudefarmer', 'unpopular', 'deadair', 'streetjesus']
+      try {
+        const results = await Promise.all(
+          endpoints.map(id => fetch(`/api/products?brand=${id}`).then(r => r.json()).catch(() => []))
+        )
+        const updatedMap = {}
+        endpoints.forEach((id, idx) => {
+          updatedMap[id] = results[idx] || []
+        })
+        setLiveProductsMap(updatedMap)
+      } catch (err) {
+        // Safe fallback preservation bounds
+      }
+    }
+    populateHomeStorefront()
+  }, [])
 
   const goToNext = () => {
     if (isTransitioning) return
@@ -188,396 +155,154 @@ export default function Home() {
     }, 300)
   }
 
-  useEffect(() => {
-    let lastScroll = 0
+  // Smooth gesture layout scrolling configurations
+  const handleTouchStart = (e) => {
+    startYRef.current = e.touches[0].clientX
+  }
 
-    const handleWheel = (e) => {
-      e.preventDefault()
-      const now = Date.now()
-      if (now - lastScroll < 800) return
-      lastScroll = now
-      if (e.deltaX > 0 || e.deltaY > 0) goToNext()
+  const handleTouchEnd = (e) => {
+    if (startYRef.current === null) return
+    const diff = startYRef.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 60) {
+      if (diff > 0) goToNext()
       else goToPrev()
     }
+    startYRef.current = null
+  }
 
-    const handleTouchStart = (e) => {
-      startYRef.current = e.touches[0].clientX
-    }
-
-    const handleTouchEnd = (e) => {
-      if (startYRef.current === null) return
-      const diff = startYRef.current - e.changedTouches[0].clientX
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) goToNext()
-        else goToPrev()
-      }
-      startYRef.current = null
-    }
-
-    window.addEventListener('wheel', handleWheel, { passive: false })
-    window.addEventListener('touchstart', handleTouchStart, { passive: false })
-    window.addEventListener('touchend', handleTouchEnd, { passive: false })
-
-    return () => {
-      window.removeEventListener('wheel', handleWheel)
-      window.removeEventListener('touchstart', handleTouchStart)
-      window.removeEventListener('touchend', handleTouchEnd)
-    }
-  }, [activeIndex, isTransitioning])
-
-  const openBrand = (brand) => setSelectedBrand(brand)
-  const closeBrand = () => setSelectedBrand(null)
+  // Slice individual dynamic array outputs to match curated layout boundaries
+  const featuredDrops = [
+    ...(liveProductsMap.pro || []).slice(0, 2).map(p => ({ ...p, brandId: 'pro' })),
+    ...(liveProductsMap.nudefarmer || []).slice(0, 2).map(p => ({ ...p, brandId: 'nudefarmer' })),
+    ...(liveProductsMap.deadair || []).slice(0, 2).map(p => ({ ...p, brandId: 'deadair' })),
+    ...(liveProductsMap.unpopular || []).slice(0, 2).map(p => ({ ...p, brandId: 'unpopular' })),
+  ].slice(0, 8)
 
   return (
-    <main style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#1c1b19', position: 'relative' }}>
-      {/* TEMPORARY ASSET EXTRACTOR - REMOVE AFTER SAVING IMAGES */}
-<div style={{ position: 'fixed', bottom: '20px', left: '20px', zIndex: 9999, display: 'flex', gap: '10px', flexDirection: 'column' }}>
-  <button 
-    onClick={() => {
-      const canvas = document.querySelector('canvas');
-      if (canvas) {
-        const imgUrl = canvas.toDataURL('image/png');
-        const win = window.open();
-        if (win) {
-          win.document.write(`<img src="${imgUrl}" style="background:#111; max-width:100%;" />`);
-        } else {
-          alert('Please allow popups to view your generated container image!');
-        }
-      }
-    }}
-    style={{ padding: '12px 20px', background: '#b01e28', color: '#fff', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}
-  >
-    📸 CAPTURE CONTAINER PNG
-  </button>
-</div>
-
-      {/* Background color transition */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeIndex}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.15 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6 }}
-          style={{
-            position: 'absolute', inset: 0,
-            background: activeBrand.accent,
-            pointerEvents: 'none',
-            willChange: 'opacity',
-          }}
-        />
-      </AnimatePresence>
-
-      {/* Grid overlay */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: `
-          repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(244,241,234,0.04) 79px, rgba(244,241,234,0.04) 80px),
-          repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(244,241,234,0.04) 79px, rgba(244,241,234,0.04) 80px)
-        `
-      }} />
-
-      {/* Header */}
-      <header style={{
-        position: 'absolute', top: 0, left: 0, right: 0,
-        padding: '20px 28px',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
-        zIndex: 10,
-      }}>
-        <div>
-          <h1 style={{
-            fontFamily: 'Big Shoulders Stencil, sans-serif',
-            fontSize: 'clamp(28px, 5vw, 52px)',
-            fontWeight: 900, textTransform: 'uppercase',
-            lineHeight: 0.9, margin: 0, color: '#f4f1ea',
-          }}>
-            THE DROP<br /><span style={{ color: '#ff5a1f' }}>YARD</span>
-          </h1>
-          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', marginTop: '6px' }}>
-            EST. 2026
-          </p>
-          <Link href="/about" style={{
-            fontFamily: 'Space Mono, monospace',
-            fontSize: '10px', color: '#a3a39c',
-            textDecoration: 'none', letterSpacing: '1px',
-            marginTop: '6px', display: 'block',
-          }}>
-            ABOUT / CONTACT
-          </Link>
-          <Link href="/subscribe" style={{
-            fontFamily: 'Space Mono, monospace',
-            fontSize: '10px', color: '#a3a39c',
-            textDecoration: 'none', letterSpacing: '1px',
-            marginTop: '6px', display: 'block',
-          }}>
-            JOIN THE YARD
-          </Link>
-
-          <div style={{ marginTop: '12px' }}>
-            <ShareButtons
-              url={`https://shopthedropyard.com{activeBrand.id}`}
-              title={`${activeBrand.name} | The Drop Yard`}
-              image={null}
-            />
-          </div>
-        </div>
-        
-        <div style={{ textAlign: 'right' }} aria-live="polite">
-          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', margin: 0 }}>
-            LOT {activeBrand.lot} / 05
-          </p>
-          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', margin: '4px 0 0' }}>
-            {activeBrand.stamp}
-          </p>
-        </div>
-      </header>
-
-      {/* 3D Container */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeIndex}
-          initial={{ opacity: 0, x: 80 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -80 }}
-          transition={{ duration: 0.4, ease: 'easeInOut' }}
-          style={{
-            position: 'absolute',
-            top: '42%', left: '30%',
-            transform: 'translate(-50%, -50%)',
-            width: '95%',
-            height: '50vw',
-            minHeight: '220px',
-            maxWidth: '700px',
-            maxHeight: '380px',
-            zIndex: 5,
-            willChange: 'transform, opacity',
-          }}
-        >
-          <Link href={`/brands/${activeBrand.id}`} style={{ display: 'block', width: '100%', height: '100%' }} aria-label={`View ${activeBrand.name} Brand details`}>
-            <ShippingContainer
-              brand={activeBrand}
-              isActive={true}
-            />
-          </Link>
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Brand info */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeIndex + '-info'}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          style={{
-            position: 'absolute',
-            bottom: '120px', left: '28px', right: '28px',
-            zIndex: 10,
-            willChange: 'transform, opacity',
-          }}
-        >
-          <h2 style={{
-            fontFamily: 'Big Shoulders Stencil, sans-serif',
-            fontSize: 'clamp(32px, 7vw, 72px)',
-            fontWeight: 900, textTransform: 'uppercase',
-            lineHeight: 0.9, margin: '0 0 10px',
-            color: activeBrand.accent,
-          }}>
-            {activeBrand.name}
-          </h2>
-          <p style={{
-            fontFamily: 'Work Sans, sans-serif',
-            fontSize: 'clamp(13px, 2vw, 16px)',
-            color: '#cfcac0', margin: '0 0 6px',
-            maxWidth: '480px',
-          }}>
-            {activeBrand.ethos}
-          </p>
-          <p style={{
-            fontFamily: 'Space Mono, monospace',
-            fontSize: '11px', color: '#a3a39c',
-            letterSpacing: '1px',
-          }}>
-            {activeBrand.tag}
-          </p>
-        </motion.div>
-      </AnimatePresence>
-
-            {/* Enter button using Next.js Link Wrapper */}
-      <Link href={`/brands/${activeBrand.id}`} passHref legacyBehavior>
-        <motion.a
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.97 }}
-          style={{
-            position: 'absolute',
-            bottom: '40px',
-            left: '28px',
-            fontFamily: 'Big Shoulders Stencil, sans-serif',
-            fontSize: '14px',
-            letterSpacing: '2px',
-            background: 'none',
-            border: `2px solid ${activeBrand.accent}`,
-            color: activeBrand.accent,
-            padding: '12px 28px',
-            cursor: 'pointer',
-            zIndex: 10,
-            textTransform: 'uppercase',
-            textDecoration: 'none',
-            display: 'inline-block'
-          }}
-        >
-          ENTER BRAND →
-        </motion.a>
-      </Link>
-
-            {/* Nav arrows */}
-      <div style={{
-        position: 'absolute', left: '18px', top: '50%',
-        transform: 'translateY(-50%)',
-        display: 'flex', flexDirection: 'column', gap: '12px', zIndex: 10,
-      }}>
-        <button
-          onClick={goToPrev}
-          aria-label="Previous Brand"
-          style={{
-            fontFamily: 'Space Mono, monospace', fontSize: '18px',
-            background: 'none', border: '1px solid #a3a39c',
-            color: '#a3a39c', width: '44px', height: '44px',
-            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}
-        >
-          ←
-        </button>
-        <button
-          onClick={goToNext}
-          aria-label="Next Brand"
-          style={{
-            fontFamily: 'Space Mono, monospace', fontSize: '18px',
-            background: 'none', border: '1px solid #a3a39c',
-            color: '#a3a39c', width: '44px', height: '44px',
-            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}
-        >
-          →
-        </button>
-      </div>
-
-      {/* Dot indicators */}
-      <div 
-        role="tablist"
-        aria-label="Brand Selection"
-        style={{
-          position: 'absolute', bottom: '40px', right: '28px',
-          display: 'flex', flexDirection: 'row', gap: '10px', zIndex: 10,
-        }}
-      >
-        {brands.map((b, i) => (
-          <button
-            key={b.id}
-            role="tab"
-            aria-selected={i === activeIndex}
-            aria-label={`Go to brand ${b.name}`}
-            onClick={() => setActiveIndex(i)}
-            style={{
-              width: i === activeIndex ? '10px' : '6px',
-              height: i === activeIndex ? '10px' : '6px',
-              borderRadius: '50%',
-              background: i === activeIndex ? activeBrand.accent : '#a3a39c',
-              border: 'none', cursor: 'pointer',
-              transition: 'all 0.3s ease',
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Scroll hint */}
-      <motion.p
-        animate={{ opacity: [0.4, 1, 0.4] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        style={{
-          position: 'absolute', top: '168px',
-          left: '50%', transform: 'translateX(-50%)',
-          fontFamily: 'Space Mono, monospace', fontSize: '10px',
-          color: '#a3a39c', letterSpacing: '2px',
-          zIndex: 10, whiteSpace: 'nowrap',
-        }}
-      >
-        SCROLL TO EXPLORE
-      </motion.p>
-
-      {/* Brand view overlay */}
-      <AnimatePresence>
-        {selectedBrand && (
+    <main style={{ minHeight: '100vh', background: '#1c1b19', color: '#ede9e0', overflowX: 'hidden', position: 'relative' }}>
+      
+      {/* Container display backdrop block segment */}
+      <div style={{ position: 'relative', width: '100%', height: '80vh', overflow: 'hidden' }} touchstart={handleTouchStart} touchend={handleTouchEnd}>
+        <AnimatePresence mode="wait">
           <motion.div
+            key={activeIndex}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={{ opacity: 0.15 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            style={{
-              position: 'fixed', inset: 0,
-              background: selectedBrand.bg,
-              color: selectedBrand.text,
-              zIndex: 50, overflowY: 'auto',
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 24px', borderBottom: '2px solid rgba(255,255,255,0.1)' }}>
-              <button
-                onClick={closeBrand}
-                style={{
-                  fontFamily: 'Big Shoulders Stencil, sans-serif',
-                  fontSize: '12px', letterSpacing: '1px',
-                  background: 'none',
-                  border: `1px solid ${selectedBrand.text}`,
-                  color: selectedBrand.text,
-                  padding: '8px 14px', cursor: 'pointer',
-                }}
-              >
-                ← BACK TO THE YARD
-              </button>
-              <span style={{ fontFamily: 'Big Shoulders Stencil, sans-serif', fontSize: '22px', fontWeight: 700, textTransform: 'uppercase' }}>
-                {selectedBrand.name}
-              </span>
-              <span style={{ fontFamily: 'Space Mono, monospace', fontSize: '11px', opacity: 0.7 }}>
-                LOT {selectedBrand.lot}
-              </span>
-            </div>
+            transition={{ duration: 0.6 }}
+            style={{ position: 'absolute', inset: 0, background: activeBrand.accent, pointerEvents: 'none', willChange: 'opacity' }}
+          />
+        </AnimatePresence>
 
-            <div style={{ padding: '70px 24px 60px', maxWidth: '1180px', margin: '0 auto' }}>
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                style={{
-                  fontFamily: 'Big Shoulders Stencil, sans-serif',
-                  fontSize: 'clamp(40px, 8vw, 92px)',
-                  lineHeight: 0.92, marginBottom: '18px',
-                  fontWeight: 900, textTransform: 'uppercase',
-                  color: selectedBrand.accent,
-                }}
-              >
-                {selectedBrand.full}
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                style={{ fontSize: '16px', maxWidth: '480px', lineHeight: 1.5, opacity: 0.85 }}
-              >
-                {selectedBrand.ethos}
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                style={{ marginTop: '32px', fontFamily: 'Space Mono, monospace', fontSize: '13px', opacity: 0.6 }}
-              >
-                Products coming soon.
-              </motion.p>
-            </div>
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          backgroundImage: `
+            repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(244,241,234,0.04) 79px, rgba(244,241,234,0.04) 80px),
+            repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(244,241,234,0.04) 79px, rgba(244,241,234,0.04) 80px)
+          `
+        }} />
+
+        <header style={{ position: 'absolute', top: 0, left: 0, right: 0, padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', zIndex: 10 }}>
+          <div>
+            <h1 style={{ fontFamily: 'Big Shoulders Stencil, sans-serif', fontSize: 'clamp(28px, 5vw, 52px)', fontWeight: 900, textTransform: 'uppercase', lineHeight: 0.9, margin: 0, color: '#f4f1ea' }}>
+              THE DROP<br /><span style={{ color: '#ff5a1f' }}>YARD</span>
+            </h1>
+            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', marginTop: '6px' }}>EST. 2026 // ONE YARD.</p>
+            <Link href="/about" style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', textDecoration: 'none', display: 'block', marginTop: '6px' }}>ABOUT / CONTACT</Link>
+            <Link href="/subscribe" style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', textDecoration: 'none', display: 'block', marginTop: '4px' }}>JOIN THE YARD</Link>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', margin: 0 }}>LOT {activeBrand.lot} / 05</p>
+            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '10px', color: '#a3a39c', margin: '4px 0 0' }}>{activeBrand.stamp}</p>
+          </div>
+        </header>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeIndex}
+            initial={{ opacity: 0, x: 60 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -60 }}
+            transition={{ duration: 0.4 }}
+            style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%, -50%)', width: '90%', height: '240px', zIndex: 5 }}
+          >
+            <Link href={`/brands/${activeBrand.id}`} style={{ display: 'block', width: '100%', height: '100%' }}>
+              <ShippingContainer brand={activeBrand} isActive={true} />
+            </Link>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeIndex + '-info'}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.4 }}
+            style={{ position: 'absolute', bottom: '32px', left: '24px', right: '24px', zIndex: 10 }}
+          >
+            <h2 style={{ fontFamily: 'Big Shoulders Stencil, sans-serif', fontSize: 'clamp(32px, 6vw, 64px)', fontWeight: 900, textTransform: 'uppercase', margin: '0 0 4px', color: activeBrand.accent }}>
+              {activeBrand.name}
+            </h2>
+            <p style={{ fontFamily: 'Work Sans, sans-serif', fontSize: '14px', color: '#cfcac0', margin: '0 0 4px', maxWidth: '440px' }}>
+              {activeBrand.ethos}
+            </p>
+          </motion.div>
+        </AnimatePresence>
+
+        <div style={{ position: 'absolute', right: '24px', top: '40%', display: 'flex', flexDirection: 'column', gap: '8px', zIndex: 20 }}>
+          <button onClick={goToPrev} style={{ background: 'none', border: '1px solid #a3a39c', color: '#a3a39c', width: '36px', height: '36px', cursor: 'pointer', borderRadius: '4px' }}>←</button>
+          <button onClick={goToNext} style={{ background: 'none', border: '1px solid #a3a39c', color: '#a3a39c', width: '36px', height: '36px', cursor: 'pointer', borderRadius: '4px' }}>→</button>
+        </div>
+      {/* Row 1: Curated Multi-Brand Featured Drops Scroll Area */}
+      {featuredDrops.length > 0 && (
+        <section style={{ padding: '40px 24px 20px' }}>
+          <h2 style={{ fontFamily: 'Big Shoulders Stencil, sans-serif', fontSize: '24px', letterSpacing: '1px', marginBottom: '16px', color: '#ff5a1f' }}>
+            ⚡ FEATURED DROPS
+          </h2>
+          <div style={{ display: 'flex', gap: '20px', overflowX: 'auto', paddingBottom: '12px', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+            {featuredDrops.map(product => {
+              let image = null
+              if (product && product.images && product.images.length > 0) {
+                const firstImg = product.images.at(0)
+                if (firstImg) image = firstImg.src || null
+              }
+
+              const enabledVariant = product.variants ? product.variants.find(v => v.is_enabled) : null
+              const price = enabledVariant ? `$${(enabledVariant.price / 100).toFixed(2)}` : ''
+              const brandAccent = brands.find(b => b.id === product.brandId)?.accent || '#ff5a1f'
+
+              return (
+                <Link key={product.id} href={`/products/${product.brandId}/${product.id}`} style={{ textDecoration: 'none', color: '#ede9e0', minWidth: '180px', maxWidth: '180px' }}>
+                  <div style={{ aspectRatio: '4/5', background: 'rgba(255,255,255,0.03)', marginBottom: '8px', overflow: 'hidden', borderRadius: '4px' }}>
+                    {image && <img src={image} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                  </div>
+                  <p style={{ fontFamily: 'Work Sans, sans-serif', fontSize: '13px', margin: 0, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                    {product.title}
+                  </p>
+                  <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', margin: '4px 0 0', color: brandAccent }}>
+                    {price}
+                  </p>
+                </Link>
+              )
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* Row 2: Tabbed Label Navigation Area Showcase Wrapper Component */}
+      <section style={{ marginTop: '20px', paddingBottom: '60px' }}>
+        <HomeTabbedCarousel 
+          brandConfigs={{
+            pro: brands.find(b => b.id === 'pro'),
+            nudefarmer: brands.find(b => b.id === 'nudefarmer'),
+            unpopular: brands.find(b => b.id === 'unpopular'),
+            deadair: brands.find(b => b.id === 'deadair'),
+            streetjesus: brands.find(b => b.id === 'streetjesus')
+          }} 
+          brandProductsMap={liveProductsMap} 
+        />
+      </section>
     </main>
   )
 }
