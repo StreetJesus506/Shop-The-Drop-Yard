@@ -64,7 +64,6 @@ export default function StudioPage() {
           </p>
         </div>
 
-        {/* Outer Frame Box */}
         <div style={{ 
           width: '100%', 
           height: '400px', 
@@ -73,19 +72,19 @@ export default function StudioPage() {
           border: '1px solid #222',
           overflow: 'hidden',
           position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           boxShadow: '0 12px 40px rgba(0,0,0,0.5)'
         }}>
-          {/* Inner offset transformation container that centers the shifted Three.js output */}
-          <div style={{ 
-            width: '100%', 
-            height: '100%', 
-            transform: 'scale(0.85) translateX(70px)', 
-            transformOrigin: 'center center' 
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transform: 'scale(0.8) translate(75px, 0px)'
           }}>
-            <ShippingContainer brand={activeBrand} isActive={true} />
+            <div style={{ width: '600px', height: '400px' }}>
+              <ShippingContainer brand={activeBrand} isActive={true} />
+            </div>
           </div>
         </div>
 
