@@ -230,6 +230,26 @@ export default function Home() {
 
   return (
     <main style={{ width: '100%', height: '100vh', overflow: 'hidden', background: '#1c1b19', position: 'relative' }}>
+      {/* TEMPORARY ASSET EXTRACTOR - REMOVE AFTER SAVING IMAGES */}
+<div style={{ position: 'fixed', bottom: '20px', left: '20px', zIndex: 9999, display: 'flex', gap: '10px', flexDirection: 'column' }}>
+  <button 
+    onClick={() => {
+      const canvas = document.querySelector('canvas');
+      if (canvas) {
+        const imgUrl = canvas.toDataURL('image/png');
+        const win = window.open();
+        if (win) {
+          win.document.write(`<img src="${imgUrl}" style="background:#111; max-width:100%;" />`);
+        } else {
+          alert('Please allow popups to view your generated container image!');
+        }
+      }
+    }}
+    style={{ padding: '12px 20px', background: '#b01e28', color: '#fff', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}
+  >
+    📸 CAPTURE CONTAINER PNG
+  </button>
+</div>
 
       {/* Background color transition */}
       <AnimatePresence mode="wait">
