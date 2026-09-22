@@ -471,18 +471,19 @@ width: '95vw',
         ENTER BRAND →
       </motion.button>
 
-      {/* Nav arrows */}
-<div style={{
-  position: 'absolute', left: '18px', top: '50%',
-  transform: 'translateY(-50%)',
-  display: 'flex', flexDirection: 'column', gap: '12px', zIndex: 10,
-}}>
+            {/* Nav arrows */}
+      <div style={{
+        position: 'absolute', left: '18px', top: '50%',
+        transform: 'translateY(-50%)',
+        display: 'flex', flexDirection: 'column', gap: '12px', zIndex: 10,
+      }}>
         <button
           onClick={goToPrev}
+          aria-label="Previous brand panel"
           style={{
             fontFamily: 'Space Mono, monospace', fontSize: '18px',
             background: 'none', border: '1px solid #6b6b63',
-            color: '#6b6b63', width: '44px', height: '44px',
+            color: '#6b6b63', width: '48px', height: '48px',
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
         >
@@ -490,16 +491,18 @@ width: '95vw',
         </button>
         <button
           onClick={goToNext}
+          aria-label="Next brand panel"
           style={{
             fontFamily: 'Space Mono, monospace', fontSize: '18px',
             background: 'none', border: '1px solid #6b6b63',
-            color: '#6b6b63', width: '44px', height: '44px',
+            color: '#6b6b63', width: '48px', height: '48px',
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
         >
           →
         </button>
       </div>
+
 
       {/* Dot indicators */}
       <div style={{
