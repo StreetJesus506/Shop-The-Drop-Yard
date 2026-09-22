@@ -504,15 +504,21 @@ width: '95vw',
       </div>
 
 
-                  {/* Dot indicators */}
+                        {/* Dot indicators */}
       <div 
         role="tablist"
         aria-label="Brand Selection"
         style={{
-          position: 'absolute', bottom: '40px', right: '28px',
-          display: 'flex', flexDirection: 'row', gap: '14px', zIndex: 10,
+          position: 'absolute', 
+          top: '196px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex', 
+          flexDirection: 'row', 
+          gap: '14px', 
+          zIndex: 10,
           alignItems: 'center',
-          height: '48px' // Enforces the full 48px touch safety zone height globally
+          height: '48px' 
         }}
       >
         {brands.map((b, i) => (
@@ -529,7 +535,6 @@ width: '95vw',
               background: i === activeIndex ? activeBrand.accent : '#6b6b63',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
-              // Use an invisible transparent border boundary instead of padding & margins
               border: '14px solid transparent',
               backgroundClip: 'padding-box',
               padding: 0,
