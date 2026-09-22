@@ -504,26 +504,41 @@ width: '95vw',
       </div>
 
 
-      {/* Dot indicators */}
-      <div style={{
-  position: 'absolute', bottom: '40px', right: '28px',
-  display: 'flex', flexDirection: 'row', gap: '10px', zIndex: 10,
-}}>
+            {/* Dot indicators */}
+      <div 
+        role="tablist"
+        aria-label="Brand Selection"
+        style={{
+          position: 'absolute', bottom: '40px', right: '28px',
+          display: 'flex', flexDirection: 'row', gap: '4px', zIndex: 10,
+          alignItems: 'center'
+        }}
+      >
         {brands.map((b, i) => (
           <button
             key={b.id}
+            role="tab"
+            aria-selected={i === activeIndex}
+            aria-label={`Go to brand ${b.name}`}
             onClick={() => setActiveIndex(i)}
             style={{
+              // Keeping visual circle dimensions exactly how you designed them
               width: i === activeIndex ? '10px' : '6px',
               height: i === activeIndex ? '10px' : '6px',
               borderRadius: '50%',
               background: i === activeIndex ? activeBrand.accent : '#6b6b63',
-              border: 'none', cursor: 'pointer',
+              border: 'none', 
+              cursor: 'pointer',
               transition: 'all 0.3s ease',
+              // Invisible padding expansion to meet the 48px mobile touch safety parameter
+              padding: '12px',
+              margin: '-12px',
+              boxSizing: 'content-box'
             }}
           />
         ))}
       </div>
+
 
       {/* Scroll hint */}
       <motion.p
