@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 
-const ShippingContainer = dynamic(() => import('../components/ShippingContainer'), {
+const ShippingContainer = dynamic(() => import('../../components/ShippingContainer'), {
   ssr: false,
   loading: () => (
     <div style={{ fontFamily: 'monospace', fontSize: '12px', color: '#a3a39c' }}>
