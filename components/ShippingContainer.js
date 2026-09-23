@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 
-const ShippingContainer = dynamic(() => import('../../components/ShippingContainer'), {
+const ShippingContainer = dynamic(() => import('../components/ShippingContainer'), {
   ssr: false,
   loading: () => (
     <div style={{ fontFamily: 'monospace', fontSize: '12px', color: '#a3a39c' }}>
@@ -75,7 +75,6 @@ export default function StudioPage() {
           </p>
         </div>
 
-        {/* Viewport Box */}
         <div style={{ 
           width: '100%', 
           height: '400px', 
@@ -99,9 +98,8 @@ export default function StudioPage() {
           </div>
         </div>
 
-        {/* Dynamic Studio Position Controls */}
         <div style={{ marginTop: '30px', background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
-          <div style={{ display: 'flex', justifycontent: 'space-between', alignitems: 'center', marginbottom: '12px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
             <label htmlFor="positionSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
               Horizontal Alignment Fine-Tuning
             </label>
