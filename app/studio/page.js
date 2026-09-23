@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
 const ShippingContainer = dynamic(() => import('../../components/ShippingContainer'), {
@@ -60,10 +60,38 @@ const availableBrands = [
 
 export default function StudioPage() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [offsetX, setOffsetX] = useState(0)
-  const [zoomScale, setZoomScale] = useState(0.85) // Uses a structural scaling factor baseline
+  const [offsetX, setOffsetX] = useState(80)
+  const [zoomScale, setZoomScale] = useState(0.76)
   
   const activeBrand = availableBrands[activeIndex]
+
+  useEffect(() => {
+    const adjustInternalCamera = setInterval(() => {
+      const canvases = document.querySelectorAll('canvas')
+      canvases.forEach(canvas => {
+        try {
+          const keys = Object.keys(canvas)
+          for (let i = 0; i < keys.length; i++) {
+            const key = keys[i]
+            if (key.includes('reactFiber') || key.includes('reactInternal')) {
+              const props = canvas[key]?.return?.memoizedState?.memoizedProps
+              if (props?.camera) {
+                props.camera.fov = 65
+                props.camera.position.set(-3.8, 0.3, 5.2)
+                props.camera.lookAt(-0.6, 0, 0)
+                props.camera.updateProjectionMatrix()
+                break
+              }
+            }
+          }
+        } catch (e) {
+          // Fallback guard
+        }
+      })
+    }, 100)
+
+    return () => clearInterval(adjustInternalCamera)
+  }, [activeIndex])
 
   return (
     <main style={{ minHeight: '100vh', background: '#111', color: '#fff', padding: '40px 24px', fontFamily: 'sans-serif' }}>
@@ -76,7 +104,6 @@ export default function StudioPage() {
           </p>
         </div>
 
-        {/* Viewport Frame */}
         <div style={{ 
           width: '100%', 
           height: '400px', 
@@ -87,7 +114,6 @@ export default function StudioPage() {
           position: 'relative',
           boxShadow: '0 12px 40px rgba(0,0,0,0.5)'
         }}>
-          {/* Layout matrix handling scaling zoom and horizontal placement adjustments simultaneously */}
           <div style={{ 
             width: '100%', 
             height: '100%', 
@@ -99,10 +125,8 @@ export default function StudioPage() {
           </div>
         </div>
 
-        {/* Control Center Panel */}
         <div style={{ marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
-          {/* Slider 1: Horizontal Alignment Adjustment */}
           <div style={{ background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <label htmlFor="positionSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
@@ -142,7 +166,6 @@ export default function StudioPage() {
             </div>
           </div>
 
-          {/* Slider 2: Size Zoom Scale Adjustment */}
           <div style={{ background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <label htmlFor="zoomSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
