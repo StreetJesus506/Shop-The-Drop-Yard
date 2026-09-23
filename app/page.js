@@ -200,7 +200,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 2D Optimized WebP Container Panel Swap */}
+            {/* 2D Optimized WebP Container Panel Swap */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeIndex}
@@ -210,7 +210,8 @@ export default function Home() {
           transition={{ duration: 0.4, ease: 'easeInOut' }}
           style={{
             position: 'absolute',
-            top: '42%', left: '50%',
+            top: '42%',
+            left: '30%',
             transform: 'translate(-50%, -50%)',
             width: '95%',
             height: '50vw',
@@ -219,9 +220,6 @@ export default function Home() {
             maxHeight: '380px',
             zIndex: 5,
             willChange: 'transform, opacity',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
           }}
         >
           <Link href={`/brands/${activeBrand.id}`} style={{ display: 'block', width: '100%', height: '100%' }} aria-label={`View ${activeBrand.name} Brand details`}>
@@ -231,13 +229,14 @@ export default function Home() {
               style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'contain',
+                objectFit: 'cover',
                 pointerEvents: 'none'
               }}
             />
           </Link>
         </motion.div>
       </AnimatePresence>
+
 
       <AnimatePresence mode="wait">
         <motion.div
