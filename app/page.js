@@ -268,7 +268,7 @@ export default function Home() {
             </Link>
           </motion.div>
         </AnimatePresence>
-        <AnimatePresence mode="wait">
+                <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex + '-info'}
             initial={{ opacity: 0, y: 20 }}
@@ -447,7 +447,7 @@ export default function Home() {
             <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
               LOADING LATEST DROPS...
             </p>
-          ) : products.length === 0 ? (
+          ) : !Array.isArray(products) || products.length === 0 ? (
             <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
               NO ACTIVE DESIGN DROPS AVAILABLE IN THIS LOT
             </p>
@@ -458,11 +458,11 @@ export default function Home() {
               gap: '24px 16px',
             }}>
               {products.map(product => {
-                const baseThumbnail = product.images?.[0]?.src || null
-                const fallbackThumbnail = product.thumbnail || baseThumbnail
-                
-                const variantArray = product.variants || []
-                const catalogPrice = variantArray.length > 0 ? variantArray[0].price : (product.price || 0)
+                // Read thumbnail src locations natively from the array objects structure
+                const itemImg = product.images?.[0]?.src || null
+
+                // Fallback calculations matching low-tier single price values safely
+                const firstVariantPrice = product.variants?.[0]?.price || 0
 
                 return (
                   <Link 
@@ -471,9 +471,9 @@ export default function Home() {
                     style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                   >
                     <div style={{ width: '100%', aspectRatio: '1', background: 'rgba(255,255,255,0.02)', overflow: 'hidden', position: 'relative', marginBottom: '12px', border: '1px solid rgba(244,241,234,0.03)' }}>
-                      {fallbackThumbnail && (
+                      {itemImg && (
                         <img 
-                          src={fallbackThumbnail} 
+                          src={itemImg} 
                           alt={product.title}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
@@ -483,7 +483,7 @@ export default function Home() {
                       {product.title}
                     </h4>
                     <p style={{ margin: 0, fontFamily: 'Space Mono, monospace', fontSize: '12px', fontWeight: 'bold', color: '#ff5a1f' }}>
-                      \${(catalogPrice / 100).toFixed(2)}
+                      \${(firstVariantPrice / 100).toFixed(2)}
                     </p>
                   </Link>
                 )
@@ -496,3 +496,4 @@ export default function Home() {
     </main>
   )
 }
+
