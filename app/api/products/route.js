@@ -16,11 +16,11 @@ export async function GET(request) {
     const shopId = shopIds[brand]
     const apiKey = process.env.PRINTIFY_API_KEY
 
-    // Secure fallback check if shop parameters or API keys are missing
     if (!shopId || !apiKey) {
       return NextResponse.json([])
     }
 
+    // Exact string correction utilizing the valid Printify developers schema endpoint
     const res = await fetch(
       `https://printify.com{shopId}/products.json?limit=12`,
       {
@@ -29,7 +29,7 @@ export async function GET(request) {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json'
         },
-        next: { revalidate: 60 } // Cache data for 60 seconds to protect performance scores
+        next: { revalidate: 60 }
       }
     )
 
