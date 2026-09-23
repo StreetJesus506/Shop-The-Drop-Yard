@@ -60,12 +60,11 @@ const availableBrands = [
 
 export default function StudioPage() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [offsetX, setOffsetX] = useState(51) // Maintained your functional starting point baseline
-  const [cameraZ, setCameraZ] = useState(5.0) // State loop managing live camera distance depth
+  const [offsetX, setOffsetX] = useState(51)
+  const [cameraZ, setCameraZ] = useState(5.0)
   
   const activeBrand = availableBrands[activeIndex]
 
-  // Direct injection script bypassing component cache layers to update the active camera distance vector
   useEffect(() => {
     const canvas = document.querySelector('canvas')
     if (canvas) {
@@ -93,7 +92,6 @@ export default function StudioPage() {
           </p>
         </div>
 
-        {/* Viewport Frame */}
         <div style={{ 
           width: '100%', 
           height: '400px', 
@@ -114,10 +112,8 @@ export default function StudioPage() {
           </div>
         </div>
 
-        {/* Control Desk Panel Grid Layout */}
         <div style={{ marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
-          {/* Slider 1: Horizontal Translation Alignment */}
           <div style={{ background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <label htmlFor="positionSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
@@ -157,7 +153,6 @@ export default function StudioPage() {
             </div>
           </div>
 
-          {/* Slider 2: Camera Distance Zoom Control */}
           <div style={{ background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <label htmlFor="zoomSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
