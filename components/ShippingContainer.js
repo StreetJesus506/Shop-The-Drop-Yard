@@ -16,8 +16,8 @@ export default function ShippingContainer({ brand, isActive, onClick }) {
 
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100)
-    camera.position.set(-3.7, 0.3, 5)
-    camera.lookAt(-0.9, 0, 0)
+    camera.position.set(-4.3, 0.3, 5)
+    camera.lookAt(-1.5, 0, 0)
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true })
     renderer.setSize(w, h)
@@ -86,7 +86,7 @@ export default function ShippingContainer({ brand, isActive, onClick }) {
 
     group.rotation.y = 0.25
     group.rotation.x = -0.06
-    group.position.x = -0.9
+    group.position.x = -1.5
     group.position.y = 0.5
     group.scale.set(1.5, 1.5, 1.5)
 
