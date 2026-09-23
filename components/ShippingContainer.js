@@ -3,8 +3,13 @@
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 
-const ShippingContainer = dynamic(() => import('@/components/ShippingContainer'), {
-  ssr: false
+const ShippingContainer = dynamic(() => import('../../components/ShippingContainer'), {
+  ssr: false,
+  loading: () => (
+    <div style={{ fontFamily: 'monospace', fontSize: '12px', color: '#a3a39c' }}>
+      LOADING 3D ENGINE...
+    </div>
+  )
 })
 
 const availableBrands = [
@@ -55,7 +60,7 @@ const availableBrands = [
 
 export default function StudioPage() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [offsetX, setOffsetX] = useState(0) // Control state for real-time horizontal positioning
+  const [offsetX, setOffsetX] = useState(0)
   
   const activeBrand = availableBrands[activeIndex]
 
@@ -79,9 +84,11 @@ export default function StudioPage() {
           border: '1px solid #222',
           overflow: 'hidden',
           position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           boxShadow: '0 12px 40px rgba(0,0,0,0.5)'
         }}>
-          {/* Reactive positioning matrix tied directly to the manual slider state */}
           <div style={{ 
             width: '100%', 
             height: '100%', 
@@ -94,11 +101,11 @@ export default function StudioPage() {
 
         {/* Dynamic Studio Position Controls */}
         <div style={{ marginTop: '30px', background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', justifycontent: 'space-between', alignitems: 'center', marginbottom: '12px' }}>
             <label htmlFor="positionSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
               Horizontal Alignment Fine-Tuning
             </label>
-            <span style={{ fontSize: '13px', fontFamily: 'monospace', color: '#ff5a1f', fontWeight: 'bold' }}>
+            <span style={{ fontSize: '13px', fontFamily: 'monospace', color: '#ff5a1f', fontWeight: 'bold', float: 'right' }}>
               {offsetX}px
             </span>
           </div>
@@ -116,10 +123,11 @@ export default function StudioPage() {
               height: '6px',
               borderRadius: '3px',
               background: '#333',
-              outline: 'none'
+              outline: 'none',
+              marginTop: '10px'
             }}
           />
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px', fontSize: '11px', fontFamily: 'monospace', color: '#555' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontSize: '11px', fontFamily: 'monospace', color: '#555' }}>
             <span>← Push Left</span>
             <button 
               onClick={() => setOffsetX(0)} 
