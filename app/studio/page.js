@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import dynamic from 'next/dynamic'
 
 const ShippingContainer = dynamic(() => import('../../components/ShippingContainer'), {
@@ -60,49 +60,10 @@ const availableBrands = [
 
 export default function StudioPage() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [offsetX, setOffsetX] = useState(51)
-  const [cameraZ, setCameraZ] = useState(5.0)
+  const [offsetX, setOffsetX] = useState(0)
+  const [zoomScale, setZoomScale] = useState(0.85) // Uses a structural scaling factor baseline
   
   const activeBrand = availableBrands[activeIndex]
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    
-    const canvases = document.querySelectorAll('canvas')
-    canvases.forEach(canvas => {
-      try {
-        const keys = Object.keys(canvas)
-        let foundCamera = false
-        
-        for (let i = 0; i < keys.length; i++) {
-          const key = keys[i]
-          if (key.includes('reactFiber') || key.includes('reactInternal')) {
-            const props = canvas[key]?.return?.memoizedState?.memoizedProps
-            if (props?.camera) {
-              props.camera.position.z = cameraZ
-              props.camera.updateProjectionMatrix()
-              foundCamera = true
-              break
-            }
-          }
-        }
-        
-        if (!foundCamera && window.__THREE__) {
-          const scenes = window.__THREE__.scenes || []
-          scenes.forEach(scene => {
-            scene.traverse(child => {
-              if (child.isCamera) {
-                child.position.z = cameraZ
-                child.updateProjectionMatrix()
-              }
-            })
-          })
-        }
-      } catch (err) {
-        // Safe navigation fallback
-      }
-    })
-  }, [cameraZ, activeIndex])
 
   return (
     <main style={{ minHeight: '100vh', background: '#111', color: '#fff', padding: '40px 24px', fontFamily: 'sans-serif' }}>
@@ -115,6 +76,7 @@ export default function StudioPage() {
           </p>
         </div>
 
+        {/* Viewport Frame */}
         <div style={{ 
           width: '100%', 
           height: '400px', 
@@ -123,23 +85,24 @@ export default function StudioPage() {
           border: '1px solid #222',
           overflow: 'hidden',
           position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           boxShadow: '0 12px 40px rgba(0,0,0,0.5)'
         }}>
+          {/* Layout matrix handling scaling zoom and horizontal placement adjustments simultaneously */}
           <div style={{ 
             width: '100%', 
             height: '100%', 
-            transform: `scale(1) translateX(${offsetX}px)`, 
-            transformOrigin: 'center center' 
+            transform: `scale(${zoomScale}) translateX(${offsetX}px)`, 
+            transformOrigin: 'center center',
+            transition: 'none'
           }}>
             <ShippingContainer brand={activeBrand} isActive={true} />
           </div>
         </div>
 
+        {/* Control Center Panel */}
         <div style={{ marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
+          {/* Slider 1: Horizontal Alignment Adjustment */}
           <div style={{ background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <label htmlFor="positionSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
@@ -152,8 +115,8 @@ export default function StudioPage() {
             <input
               id="positionSlider"
               type="range"
-              min="-200"
-              max="200"
+              min="-300"
+              max="300"
               value={offsetX}
               onChange={(e) => setOffsetX(Number(e.target.value))}
               style={{
@@ -179,23 +142,24 @@ export default function StudioPage() {
             </div>
           </div>
 
+          {/* Slider 2: Size Zoom Scale Adjustment */}
           <div style={{ background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <label htmlFor="zoomSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                Camera Distance Zoom (Z-Depth)
+                Container Scale Zoom Matrix
               </label>
               <span style={{ fontSize: '13px', fontFamily: 'monospace', color: '#ff5a1f', fontWeight: 'bold' }}>
-                {cameraZ.toFixed(1)}m
+                {Math.round(zoomScale * 100)}%
               </span>
             </div>
             <input
               id="zoomSlider"
               type="range"
-              min="3.5"
-              max="9.0"
-              step="0.1"
-              value={cameraZ}
-              onChange={(e) => setCameraZ(Number(e.target.value))}
+              min="0.40"
+              max="1.30"
+              step="0.01"
+              value={zoomScale}
+              onChange={(e) => setZoomScale(Number(e.target.value))}
               style={{
                 width: '100%',
                 accentColor: '#ff5a1f',
@@ -208,14 +172,14 @@ export default function StudioPage() {
               }}
             />
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontSize: '11px', fontFamily: 'monospace', color: '#555' }}>
-              <span>🔍 Zoom In (Closer)</span>
+              <span>🔍 Scale Down (Smaller)</span>
               <button 
-                onClick={() => setCameraZ(5.0)} 
+                onClick={() => setZoomScale(0.85)} 
                 style={{ background: 'none', border: 'none', color: '#a3a39c', cursor: 'pointer', fontSize: '11px', fontFamily: 'monospace', textDecoration: 'underline' }}
               >
-                Reset Zoom (5.0m)
+                Reset Scale (85%)
               </button>
-              <span>🔍 Zoom Out (Further Away) →</span>
+              <span>🔍 Scale Up (Larger) →</span>
             </div>
           </div>
 
@@ -252,8 +216,8 @@ export default function StudioPage() {
           <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#fff' }}>Capture Protocol:</h3>
           <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: '#aaa', lineHeight: '1.6' }}>
             <li>Cycle to your target brand configuration using the buttons above.</li>
-            <li>Use the <strong>Camera Distance Zoom</strong> slider to pull the lens back until the full container profile fits comfortably inside the box.</li>
-            <li>Use the <strong>Horizontal Alignment</strong> slider to center the frame perfectly before taking your screen capture vectors.</li>
+            <li>Drag the <strong>Container Scale Zoom</strong> slider left to shrink the object profile until both ends fit inside comfortably.</li>
+            <li>Drag the <strong>Horizontal Alignment</strong> slider to center your layout completely before taking your screen capture vectors.</li>
           </ul>
         </div>
 
