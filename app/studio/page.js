@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 
 const ShippingContainer = dynamic(() => import('../../components/ShippingContainer'), {
@@ -60,9 +60,27 @@ const availableBrands = [
 
 export default function StudioPage() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [offsetX, setOffsetX] = useState(0)
+  const [offsetX, setOffsetX] = useState(51) // Maintained your functional starting point baseline
+  const [cameraZ, setCameraZ] = useState(5.0) // State loop managing live camera distance depth
   
   const activeBrand = availableBrands[activeIndex]
+
+  // Direct injection script bypassing component cache layers to update the active camera distance vector
+  useEffect(() => {
+    const canvas = document.querySelector('canvas')
+    if (canvas) {
+      try {
+        const fiberKey = Object.keys(canvas).find(key => key.startsWith('__reactFiber\(') \vert{}\vert{} key.startsWith('__reactInternalInstance\)'))
+        if (fiberKey && canvas[fiberKey]?.return?.memoizedState?.memoizedProps?.camera) {
+          const camera = canvas[fiberKey].return.memoizedState.memoizedProps.camera
+          camera.position.z = cameraZ
+          camera.updateProjectionMatrix()
+        }
+      } catch (e) {
+        // Safe navigation preservation loop
+      }
+    }
+  }, [cameraZ, activeIndex])
 
   return (
     <main style={{ minHeight: '100vh', background: '#111', color: '#fff', padding: '40px 24px', fontFamily: 'sans-serif' }}>
@@ -75,6 +93,7 @@ export default function StudioPage() {
           </p>
         </div>
 
+        {/* Viewport Frame */}
         <div style={{ 
           width: '100%', 
           height: '400px', 
@@ -83,9 +102,6 @@ export default function StudioPage() {
           border: '1px solid #222',
           overflow: 'hidden',
           position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           boxShadow: '0 12px 40px rgba(0,0,0,0.5)'
         }}>
           <div style={{ 
@@ -98,43 +114,90 @@ export default function StudioPage() {
           </div>
         </div>
 
-        <div style={{ marginTop: '30px', background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <label htmlFor="positionSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              Horizontal Alignment Fine-Tuning
-            </label>
-            <span style={{ fontSize: '13px', fontFamily: 'monospace', color: '#ff5a1f', fontWeight: 'bold', float: 'right' }}>
-              {offsetX}px
-            </span>
+        {/* Control Desk Panel Grid Layout */}
+        <div style={{ marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          
+          {/* Slider 1: Horizontal Translation Alignment */}
+          <div style={{ background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <label htmlFor="positionSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Horizontal Alignment Fine-Tuning
+              </label>
+              <span style={{ fontSize: '13px', fontFamily: 'monospace', color: '#ff5a1f', fontWeight: 'bold' }}>
+                {offsetX}px
+              </span>
+            </div>
+            <input
+              id="positionSlider"
+              type="range"
+              min="-200"
+              max="200"
+              value={offsetX}
+              onChange={(e) => setOffsetX(Number(e.target.value))}
+              style={{
+                width: '100%',
+                accentColor: '#ff5a1f',
+                cursor: 'ew-resize',
+                height: '6px',
+                borderRadius: '3px',
+                background: '#333',
+                outline: 'none',
+                marginTop: '10px'
+              }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontSize: '11px', fontFamily: 'monospace', color: '#555' }}>
+              <span>← Push Left</span>
+              <button 
+                onClick={() => setOffsetX(0)} 
+                style={{ background: 'none', border: 'none', color: '#a3a39c', cursor: 'pointer', fontSize: '11px', fontFamily: 'monospace', textDecoration: 'underline' }}
+              >
+                Reset Position
+              </button>
+              <span>Push Right →</span>
+            </div>
           </div>
-          <input
-            id="positionSlider"
-            type="range"
-            min="-200"
-            max="200"
-            value={offsetX}
-            onChange={(e) => setOffsetX(Number(e.target.value))}
-            style={{
-              width: '100%',
-              accentColor: '#ff5a1f',
-              cursor: 'ew-resize',
-              height: '6px',
-              borderRadius: '3px',
-              background: '#333',
-              outline: 'none',
-              marginTop: '10px'
-            }}
-          />
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontSize: '11px', fontFamily: 'monospace', color: '#555' }}>
-            <span>← Push Left</span>
-            <button 
-              onClick={() => setOffsetX(0)} 
-              style={{ background: 'none', border: 'none', color: '#a3a39c', cursor: 'pointer', fontSize: '11px', fontFamily: 'monospace', textDecoration: 'underline' }}
-            >
-              Reset Center
-            </button>
-            <span>Push Right →</span>
+
+          {/* Slider 2: Camera Distance Zoom Control */}
+          <div style={{ background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <label htmlFor="zoomSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Camera Distance Zoom (Z-Depth)
+              </label>
+              <span style={{ fontSize: '13px', fontFamily: 'monospace', color: '#ff5a1f', fontWeight: 'bold' }}>
+                {cameraZ.toFixed(1)}m
+              </span>
+            </div>
+            <input
+              id="zoomSlider"
+              type="range"
+              min="3.5"
+              max="9.0"
+              step="0.1"
+              value={cameraZ}
+              onChange={(e) => setCameraZ(Number(e.target.value))}
+              style={{
+                width: '100%',
+                accentColor: '#ff5a1f',
+                cursor: 'ns-resize',
+                height: '6px',
+                borderRadius: '3px',
+                background: '#333',
+                outline: 'none',
+                marginTop: '10px'
+              }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontSize: '11px', fontFamily: 'monospace', color: '#555' }}>
+              <span>🔍 Zoom In (Closer)</span>
+              <button 
+                onClick={() => setCameraZ(5.0)} 
+                style={{ background: 'none', border: 'none', color: '#a3a39c', cursor: 'pointer', fontSize: '11px', fontFamily: 'monospace', textDecoration: 'underline' }}
+              >
+                Reset Zoom (5.0m)
+              </button>
+              <span>🔍 Zoom Out (Further Away) →</span>
+            </div>
           </div>
+
         </div>
 
         <div style={{ marginTop: '40px' }}>
@@ -168,8 +231,8 @@ export default function StudioPage() {
           <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#fff' }}>Capture Protocol:</h3>
           <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: '#aaa', lineHeight: '1.6' }}>
             <li>Cycle to your target brand configuration using the buttons above.</li>
-            <li>Use the range slider to center the container box to fit your device viewpoint parameters completely intact.</li>
-            <li>Right-click or long-press directly inside the graphics window to save out your optimized 2D file vectors.</li>
+            <li>Use the <strong>Camera Distance Zoom</strong> slider to pull the lens back until the full container profile fits comfortably inside the box.</li>
+            <li>Use the <strong>Horizontal Alignment</strong> slider to center the frame perfectly before taking your screen capture vectors.</li>
           </ul>
         </div>
 
