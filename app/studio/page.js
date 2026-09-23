@@ -1,7 +1,16 @@
 'use client'
 
 import { useState } from 'react'
-import ShippingContainer from '@/components/ShippingContainer'
+import dynamic from 'next/dynamic'
+
+const ShippingContainer = dynamic(() => import('../components/ShippingContainer'), {
+  ssr: false,
+  loading: () => (
+    <div style={{ fontFamily: 'monospace', fontSize: '12px', color: '#a3a39c' }}>
+      LOADING 3D ENGINE...
+    </div>
+  )
+})
 
 const availableBrands = [
   {
@@ -51,6 +60,8 @@ const availableBrands = [
 
 export default function StudioPage() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [offsetX, setOffsetX] = useState(0)
+  
   const activeBrand = availableBrands[activeIndex]
 
   return (
@@ -72,19 +83,57 @@ export default function StudioPage() {
           border: '1px solid #222',
           overflow: 'hidden',
           position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           boxShadow: '0 12px 40px rgba(0,0,0,0.5)'
         }}>
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transform: 'scale(0.8) translate(75px, 0px)'
+          <div style={{ 
+            width: '100%', 
+            height: '100%', 
+            transform: `scale(1) translateX(${offsetX}px)`, 
+            transformOrigin: 'center center' 
           }}>
-            <div style={{ width: '600px', height: '400px' }}>
-              <ShippingContainer brand={activeBrand} isActive={true} />
-            </div>
+            <ShippingContainer brand={activeBrand} isActive={true} />
+          </div>
+        </div>
+
+        <div style={{ marginTop: '30px', background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <label htmlFor="positionSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              Horizontal Alignment Fine-Tuning
+            </label>
+            <span style={{ fontSize: '13px', fontFamily: 'monospace', color: '#ff5a1f', fontWeight: 'bold', float: 'right' }}>
+              {offsetX}px
+            </span>
+          </div>
+          <input
+            id="positionSlider"
+            type="range"
+            min="-200"
+            max="200"
+            value={offsetX}
+            onChange={(e) => setOffsetX(Number(e.target.value))}
+            style={{
+              width: '100%',
+              accentColor: '#ff5a1f',
+              cursor: 'ew-resize',
+              height: '6px',
+              borderRadius: '3px',
+              background: '#333',
+              outline: 'none',
+              marginTop: '10px'
+            }}
+          />
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontSize: '11px', fontFamily: 'monospace', color: '#555' }}>
+            <span>← Push Left</span>
+            <button 
+              onClick={() => setOffsetX(0)} 
+              style={{ background: 'none', border: 'none', color: '#a3a39c', cursor: 'pointer', fontSize: '11px', fontFamily: 'monospace', textDecoration: 'underline' }}
+            >
+              Reset Center
+            </button>
+            <span>Push Right →</span>
           </div>
         </div>
 
@@ -119,9 +168,8 @@ export default function StudioPage() {
           <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#fff' }}>Capture Protocol:</h3>
           <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: '#aaa', lineHeight: '1.6' }}>
             <li>Cycle to your target brand configuration using the buttons above.</li>
-            <li>Right-click directly inside the container graphics window and select <strong>"Save Image As..."</strong>.</li>
-            <li>If you are using a mobile viewport, press and hold the container for 2 seconds and select <strong>"Save to Photos"</strong>.</li>
-            <li>Rename the output graphic asset file to match your production repository schema configurations.</li>
+            <li>Use the range slider to center the container box to fit your device viewpoint parameters completely intact.</li>
+            <li>Right-click or long-press directly inside the graphics window to save out your optimized 2D file vectors.</li>
           </ul>
         </div>
 
