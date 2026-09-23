@@ -200,7 +200,7 @@ export default function Home() {
         </div>
       </header>
 
-                         {/* 2D Optimized WebP Container Panel Swap */}
+                     {/* 2D Optimized WebP Container Panel Swap */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeIndex}
@@ -213,10 +213,10 @@ export default function Home() {
             top: '42%',
             left: '5%',
             transform: 'translate(-50%, -50%)',
-            width: '95%',
+            width: '120%',
             height: '50vw',
             minHeight: '220px',
-            maxWidth: '700px',
+            maxWidth: '850px',
             maxHeight: '380px',
             zIndex: 5,
             willChange: 'transform, opacity',
@@ -236,7 +236,6 @@ export default function Home() {
           </Link>
         </motion.div>
       </AnimatePresence>
-
 
       <AnimatePresence mode="wait">
         <motion.div
