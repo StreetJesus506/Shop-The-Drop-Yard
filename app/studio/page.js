@@ -60,38 +60,34 @@ const availableBrands = [
 
 export default function StudioPage() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [offsetX, setOffsetX] = useState(80)
-  const [zoomScale, setZoomScale] = useState(0.76)
+  const [offsetX, setOffsetX] = useState(76)
+  const [zoomScale, setZoomScale] = useState(0.78)
+  const [rotationY, setRotationY] = useState(0.25) // Reactive state managing the 3D model rotation axis
   
   const activeBrand = availableBrands[activeIndex]
 
+  // Direct injection link pulling the dynamic rotation value straight into the running WebGL canvas context
   useEffect(() => {
-    const adjustInternalCamera = setInterval(() => {
-      const canvases = document.querySelectorAll('canvas')
-      canvases.forEach(canvas => {
-        try {
-          const keys = Object.keys(canvas)
-          for (let i = 0; i < keys.length; i++) {
-            const key = keys[i]
-            if (key.includes('reactFiber') || key.includes('reactInternal')) {
-              const props = canvas[key]?.return?.memoizedState?.memoizedProps
-              if (props?.camera) {
-                props.camera.fov = 65
-                props.camera.position.set(-3.8, 0.3, 5.2)
-                props.camera.lookAt(-0.6, 0, 0)
-                props.camera.updateProjectionMatrix()
-                break
-              }
+    const canvas = document.querySelector('canvas')
+    if (canvas) {
+      try {
+        const keys = Object.keys(canvas)
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i]
+          if (key.includes('reactFiber') || key.includes('reactInternal')) {
+            const scene = canvas[key]?.return?.memoizedState?.memoizedProps?.scene
+            const group = scene?.children?.find(child => child.type === 'Group')
+            if (group) {
+              group.rotation.y = rotationY
+              break
             }
           }
-        } catch (e) {
-          // Fallback guard
         }
-      })
-    }, 100)
-
-    return () => clearInterval(adjustInternalCamera)
-  }, [activeIndex])
+      } catch (e) {
+        // Fallback guard
+      }
+    }
+  }, [rotationY, activeIndex])
 
   return (
     <main style={{ minHeight: '100vh', background: '#111', color: '#fff', padding: '40px 24px', fontFamily: 'sans-serif' }}>
@@ -127,6 +123,7 @@ export default function StudioPage() {
 
         <div style={{ marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
+          {/* Slider 1: Layout Fine-Tuning */}
           <div style={{ background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <label htmlFor="positionSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
@@ -139,8 +136,8 @@ export default function StudioPage() {
             <input
               id="positionSlider"
               type="range"
-              min="-300"
-              max="300"
+              min="-400"
+              max="400"
               value={offsetX}
               onChange={(e) => setOffsetX(Number(e.target.value))}
               style={{
@@ -154,18 +151,9 @@ export default function StudioPage() {
                 marginTop: '10px'
               }}
             />
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontSize: '11px', fontFamily: 'monospace', color: '#555' }}>
-              <span>← Push Left</span>
-              <button 
-                onClick={() => setOffsetX(0)} 
-                style={{ background: 'none', border: 'none', color: '#a3a39c', cursor: 'pointer', fontSize: '11px', fontFamily: 'monospace', textDecoration: 'underline' }}
-              >
-                Reset Position
-              </button>
-              <span>Push Right →</span>
-            </div>
           </div>
 
+          {/* Slider 2: Scale Zoom */}
           <div style={{ background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <label htmlFor="zoomSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
@@ -178,7 +166,7 @@ export default function StudioPage() {
             <input
               id="zoomSlider"
               type="range"
-              min="0.40"
+              min="0.30"
               max="1.30"
               step="0.01"
               value={zoomScale}
@@ -194,15 +182,46 @@ export default function StudioPage() {
                 marginTop: '10px'
               }}
             />
+          </div>
+
+          {/* Slider 3: Live Perspective Rotation Axis */}
+          <div style={{ background: '#1c1b19', padding: '20px', borderRadius: '6px', border: '1px solid #2a2926' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <label htmlFor="rotationSlider" style={{ fontSize: '13px', fontFamily: 'monospace', color: '#a3a39c', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                3D Perspective Angle Rotation (Y-Axis)
+              </label>
+              <span style={{ fontSize: '13px', fontFamily: 'monospace', color: '#ff5a1f', fontWeight: 'bold' }}>
+                {rotationY.toFixed(2)} rad
+              </span>
+            </div>
+            <input
+              id="rotationSlider"
+              type="range"
+              min="-0.50"
+              max="1.50"
+              step="0.01"
+              value={rotationY}
+              onChange={(e) => setRotationY(Number(e.target.value))}
+              style={{
+                width: '100%',
+                accentColor: '#ff5a1f',
+                cursor: 'ew-resize',
+                height: '6px',
+                borderRadius: '3px',
+                background: '#333',
+                outline: 'none',
+                marginTop: '10px'
+              }}
+            />
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontSize: '11px', fontFamily: 'monospace', color: '#555' }}>
-              <span>🔍 Scale Down (Smaller)</span>
+              <span>🔄 Flatten Profile</span>
               <button 
-                onClick={() => setZoomScale(0.85)} 
+                onClick={() => setRotationY(0.25)} 
                 style={{ background: 'none', border: 'none', color: '#a3a39c', cursor: 'pointer', fontSize: '11px', fontFamily: 'monospace', textDecoration: 'underline' }}
               >
-                Reset Scale (85%)
+                Reset Original Angle (0.25)
               </button>
-              <span>🔍 Scale Up (Larger) →</span>
+              <span>Turn Side Wall Forward 🔄</span>
             </div>
           </div>
 
@@ -233,15 +252,6 @@ export default function StudioPage() {
               </button>
             ))}
           </div>
-        </div>
-
-        <div style={{ marginTop: '40px', background: '#161616', padding: '20px', borderRadius: '6px', border: '1px solid #222' }}>
-          <h3 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#fff' }}>Capture Protocol:</h3>
-          <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: '#aaa', lineHeight: '1.6' }}>
-            <li>Cycle to your target brand configuration using the buttons above.</li>
-            <li>Drag the <strong>Container Scale Zoom</strong> slider left to shrink the object profile until both ends fit inside comfortably.</li>
-            <li>Drag the <strong>Horizontal Alignment</strong> slider to center your layout completely before taking your screen capture vectors.</li>
-          </ul>
         </div>
 
       </div>
