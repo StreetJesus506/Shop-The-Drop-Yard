@@ -16,7 +16,7 @@ export default function ShippingContainer({ brand, isActive, onClick }) {
 
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100)
-    camera.position.set(-2.8, 0.3, 5)
+    camera.position.set(0, 0, 6.2)
     camera.lookAt(0, 0, 0)
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true })
@@ -84,7 +84,7 @@ export default function ShippingContainer({ brand, isActive, onClick }) {
     door.position.set(0, 0, 0.51)
     group.add(door)
 
-    group.rotation.y = 0.25
+    group.rotation.y = 0.45
     group.rotation.x = -0.06
     group.position.x = 0
     group.position.y = 0
