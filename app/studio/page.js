@@ -66,19 +66,42 @@ export default function StudioPage() {
   const activeBrand = availableBrands[activeIndex]
 
   useEffect(() => {
-    const canvas = document.querySelector('canvas')
-    if (canvas) {
+    if (typeof window === 'undefined') return
+    
+    const canvases = document.querySelectorAll('canvas')
+    canvases.forEach(canvas => {
       try {
-        const fiberKey = Object.keys(canvas).find(key => key.startsWith('__reactFiber\(') \vert{}\vert{} key.startsWith('__reactInternalInstance\)'))
-        if (fiberKey && canvas[fiberKey]?.return?.memoizedState?.memoizedProps?.camera) {
-          const camera = canvas[fiberKey].return.memoizedState.memoizedProps.camera
-          camera.position.z = cameraZ
-          camera.updateProjectionMatrix()
+        const keys = Object.keys(canvas)
+        let foundCamera = false
+        
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i]
+          if (key.includes('reactFiber') || key.includes('reactInternal')) {
+            const props = canvas[key]?.return?.memoizedState?.memoizedProps
+            if (props?.camera) {
+              props.camera.position.z = cameraZ
+              props.camera.updateProjectionMatrix()
+              foundCamera = true
+              break
+            }
+          }
         }
-      } catch (e) {
-        // Safe navigation preservation loop
+        
+        if (!foundCamera && window.__THREE__) {
+          const scenes = window.__THREE__.scenes || []
+          scenes.forEach(scene => {
+            scene.traverse(child => {
+              if (child.isCamera) {
+                child.position.z = cameraZ
+                child.updateProjectionMatrix()
+              }
+            })
+          })
+        }
+      } catch (err) {
+        // Safe navigation fallback
       }
-    }
+    })
   }, [cameraZ, activeIndex])
 
   return (
@@ -100,6 +123,9 @@ export default function StudioPage() {
           border: '1px solid #222',
           overflow: 'hidden',
           position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           boxShadow: '0 12px 40px rgba(0,0,0,0.5)'
         }}>
           <div style={{ 
