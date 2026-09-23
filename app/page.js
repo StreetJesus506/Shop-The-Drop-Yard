@@ -5,6 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import ShareButtons from '@/components/ShareButtons'
 
+// 💡 Place the exact Printify Product IDs you want to feature here for curation
+const curatedProductIds = [
+  "65f1a2b3c4d5e6f7a8b9c0d1", // Example ID 1
+  "65f1a2b3c4d5e6f7a8b9c0d2", // Example ID 2
+  "65f1a2b3c4d5e6f7a8b9c0d3", // Example ID 3
+  "65f1a2b3c4d5e6f7a8b9c0d4"  // Example ID 4
+]
+
 const brands = [
   {
     id: 'pro',
@@ -110,7 +118,7 @@ export default function Home() {
           setProducts(data || [])
         }
       } catch (err) {
-        console.error("Store dynamic data connection error:", err)
+        console.error("Store catalog pipeline tracking error:", err)
       } finally {
         setIsLoadingProducts(false)
       }
@@ -121,11 +129,8 @@ export default function Home() {
     let lastScroll = 0
 
     const handleWheel = (e) => {
-      if (window.scrollY > 50) return
-
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        if (e.deltaY > 15) return
-      }
+      // Allows smooth background navigation loops if user is resting at the absolute top of the layout page view
+      if (window.scrollY > 10) return
 
       e.preventDefault()
       const now = Date.now()
@@ -140,10 +145,11 @@ export default function Home() {
     }
 
     const handleTouchEnd = (e) => {
-      if (window.scrollY > 50) return
+      // Fixed touch block protocol allowing uninhibited swipe navigation metrics at the primary viewport baseline entry level
+      if (window.scrollY > 10) return
       if (startYRef.current === null) return
       const diff = startYRef.current - e.changedTouches[0].clientX
-      if (Math.abs(diff) > 50) {
+      if (Math.abs(diff) > 40) {
         if (diff > 0) goToNext()
         else goToPrev()
       }
@@ -434,19 +440,13 @@ export default function Home() {
             color: activeBrand.accent,
             marginBottom: '32px'
           }}>
-            LATEST DROPS / {activeBrand.name}
+            FEATURED DROPS / {activeBrand.name}
           </h3>
 
           {isLoadingProducts ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-              {[1, 2, 3, 4].map(skeletonId => (
-                <div key={skeletonId}>
-                  <div style={{ width: '100%', aspectRatio: '1', background: 'rgba(255,255,255,0.03)', marginBottom: '12px' }} />
-                  <div style={{ height: '14px', width: '70%', background: 'rgba(255,255,255,0.05)', marginBottom: '6px' }} />
-                  <div style={{ height: '12px', width: '40%', background: 'rgba(255,255,255,0.03)' }} />
-                </div>
-              ))}
-            </div>
+            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
+              LOADING LATEST DROPS...
+            </p>
           ) : products.length === 0 ? (
             <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
               NO ACTIVE DESIGN DROPS AVAILABLE IN THIS LOT
@@ -458,20 +458,22 @@ export default function Home() {
               gap: '24px 16px',
             }}>
               {products.map(product => {
-                const variants = product.variants || []
-                const priceValue = variants.length > 0 ? variants[0].price : 0
-                const productImg = product.images && product.images.length > 0 ? product.images[0].src : null
+                const baseThumbnail = product.images?.[0]?.src || null
+                const fallbackThumbnail = product.thumbnail || baseThumbnail
                 
+                const variantArray = product.variants || []
+                const catalogPrice = variantArray.length > 0 ? variantArray[0].price : (product.price || 0)
+
                 return (
                   <Link 
                     key={product.id} 
                     href={`/products/${activeBrand.id}/${product.id}`}
                     style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                   >
-                    <div style={{ width: '100%', aspectRatio: '1', background: 'rgba(255,255,255,0.02)', overflow: 'hidden', relative: 'true', marginBottom: '12px', border: '1px solid rgba(244,241,234,0.03)' }}>
-                      {productImg && (
+                    <div style={{ width: '100%', aspectRatio: '1', background: 'rgba(255,255,255,0.02)', overflow: 'hidden', position: 'relative', marginBottom: '12px', border: '1px solid rgba(244,241,234,0.03)' }}>
+                      {fallbackThumbnail && (
                         <img 
-                          src={productImg} 
+                          src={fallbackThumbnail} 
                           alt={product.title}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
@@ -481,7 +483,7 @@ export default function Home() {
                       {product.title}
                     </h4>
                     <p style={{ margin: 0, fontFamily: 'Space Mono, monospace', fontSize: '12px', fontWeight: 'bold', color: '#ff5a1f' }}>
-                      \${(priceValue / 100).toFixed(2)}
+                      \${(catalogPrice / 100).toFixed(2)}
                     </p>
                   </Link>
                 )
