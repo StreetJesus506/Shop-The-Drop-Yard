@@ -292,7 +292,7 @@ export default function Home() {
               fontFamily: 'Space Mono, monospace', fontSize: '18px',
               background: 'none', border: '1px solid #6b6b63',
               color: '#6b6b63', width: '48px', height: '48px',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifycontent: 'center',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
             ←
@@ -304,7 +304,7 @@ export default function Home() {
               fontFamily: 'Space Mono, monospace', fontSize: '18px',
               background: 'none', border: '1px solid #6b6b63',
               color: '#6b6b63', width: '44px', height: '44px',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifycontent: 'center',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
             →
