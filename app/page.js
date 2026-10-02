@@ -383,7 +383,7 @@ export default function Home() {
             <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
               SYNCING LATEST DESIGN DROPS...
             </p>
-          ) : currentBrandProducts.length === 0 ? (
+          ) : !Array.isArray(currentBrandProducts) || currentBrandProducts.length === 0 ? (
             <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
               NO ACTIVE DESIGN DROPS AVAILABLE IN THIS LOT
             </p>
@@ -394,10 +394,12 @@ export default function Home() {
               gap: '24px 16px',
             }}>
               {currentBrandProducts.map(product => {
-                // Read nested Printify object array positions defensively
-                const productImg = product.images && product.images[0] ? product.images[0].src : null
-                const variantArray = product.variants || []
-                const lowestPrice = variantArray && variantArray[0] ? variantArray[0].price : 0
+                // Safeguards array tracking to extract your primary item image index successfully
+                const itemImg = product.images && product.images[0] ? product.images[0].src : null
+                
+                // Safely unpacks the primary variant option price index from the data node
+                const baseVariants = product.variants || []
+                const priceValue = baseVariants && baseVariants[0] ? baseVariants[0].price : 0
 
                 return (
                   <Link 
@@ -406,9 +408,9 @@ export default function Home() {
                     style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
                   >
                     <div style={{ width: '100%', aspectRatio: '1', background: 'rgba(255,255,255,0.02)', overflow: 'hidden', position: 'relative', marginBottom: '12px', border: '1px solid rgba(244,241,234,0.03)' }}>
-                      {productImg && (
+                      {itemImg && (
                         <img 
-                          src={productImg} 
+                          src={itemImg} 
                           alt={product.title}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
@@ -418,7 +420,7 @@ export default function Home() {
                       {product.title}
                     </h4>
                     <p style={{ margin: 0, fontFamily: 'Space Mono, monospace', fontSize: '12px', fontWeight: 'bold', color: '#ff5a1f' }}>
-                      \${(lowestPrice / 100).toFixed(2)}
+                      \${(priceValue / 100).toFixed(2)}
                     </p>
                   </Link>
                 )
