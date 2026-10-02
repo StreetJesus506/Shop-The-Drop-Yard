@@ -5,90 +5,55 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import ShareButtons from '@/components/ShareButtons'
 
-// 💡 Place the exact Printify Product IDs you want to feature here for curation
-const curatedProductIds = [
-  "65f1a2b3c4d5e6f7a8b9c0d1", // Example ID 1
-  "65f1a2b3c4d5e6f7a8b9c0d2", // Example ID 2
-  "65f1a2b3c4d5e6f7a8b9c0d3", // Example ID 3
-  "65f1a2b3c4d5e6f7a8b9c0d4"  // Example ID 4
-]
+// ⚡ STATIC HOME INVENTORY SYSTEM: Bypasses network lag entirely for instant loads
+const localCatalogByBrand = {
+  pro: [
+    { id: 'pro-h1', title: 'P.R.O. Heavyweight Hoodie', price: 6500, img: 'https://printify.com' },
+    { id: 'pro-t1', title: 'Class War Graphic Tee', price: 3200, img: 'https://printify.com' },
+    { id: 'pro-c1', title: 'Revolution Stencil Cap', price: 2800, img: 'https://printify.com' },
+    { id: 'pro-a1', title: 'Outfitters Tote Bag', price: 1800, img: 'https://printify.com' }
+  ],
+  nudefarmer: [
+    { id: 'nf-h1', title: 'Farm To Fit Work Hoodie', price: 6800, img: 'https://printify.com' },
+    { id: 'nf-t1', title: 'Girls Grow Too Crop Tee', price: 3400, img: 'https://printify.com' },
+    { id: 'nf-c1', title: 'Herbal Canvas Trucker', price: 3000, img: 'https://printify.com' },
+    { id: 'nf-a1', title: 'Nude Farmer Utility Pouch', price: 2200, img: 'https://printify.com' }
+  ],
+  unpopular: [
+    { id: 'up-h1', title: 'History Buried Heavy Hoodie', price: 7000, img: 'https://printify.com' },
+    { id: 'up-t1', title: 'ACAB Vintage Box Tee', price: 3500, img: 'https://printify.com' },
+    { id: 'up-c1', title: 'Corner Store Cig Beanie', price: 2500, img: 'https://printify.com' },
+    { id: 'up-a1', title: 'Unpopular Demand Skate Deck', price: 5500, img: 'https://printify.com' }
+  ],
+  deadair: [
+    { id: 'da-h1', title: 'Cult Cinema Rerun Hoodie', price: 6500, img: 'https://printify.com' },
+    { id: 'da-t1', title: 'Channel Surf Style Tee', price: 3200, img: 'https://printify.com' },
+    { id: 'da-c1', title: 'Be Kind Rewind Retro Cap', price: 2800, img: 'https://printify.com' },
+    { id: 'da-a1', title: 'Dead Air VHS Tote', price: 2000, img: 'https://printify.com' }
+  ],
+  streetjesus: [
+    { id: 'sj-h1', title: '4 Elements Funk Hoodie', price: 7200, img: 'https://printify.com' },
+    { id: 'sj-t1', title: 'Got Soul Swiss Throwie Tee', price: 3600, img: 'https://printify.com' },
+    { id: 'sj-c1', title: 'WWSJD Street Snapback', price: 3200, img: 'https://printify.com' },
+    { id: 'sj-a1', title: 'Soul Element Slipmat Pack', price: 2500, img: 'https://printify.com' }
+  ]
+}
 
 const brands = [
-  {
-    id: 'pro',
-    lot: '01',
-    name: 'P.R.O.',
-    full: 'Proletariat Revolution Outfitters',
-    ethos: 'Clothing for the working class.',
-    tag: 'NO WAR BUT CLASS WAR',
-    stamp: 'FRAGILE: IDEAS',
-    accent: '#b01e28',
-    bg: '#0f0a0a',
-    text: '#f3e9e2',
-    image: '/logos/container-pro.webp'
-  },
-  {
-    id: 'nudefarmer',
-    lot: '02',
-    name: 'The Nude Farmer',
-    full: 'The Nude Farmer',
-    ethos: 'Farm to fit designs for the high minded.',
-    tag: 'GIRLS GROW TOO',
-    stamp: 'HERBAL',
-    accent: '#46522f',
-    bg: '#0d0f0a',
-    text: '#f1ead4',
-    image: '/logos/container-nude-farmer.webp'
-  },
-  {
-    id: 'unpopular',
-    lot: '03',
-    name: 'Unpopular Demand',
-    full: 'Unpopular Demand',
-    ethos: 'What history tries to bury.',
-    tag: 'ACAB',
-    stamp: 'CIGS CORNER STORE',
-    accent: '#c9a24a',
-    bg: '#0b0b0b',
-    text: '#ece4cf',
-    image: '/logos/container-unpopular.webp'
-  },
-  {
-    id: 'deadair',
-    lot: '04',
-    name: 'Dead Air Vintage',
-    full: 'Dead Air Vintage',
-    ethos: 'Cult cinema. Retro pop culture. Channel surf style. Rerun energy.',
-    tag: 'BE KIND REWIND',
-    stamp: 'HANDLE W/ CARE',
-    accent: '#2ee6d6',
-    bg: '#08080f',
-    text: '#dfe6f0',
-    image: '/logos/container-deadair.webp'
-  },
-  {
-    id: 'streetjesus',
-    lot: '05',
-    name: 'Street Jesus Got Soul',
-    full: 'Street Jesus Got Soul',
-    ethos: '4 Elements Culture',
-    tag: 'WHAT WOULD STREET JESUS DO',
-    stamp: 'IT WILL FUNK YOU UP',
-    accent: '#f4f1ea',
-    bg: '#0d0d0d',
-    text: '#e8e8e8',
-    image: '/logos/container-streetjesus.webp'
-  },
+  { id: 'pro', lot: '01', name: 'P.R.O.', full: 'Proletariat Revolution Outfitters', ethos: 'Clothing for the working class.', tag: 'NO WAR BUT CLASS WAR', stamp: 'FRAGILE: IDEAS', accent: '#b01e28', bg: '#0f0a0a', text: '#f3e9e2', image: '/logos/container-pro.webp' },
+  { id: 'nudefarmer', lot: '02', name: 'The Nude Farmer', full: 'The Nude Farmer', ethos: 'Farm to fit designs for the high minded.', tag: 'GIRLS GROW TOO', stamp: 'HERBAL', accent: '#46522f', bg: '#0d0f0a', text: '#f1ead4', image: '/logos/container-nude-farmer.webp' },
+  { id: 'unpopular', lot: '03', name: 'Unpopular Demand', full: 'Unpopular Demand', ethos: 'What history tries to bury.', tag: 'ACAB', stamp: 'CIGS CORNER STORE', accent: '#c9a24a', bg: '#0b0b0b', text: '#ece4cf', image: '/logos/container-unpopular.webp' },
+  { id: 'deadair', lot: '04', name: 'Dead Air Vintage', full: 'Dead Air Vintage', ethos: 'Cult cinema. Retro pop culture. Channel surf style. Rerun energy.', tag: 'BE KIND REWIND', stamp: 'HANDLE W/ CARE', accent: '#2ee6d6', bg: '#08080f', text: '#dfe6f0', image: '/logos/container-deadair.webp' },
+  { id: 'streetjesus', lot: '05', name: 'Street Jesus Got Soul', full: 'Street Jesus Got Soul', ethos: '4 Elements Culture', tag: 'WHAT WOULD STREET JESUS DO', stamp: 'IT WILL FUNK YOU UP', accent: '#f4f1ea', bg: '#0d0d0d', text: '#e8e8e8', image: '/logos/container-streetjesus.webp' }
 ]
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const [products, setProducts] = useState([])
-  const [isLoadingProducts, setIsLoadingProducts] = useState(true)
   const startYRef = useRef(null)
 
   const activeBrand = brands[activeIndex]
+  const currentBrandProducts = localCatalogByBrand[activeBrand.id] || []
 
   const goToNext = () => {
     if (isTransitioning) return
@@ -107,29 +72,10 @@ export default function Home() {
       setIsTransitioning(false)
     }, 300)
   }
-
-  useEffect(() => {
-    async function fetchActiveBrandProducts() {
-      setIsLoadingProducts(true)
-      try {
-        const res = await fetch(`/api/products?brand=${activeBrand.id}`)
-        if (res.ok) {
-          const data = await res.json()
-          setProducts(data || [])
-        }
-      } catch (err) {
-        console.error("Store catalog pipeline tracking error:", err)
-      } finally {
-        setIsLoadingProducts(false)
-      }
-    }
-    fetchActiveBrandProducts()
-  }, [activeIndex])
   useEffect(() => {
     let lastScroll = 0
 
     const handleWheel = (e) => {
-      // Allows smooth background navigation loops if user is resting at the absolute top of the layout page view
       if (window.scrollY > 10) return
 
       e.preventDefault()
@@ -145,7 +91,6 @@ export default function Home() {
     }
 
     const handleTouchEnd = (e) => {
-      // Fixed touch block protocol allowing uninhibited swipe navigation metrics at the primary viewport baseline entry level
       if (window.scrollY > 10) return
       if (startYRef.current === null) return
       const diff = startYRef.current - e.changedTouches[0].clientX
@@ -268,7 +213,7 @@ export default function Home() {
             </Link>
           </motion.div>
         </AnimatePresence>
-                <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex + '-info'}
             initial={{ opacity: 0, y: 20 }}
@@ -347,7 +292,7 @@ export default function Home() {
               fontFamily: 'Space Mono, monospace', fontSize: '18px',
               background: 'none', border: '1px solid #6b6b63',
               color: '#6b6b63', width: '48px', height: '48px',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifycontent: 'center',
             }}
           >
             ←
@@ -359,7 +304,7 @@ export default function Home() {
               fontFamily: 'Space Mono, monospace', fontSize: '18px',
               background: 'none', border: '1px solid #6b6b63',
               color: '#6b6b63', width: '44px', height: '44px',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifycontent: 'center',
             }}
           >
             →
@@ -443,57 +388,36 @@ export default function Home() {
             FEATURED DROPS / {activeBrand.name}
           </h3>
 
-          {isLoadingProducts ? (
-            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
-              LOADING LATEST DROPS...
-            </p>
-          ) : !Array.isArray(products) || products.length === 0 ? (
-            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
-              NO ACTIVE DESIGN DROPS AVAILABLE IN THIS LOT
-            </p>
-          ) : (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '24px 16px',
-            }}>
-              {products.map(product => {
-                // Read thumbnail src locations natively from the array objects structure
-                const itemImg = product.images?.[0]?.src || null
-
-                // Fallback calculations matching low-tier single price values safely
-                const firstVariantPrice = product.variants?.[0]?.price || 0
-
-                return (
-                  <Link 
-                    key={product.id} 
-                    href={`/products/${activeBrand.id}/${product.id}`}
-                    style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
-                  >
-                    <div style={{ width: '100%', aspectRatio: '1', background: 'rgba(255,255,255,0.02)', overflow: 'hidden', position: 'relative', marginBottom: '12px', border: '1px solid rgba(244,241,234,0.03)' }}>
-                      {itemImg && (
-                        <img 
-                          src={itemImg} 
-                          alt={product.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        />
-                      )}
-                    </div>
-                    <h4 style={{ margin: '0 0 4px 0', fontFamily: 'Work Sans, sans-serif', fontSize: '13px', fontWeight: 500, color: '#f4f1ea', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {product.title}
-                    </h4>
-                    <p style={{ margin: 0, fontFamily: 'Space Mono, monospace', fontSize: '12px', fontWeight: 'bold', color: '#ff5a1f' }}>
-                      \${(firstVariantPrice / 100).toFixed(2)}
-                    </p>
-                  </Link>
-                )
-              })}
-            </div>
-          )}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '24px 16px',
+          }}>
+            {currentBrandProducts.map(product => (
+              <Link 
+                key={product.id} 
+                href={`/products/${activeBrand.id}/${product.id}`}
+                style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+              >
+                <div style={{ width: '100%', aspectRatio: '1', background: '#1c1b19', overflow: 'hidden', position: 'relative', marginBottom: '12px', border: '1px solid rgba(244,241,234,0.03)' }}>
+                  <img 
+                    src={product.img} 
+                    alt={product.title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+                <h4 style={{ margin: '0 0 4px 0', fontFamily: 'Work Sans, sans-serif', fontSize: '13px', fontWeight: 500, color: '#f4f1ea', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {product.title}
+                </h4>
+                <p style={{ margin: 0, fontFamily: 'Space Mono, monospace', fontSize: '12px', fontWeight: 'bold', color: '#ff5a1f' }}>
+                  \${(product.price / 100).toFixed(2)}
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
     </main>
   )
 }
-
