@@ -5,55 +5,23 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import ShareButtons from '@/components/ShareButtons'
 
-// ⚡ STATIC HOME INVENTORY SYSTEM: Bypasses network lag entirely for instant loads
-const localCatalogByBrand = {
-  pro: [
-    { id: 'pro-h1', title: 'P.R.O. Heavyweight Hoodie', price: 6500, img: 'https://printify.com' },
-    { id: 'pro-t1', title: 'Class War Graphic Tee', price: 3200, img: 'https://printify.com' },
-    { id: 'pro-c1', title: 'Revolution Stencil Cap', price: 2800, img: 'https://printify.com' },
-    { id: 'pro-a1', title: 'Outfitters Tote Bag', price: 1800, img: 'https://printify.com' }
-  ],
-  nudefarmer: [
-    { id: 'nf-h1', title: 'Farm To Fit Work Hoodie', price: 6800, img: 'https://printify.com' },
-    { id: 'nf-t1', title: 'Girls Grow Too Crop Tee', price: 3400, img: 'https://printify.com' },
-    { id: 'nf-c1', title: 'Herbal Canvas Trucker', price: 3000, img: 'https://printify.com' },
-    { id: 'nf-a1', title: 'Nude Farmer Utility Pouch', price: 2200, img: 'https://printify.com' }
-  ],
-  unpopular: [
-    { id: 'up-h1', title: 'History Buried Heavy Hoodie', price: 7000, img: 'https://printify.com' },
-    { id: 'up-t1', title: 'ACAB Vintage Box Tee', price: 3500, img: 'https://printify.com' },
-    { id: 'up-c1', title: 'Corner Store Cig Beanie', price: 2500, img: 'https://printify.com' },
-    { id: 'up-a1', title: 'Unpopular Demand Skate Deck', price: 5500, img: 'https://printify.com' }
-  ],
-  deadair: [
-    { id: 'da-h1', title: 'Cult Cinema Rerun Hoodie', price: 6500, img: 'https://printify.com' },
-    { id: 'da-t1', title: 'Channel Surf Style Tee', price: 3200, img: 'https://printify.com' },
-    { id: 'da-c1', title: 'Be Kind Rewind Retro Cap', price: 2800, img: 'https://printify.com' },
-    { id: 'da-a1', title: 'Dead Air VHS Tote', price: 2000, img: 'https://printify.com' }
-  ],
-  streetjesus: [
-    { id: 'sj-h1', title: '4 Elements Funk Hoodie', price: 7200, img: 'https://printify.com' },
-    { id: 'sj-t1', title: 'Got Soul Swiss Throwie Tee', price: 3600, img: 'https://printify.com' },
-    { id: 'sj-c1', title: 'WWSJD Street Snapback', price: 3200, img: 'https://printify.com' },
-    { id: 'sj-a1', title: 'Soul Element Slipmat Pack', price: 2500, img: 'https://printify.com' }
-  ]
-}
-
 const brands = [
   { id: 'pro', lot: '01', name: 'P.R.O.', full: 'Proletariat Revolution Outfitters', ethos: 'Clothing for the working class.', tag: 'NO WAR BUT CLASS WAR', stamp: 'FRAGILE: IDEAS', accent: '#b01e28', bg: '#0f0a0a', text: '#f3e9e2', image: '/logos/container-pro.webp' },
   { id: 'nudefarmer', lot: '02', name: 'The Nude Farmer', full: 'The Nude Farmer', ethos: 'Farm to fit designs for the high minded.', tag: 'GIRLS GROW TOO', stamp: 'HERBAL', accent: '#46522f', bg: '#0d0f0a', text: '#f1ead4', image: '/logos/container-nude-farmer.webp' },
   { id: 'unpopular', lot: '03', name: 'Unpopular Demand', full: 'Unpopular Demand', ethos: 'What history tries to bury.', tag: 'ACAB', stamp: 'CIGS CORNER STORE', accent: '#c9a24a', bg: '#0b0b0b', text: '#ece4cf', image: '/logos/container-unpopular.webp' },
-  { id: 'deadair', lot: '04', name: 'Dead Air Vintage', full: 'Dead Air Vintage', ethos: 'Cult cinema. Retro pop culture. Channel surf style. Rerun energy.', tag: 'BE KIND REWIND', stamp: 'HANDLE W/ CARE', accent: '#2ee6d6', bg: '#08080f', text: '#dfe6f0', image: '/logos/container-deadair.webp' },
+  { id: 'deadair', 'lot': '04', name: 'Dead Air Vintage', full: 'Dead Air Vintage', ethos: 'Cult cinema. Retro pop culture. Channel surf style. Rerun energy.', tag: 'BE KIND REWIND', stamp: 'HANDLE W/ CARE', accent: '#2ee6d6', bg: '#08080f', text: '#dfe6f0', image: '/logos/container-deadair.webp' },
   { id: 'streetjesus', lot: '05', name: 'Street Jesus Got Soul', full: 'Street Jesus Got Soul', ethos: '4 Elements Culture', tag: 'WHAT WOULD STREET JESUS DO', stamp: 'IT WILL FUNK YOU UP', accent: '#f4f1ea', bg: '#0d0d0d', text: '#e8e8e8', image: '/logos/container-streetjesus.webp' }
 ]
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [productsByBrand, setProductsByBrand] = useState({})
+  const [isLoading, setIsLoading] = useState(true)
   const startYRef = useRef(null)
 
   const activeBrand = brands[activeIndex]
-  const currentBrandProducts = localCatalogByBrand[activeBrand.id] || []
+  const currentBrandProducts = productsByBrand[activeBrand.id] || []
 
   const goToNext = () => {
     if (isTransitioning) return
@@ -72,6 +40,29 @@ export default function Home() {
       setIsTransitioning(false)
     }, 300)
   }
+
+  // Automated ISR background validation mapping pipeline
+  useEffect(() => {
+    async function backgroundSyncCatalog() {
+      if (productsByBrand[activeBrand.id]) return // Instant cache render if item pool exists
+      setIsLoading(true)
+      try {
+        const res = await fetch(`/api/products?brand=${activeBrand.id}`)
+        if (res.ok) {
+          const rawData = await res.json()
+          setProductsByBrand(prev => ({
+            ...prev,
+            [activeBrand.id]: rawData || []
+          }))
+        }
+      } catch (err) {
+        console.error("Background sync pipeline failure:", err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    backgroundSyncCatalog()
+  }, [activeIndex, activeBrand.id])
   useEffect(() => {
     let lastScroll = 0
 
@@ -385,36 +376,55 @@ export default function Home() {
             color: activeBrand.accent,
             marginBottom: '32px'
           }}>
-            FEATURED DROPS / {activeBrand.name}
+            LATEST DROPS / {activeBrand.name}
           </h3>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '24px 16px',
-          }}>
-            {currentBrandProducts.map(product => (
-              <Link 
-                key={product.id} 
-                href={`/products/${activeBrand.id}/${product.id}`}
-                style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
-              >
-                <div style={{ width: '100%', aspectRatio: '1', background: '#1c1b19', overflow: 'hidden', position: 'relative', marginBottom: '12px', border: '1px solid rgba(244,241,234,0.03)' }}>
-                  <img 
-                    src={product.img} 
-                    alt={product.title}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                </div>
-                <h4 style={{ margin: '0 0 4px 0', fontFamily: 'Work Sans, sans-serif', fontSize: '13px', fontWeight: 500, color: '#f4f1ea', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {product.title}
-                </h4>
-                <p style={{ margin: 0, fontFamily: 'Space Mono, monospace', fontSize: '12px', fontWeight: 'bold', color: '#ff5a1f' }}>
-                  \${(product.price / 100).toFixed(2)}
-                </p>
-              </Link>
-            ))}
-          </div>
+          {isLoading && currentBrandProducts.length === 0 ? (
+            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
+              SYNCING LATEST DESIGN DROPS...
+            </p>
+          ) : currentBrandProducts.length === 0 ? (
+            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
+              NO ACTIVE DESIGN DROPS AVAILABLE IN THIS LOT
+            </p>
+          ) : (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '24px 16px',
+            }}>
+              {currentBrandProducts.map(product => {
+                // Read nested Printify object array positions defensively
+                const productImg = product.images && product.images[0] ? product.images[0].src : null
+                const variantArray = product.variants || []
+                const lowestPrice = variantArray && variantArray[0] ? variantArray[0].price : 0
+
+                return (
+                  <Link 
+                    key={product.id} 
+                    href={`/products/${activeBrand.id}/${product.id}`}
+                    style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+                  >
+                    <div style={{ width: '100%', aspectRatio: '1', background: 'rgba(255,255,255,0.02)', overflow: 'hidden', position: 'relative', marginBottom: '12px', border: '1px solid rgba(244,241,234,0.03)' }}>
+                      {productImg && (
+                        <img 
+                          src={productImg} 
+                          alt={product.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      )}
+                    </div>
+                    <h4 style={{ margin: '0 0 4px 0', fontFamily: 'Work Sans, sans-serif', fontSize: '13px', fontWeight: 500, color: '#f4f1ea', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {product.title}
+                    </h4>
+                    <p style={{ margin: 0, fontFamily: 'Space Mono, monospace', fontSize: '12px', fontWeight: 'bold', color: '#ff5a1f' }}>
+                      \${(lowestPrice / 100).toFixed(2)}
+                    </p>
+                  </Link>
+                )
+              })}
+            </div>
+          )}
         </div>
       </div>
 
