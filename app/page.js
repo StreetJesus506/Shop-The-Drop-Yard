@@ -34,9 +34,26 @@ const localCatalogByBrand = {
     }
   ],
   nudefarmer: [
-    { id: '6a72197642c99547740f52e2', title: 'Nude Farmer Classic Womens Tee', price: 3000, img: 'https://images.printify.com/mockup/6a72197642c99547740f52e2/64160/87732/1a113239f00.jpg?s=608' },
-    { id: '6ac5598ffd169ea5b106d10f', title: 'High Heels Bomber Jacket', price: 10000, img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/10/20261006204906-1f1c1c75-f2b7-665a-9f91-d62ddd02f99e.jpg?s=320&use_cdn_redirect=true&t=1791319818264' }
-    { id: '6aa317c59f8d2ff301039eba', title: 'Married Hoodie', price: 5000, img: 'https://images.printify.com/mockup/6aa317c59f8d2ff301039eba/32920/127688/1a08d162590.jpg?s=608' }
+    
+    { 
+      id: '6a72197642c99547740f52e2', 
+      title: 'Nude Farmer Classic Tee', 
+      price: 3000, 
+      img: 'https://images.printify.com/mockup/6a72197642c99547740f52e2/64160/87732/1a113239f00.jpg?s=608' // Update this quote string with your copied Printify mockup address link
+    },
+    { 
+      id: '6ac5598ffd169ea5b106d10f', 
+      title: 'High Heels Bomber Jacket', 
+      price: 10000, 
+      img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/10/20261006204906-1f1c1c75-f2b7-665a-9f91-d62ddd02f99e.jpg?s=320&use_cdn_redirect=true&t=1791319818264'
+    },
+    { 
+      id: '6aa317c59f8d2ff301039eba', 
+      title: 'Married Hoodie', 
+      price: 5000, 
+      img: 'https://images.printify.com/mockup/6aa317c59f8d2ff301039eba/32920/127688/1a08d162590.jpg?s=608'
+    },
+    
   ],
   unpopular: [
     { id: 'up-drop1', title: 'History Buried Heavy Hoodie', price: 7000, img: 'https://printify.com' },
