@@ -5,32 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import ShareButtons from '@/components/ShareButtons'
 
-// 🛡️ FAIL-SAFE COMPRESSED DATA MATRIX: Loads instantly if live API handshake hits an empty server layer
-const fallbackCatalog = {
-  pro: [
-    { id: 'pro-f1', title: 'P.R.O. Heavyweight Hoodie', price: 6500, img: 'https://printify.com' },
-    { id: 'pro-f2', title: 'Class War Graphic Tee', price: 3200, img: 'https://printify.com' },
-    { id: 'pro-f3', title: 'Revolution Stencil Cap', price: 2800, img: 'https://printify.com' }
-  ],
-  nudefarmer: [
-    { id: 'nf-f1', title: 'Farm To Fit Work Hoodie', price: 6800, img: 'https://printify.com' },
-    { id: 'nf-f2', title: 'Girls Grow Too Crop Tee', price: 3400, img: 'https://printify.com' },
-    { id: 'nf-f3', title: 'Herbal Canvas Trucker', price: 3000, img: 'https://printify.com' }
-  ],
-  unpopular: [
-    { id: 'up-f1', title: 'History Buried Heavy Hoodie', price: 7000, img: 'https://printify.com' },
-    { id: 'up-f2', title: 'ACAB Vintage Box Tee', price: 3500, img: 'https://printify.com' }
-  ],
-  deadair: [
-    { id: 'da-f1', title: 'Cult Cinema Rerun Hoodie', price: 6500, img: 'https://printify.com' },
-    { id: 'da-f2', title: 'Channel Surf Style Tee', price: 3200, img: 'https://printify.com' }
-  ],
-  streetjesus: [
-    { id: 'sj-f1', title: '4 Elements Funk Hoodie', price: 7200, img: 'https://printify.com' },
-    { id: 'sj-f2', title: 'Got Soul Swiss Throwie Tee', price: 3600, img: 'https://printify.com' }
-  ]
-}
-
 const brands = [
   { id: 'pro', lot: '01', name: 'P.R.O.', full: 'Proletariat Revolution Outfitters', ethos: 'Clothing for the working class.', tag: 'NO WAR BUT CLASS WAR', stamp: 'FRAGILE: IDEAS', accent: '#b01e28', bg: '#0f0a0a', text: '#f3e9e2', image: '/logos/container-pro.webp' },
   { id: 'nudefarmer', lot: '02', name: 'The Nude Farmer', full: 'The Nude Farmer', ethos: 'Farm to fit designs for the high minded.', tag: 'GIRLS GROW TOO', stamp: 'HERBAL', accent: '#46522f', bg: '#0d0f0a', text: '#f1ead4', image: '/logos/container-nude-farmer.webp' },
@@ -47,10 +21,7 @@ export default function Home() {
   const startYRef = useRef(null)
 
   const activeBrand = brands[activeIndex]
-  
-  // Dynamic extraction: reads live sync values, auto-reverts to backup matrix parameters if server returns empty
-  const rawLiveItems = productsByBrand[activeBrand.id] || []
-  const currentBrandProducts = rawLiveItems.length > 0 ? rawLiveItems : (fallbackCatalog[activeBrand.id] || [])
+  const currentBrandProducts = productsByBrand[activeBrand.id] || []
 
   const goToNext = () => {
     if (isTransitioning) return
@@ -70,21 +41,25 @@ export default function Home() {
     }, 300)
   }
 
+  // Automatic background validation and catalog rendering pipeline
   useEffect(() => {
     async function backgroundSyncCatalog() {
-      if (productsByBrand[activeBrand.id]) return
+      if (productsByBrand[activeBrand.id]) return 
       setIsLoading(true)
       try {
         const origin = window.location.origin
         const res = await fetch(`${origin}/api/products?brand=${activeBrand.id}`)
         if (res.ok) {
           const rawData = await res.json()
-          if (Array.isArray(rawData) && rawData.length > 0) {
-            setProductsByBrand(prev => ({ ...prev, [activeBrand.id]: rawData }))
+          if (Array.isArray(rawData)) {
+            setProductsByBrand(prev => ({
+              ...prev,
+              [activeBrand.id]: rawData
+            }))
           }
         }
       } catch (err) {
-        console.error("Background handshake block:", err)
+        console.error("Store background sync tracking link error:", err)
       } finally {
         setIsLoading(false)
       }
@@ -106,13 +81,13 @@ export default function Home() {
     }
 
     const handleTouchStart = (e) => {
-      startYRef.current = e.touches[0].clientX
+      startYRef.current = e.touches.clientX
     }
 
     const handleTouchEnd = (e) => {
       if (window.scrollY > 10) return
       if (startYRef.current === null) return
-      const diff = startYRef.current - e.changedTouches[0].clientX
+      const diff = startYRef.current - e.changedTouches.clientX
       if (Math.abs(diff) > 40) {
         if (diff > 0) goToNext()
         else goToPrev()
@@ -232,7 +207,7 @@ export default function Home() {
             </Link>
           </motion.div>
         </AnimatePresence>
-                <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex + '-info'}
             initial={{ opacity: 0, y: 20 }}
@@ -407,35 +382,45 @@ export default function Home() {
             LATEST DROPS / {activeBrand.name}
           </h3>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '24px 16px',
-          }}>
-            {currentBrandProducts.map(product => {
-              const variantsList = product.variants || []
-              const priceDisplay = product.price || (variantsList.length > 0 ? variantsList.price : 0)
-              
-              const imgList = product.images || []
-              const imgTrack = product.img || (imgList.length > 0 ? imgList.src : null)
+          {isLoading && currentBrandProducts.length === 0 ? (
+            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
+              SYNCING LATEST DESIGN DROPS...
+            </p>
+          ) : currentBrandProducts.length === 0 ? (
+            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
+              NO ACTIVE DESIGN DROPS AVAILABLE IN THIS LOT
+            </p>
+          ) : (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '24px 16px',
+            }}>
+              {currentBrandProducts.map(product => {
+                // Read complex nested Printify arrays natively to ensure 100% correct photo and price mapping
+                const variantsList = product.variants || []
+                const priceDisplay = variantsList[0] ? variantsList[0].price : 0
+                
+                const imgList = product.images || []
+                const imgTrack = imgList[0] ? imgList[0].src : null
 
-              return (
-                <Link 
-                  key={product.id} 
-                  href={`/products/${activeBrand.id}/${product.id}`}
-                  style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
-                >
-                  <div style={{ width: '100%', aspectRatio: '1', background: 'rgba(255,255,255,0.02)', overflow: 'hidden', position: 'relative', marginBottom: '12px', border: '1px solid rgba(244,241,234,0.03)' }}>
-                    {imgTrack && (
-                      <img 
-                        src={imgTrack} 
-                        alt={product.title}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      />
-                    )}
-                  </div>
-                  <h4 style={{ margin: '0 0 4px 0', fontFamily: 'Work Sans, sans-serif', fontSize: '13px', fontWeight: 500, color: '#f4f1ea', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {product.title}
+                return (
+                  <Link 
+                    key={product.id} 
+                    href={`/products/${activeBrand.id}/${product.id}`}
+                    style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+                  >
+                    <div style={{ width: '100%', aspectRatio: '1', background: 'rgba(255,255,255,0.02)', overflow: 'hidden', position: 'relative', marginBottom: '12px', border: '1px solid rgba(244,241,234,0.03)' }}>
+                      {imgTrack && (
+                        <img 
+                          src={imgTrack} 
+                          alt={product.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      )}
+                    </div>
+                    <h4 style={{ margin: '0 0 4px 0', fontFamily: 'Work Sans, sans-serif', fontSize: '13px', fontWeight: 500, color: '#f4f1ea', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {product.title}
                     </h4>
                     <p style={{ margin: 0, fontFamily: 'Space Mono, monospace', fontSize: '12px', fontWeight: 900, color: '#ff5a1f' }}>
                       {`$${(priceDisplay / 100).toFixed(2)}`}
@@ -444,8 +429,9 @@ export default function Home() {
                 )
               })}
             </div>
-          </div>
+          )}
         </div>
+      </div>
 
     </main>
   )
