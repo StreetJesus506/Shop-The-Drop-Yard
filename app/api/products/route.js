@@ -37,10 +37,11 @@ export async function GET(request) {
       return NextResponse.json([])
     }
 
-    const data = await res.json()
-    const products = (data.data || []).filter(p => p.visible === true)
+        const data = await res.json()
+    const products = data.data || []
     
     return NextResponse.json(products)
+
   } catch (err) {
     return NextResponse.json([])
   }
