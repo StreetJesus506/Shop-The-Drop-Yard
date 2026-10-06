@@ -30,7 +30,7 @@ const localCatalogByBrand = {
       id: '6a867614357c880984034567', 
       title: 'PRO Sneakers v1', 
       price: 7500, 
-      img: 'https://images.printify.com/mockup/6a867614357c880984034567/149563/120834/pro-sneakers-v1-lowtop-leather-sneakers.jpg?camera_label=left-shoe-inside'
+      img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/08/20260821024246-1f19d09f-d92a-668e-94c0-120a4e3412bb.jpg?s=320&use_cdn_redirect=true&t=1787290724520'
     }
   ],
   nudefarmer: [
