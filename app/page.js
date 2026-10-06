@@ -232,7 +232,7 @@ export default function Home() {
             </Link>
           </motion.div>
         </AnimatePresence>
-        <AnimatePresence mode="wait">
+                <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex + '-info'}
             initial={{ opacity: 0, y: 20 }}
@@ -413,12 +413,11 @@ export default function Home() {
             gap: '24px 16px',
           }}>
             {currentBrandProducts.map(product => {
-              // Intelligently supports both live raw Printify objects or fallback image vectors perfectly
               const variantsList = product.variants || []
-              const priceDisplay = product.price || (variantsList.length > 0 ? variantsList[0].price : 0)
+              const priceDisplay = product.price || (variantsList.length > 0 ? variantsList.price : 0)
               
               const imgList = product.images || []
-              const imgTrack = product.img || (imgList.length > 0 ? imgList[0].src : null)
+              const imgTrack = product.img || (imgList.length > 0 ? imgList.src : null)
 
               return (
                 <Link 
@@ -437,16 +436,16 @@ export default function Home() {
                   </div>
                   <h4 style={{ margin: '0 0 4px 0', fontFamily: 'Work Sans, sans-serif', fontSize: '13px', fontWeight: 500, color: '#f4f1ea', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {product.title}
-                  </h4>
-                  <p style={{ margin: 0, fontFamily: 'Space Mono, monospace', fontSize: '12px', fontWeight: 900, color: '#ff5a1f' }}>
-                    \${(priceDisplay / 100).toFixed(2)}
-                  </p>
-                </Link>
-              )
-            })}
+                    </h4>
+                    <p style={{ margin: 0, fontFamily: 'Space Mono, monospace', fontSize: '12px', fontWeight: 900, color: '#ff5a1f' }}>
+                      {`$${(priceDisplay / 100).toFixed(2)}`}
+                    </p>
+                  </Link>
+                )
+              })}
+            </div>
           </div>
         </div>
-      </div>
 
     </main>
   )
