@@ -12,7 +12,7 @@ const localCatalogByBrand = {
       id: '694c98873c0595a5040d5c49', 
       title: 'McCarthyism Tee', 
       price: 3000, 
-      img: 'https://printify.com' // Update this quote string with your copied Printify mockup address link
+      img: 'https://images.printify.com/mockup/694c98873c0595a5040d5c49/12022/92570/mccarthyism-tee.jpg?camera_label=front' // Update this quote string with your copied Printify mockup address link
     },
     { 
       id: 'pro-drop2', 
