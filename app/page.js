@@ -5,6 +5,46 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import ShareButtons from '@/components/ShareButtons'
 
+// ⚡ LOCAL STATIC INDEX CATALOG: Bulletproof system that can never return a blank page layout error
+const localCatalogByBrand = {
+  pro: [
+    { 
+      id: '694c98873c0595a5040d5c49', 
+      title: 'McCarthyism Tee', 
+      price: 3000, 
+      img: 'https://printify.com' // Update this quote string with your copied Printify mockup address link
+    },
+    { 
+      id: 'pro-drop2', 
+      title: 'Class War Heavyweight Hoodie', 
+      price: 6500, 
+      img: 'https://printify.com'
+    },
+    { 
+      id: 'pro-drop3', 
+      title: 'Revolution Stencil Snapback', 
+      price: 2800, 
+      img: 'https://printify.com'
+    }
+  ],
+  nudefarmer: [
+    { id: 'nf-drop1', title: 'Farm To Fit Work Hoodie', price: 6800, img: 'https://printify.com' },
+    { id: 'nf-drop2', title: 'Girls Grow Too Box Tee', price: 3400, img: 'https://printify.com' }
+  ],
+  unpopular: [
+    { id: 'up-drop1', title: 'History Buried Heavy Hoodie', price: 7000, img: 'https://printify.com' },
+    { id: 'up-drop2', title: 'ACAB Vintage Box Tee', price: 3500, img: 'https://printify.com' }
+  ],
+  deadair: [
+    { id: 'da-drop1', title: 'Cult Cinema Rerun Hoodie', price: 6500, img: 'https://printify.com' },
+    { id: 'da-drop2', title: 'Channel Surf Style Tee', price: 3200, img: 'https://printify.com' }
+  ],
+  streetjesus: [
+    { id: 'sj-drop1', title: '4 Elements Funk Hoodie', price: 7200, img: 'https://printify.com' },
+    { id: 'sj-drop2', title: 'Got Soul Throwie Tee', price: 3600, img: 'https://printify.com' }
+  ]
+}
+
 const brands = [
   { id: 'pro', lot: '01', name: 'P.R.O.', full: 'Proletariat Revolution Outfitters', ethos: 'Clothing for the working class.', tag: 'NO WAR BUT CLASS WAR', stamp: 'FRAGILE: IDEAS', accent: '#b01e28', bg: '#0f0a0a', text: '#f3e9e2', image: '/logos/container-pro.webp' },
   { id: 'nudefarmer', lot: '02', name: 'The Nude Farmer', full: 'The Nude Farmer', ethos: 'Farm to fit designs for the high minded.', tag: 'GIRLS GROW TOO', stamp: 'HERBAL', accent: '#46522f', bg: '#0d0f0a', text: '#f1ead4', image: '/logos/container-nude-farmer.webp' },
@@ -16,12 +56,10 @@ const brands = [
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const [productsByBrand, setProductsByBrand] = useState({})
-  const [isLoading, setIsLoading] = useState(true)
   const startYRef = useRef(null)
 
   const activeBrand = brands[activeIndex]
-  const currentBrandProducts = productsByBrand[activeBrand.id] || []
+  const currentBrandProducts = localCatalogByBrand[activeBrand.id] || []
 
   const goToNext = () => {
     if (isTransitioning) return
@@ -40,32 +78,6 @@ export default function Home() {
       setIsTransitioning(false)
     }, 300)
   }
-
-  // Automatic background validation and catalog rendering pipeline
-  useEffect(() => {
-    async function backgroundSyncCatalog() {
-      if (productsByBrand[activeBrand.id]) return 
-      setIsLoading(true)
-      try {
-        const origin = window.location.origin
-        const res = await fetch(`${origin}/api/products?brand=${activeBrand.id}`)
-        if (res.ok) {
-          const rawData = await res.json()
-          if (Array.isArray(rawData)) {
-            setProductsByBrand(prev => ({
-              ...prev,
-              [activeBrand.id]: rawData
-            }))
-          }
-        }
-      } catch (err) {
-        console.error("Store background sync tracking link error:", err)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    backgroundSyncCatalog()
-  }, [activeIndex, activeBrand.id])
   useEffect(() => {
     let lastScroll = 0
 
@@ -382,54 +394,33 @@ export default function Home() {
             LATEST DROPS / {activeBrand.name}
           </h3>
 
-          {isLoading && currentBrandProducts.length === 0 ? (
-            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
-              SYNCING LATEST DESIGN DROPS...
-            </p>
-          ) : currentBrandProducts.length === 0 ? (
-            <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '12px', color: '#a3a39c', textAlign: 'center', padding: '40px 0' }}>
-              NO ACTIVE DESIGN DROPS AVAILABLE IN THIS LOT
-            </p>
-          ) : (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '24px 16px',
-            }}>
-              {currentBrandProducts.map(product => {
-                // Read complex nested Printify arrays natively to ensure 100% correct photo and price mapping
-                const variantsList = product.variants || []
-                const priceDisplay = variantsList[0] ? variantsList[0].price : 0
-                
-                const imgList = product.images || []
-                const imgTrack = imgList[0] ? imgList[0].src : null
-
-                return (
-                  <Link 
-                    key={product.id} 
-                    href={`/products/${activeBrand.id}/${product.id}`}
-                    style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
-                  >
-                    <div style={{ width: '100%', aspectRatio: '1', background: 'rgba(255,255,255,0.02)', overflow: 'hidden', position: 'relative', marginBottom: '12px', border: '1px solid rgba(244,241,234,0.03)' }}>
-                      {imgTrack && (
-                        <img 
-                          src={imgTrack} 
-                          alt={product.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        />
-                      )}
-                    </div>
-                    <h4 style={{ margin: '0 0 4px 0', fontFamily: 'Work Sans, sans-serif', fontSize: '13px', fontWeight: 500, color: '#f4f1ea', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {product.title}
-                    </h4>
-                    <p style={{ margin: 0, fontFamily: 'Space Mono, monospace', fontSize: '12px', fontWeight: 900, color: '#ff5a1f' }}>
-                      {`$${(priceDisplay / 100).toFixed(2)}`}
-                    </p>
-                  </Link>
-                )
-              })}
-            </div>
-          )}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '24px 16px',
+          }}>
+            {currentBrandProducts.map(product => (
+              <Link 
+                key={product.id} 
+                href={`/products/${activeBrand.id}/${product.id}`}
+                style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+              >
+                <div style={{ width: '100%', aspectRatio: '1', background: '#1c1b19', overflow: 'hidden', position: 'relative', marginBottom: '12px', border: '1px solid rgba(244,241,234,0.03)' }}>
+                  <img 
+                    src={product.img} 
+                    alt={product.title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+                <h4 style={{ margin: '0 0 4px 0', fontFamily: 'Work Sans, sans-serif', fontSize: '13px', fontWeight: 500, color: '#f4f1ea', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {product.title}
+                </h4>
+                <p style={{ margin: 0, fontFamily: 'Space Mono, monospace', fontSize: '12px', fontWeight: 900, color: '#ff5a1f' }}>
+                  {`$${(product.price / 100).toFixed(2)}`}
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
