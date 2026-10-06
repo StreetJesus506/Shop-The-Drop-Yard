@@ -78,7 +78,7 @@ export default function Home() {
       setIsTransitioning(false)
     }, 300)
   }
-  useEffect(() => {
+    useEffect(() => {
     let lastScroll = 0
 
     const handleWheel = (e) => {
@@ -93,13 +93,13 @@ export default function Home() {
     }
 
     const handleTouchStart = (e) => {
-      startYRef.current = e.touches.clientX
+      startYRef.current = e.touches[0].clientX
     }
 
     const handleTouchEnd = (e) => {
       if (window.scrollY > 10) return
       if (startYRef.current === null) return
-      const diff = startYRef.current - e.changedTouches.clientX
+      const diff = startYRef.current - e.changedTouches[0].clientX
       if (Math.abs(diff) > 40) {
         if (diff > 0) goToNext()
         else goToPrev()
@@ -108,8 +108,8 @@ export default function Home() {
     }
 
     window.addEventListener('wheel', handleWheel, { passive: false })
-    window.addEventListener('touchstart', handleTouchStart, { passive: false })
-    window.addEventListener('touchend', handleTouchEnd, { passive: false })
+    window.addEventListener('touchstart', handleTouchStart, { passive: true })
+    window.addEventListener('touchend', handleTouchEnd, { passive: true })
 
     return () => {
       window.removeEventListener('wheel', handleWheel)
@@ -121,7 +121,8 @@ export default function Home() {
   return (
     <main style={{ width: '100%', minHeight: '100vh', background: '#1c1b19', position: 'relative', overflowX: 'hidden' }}>
       
-      <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+      {/* 💡 Touch-Action Pan-Y allows effortless sideways swiping without breaking vertical scroll */}
+      <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden', touchAction: 'pan-y' }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex}
@@ -219,6 +220,7 @@ export default function Home() {
             </Link>
           </motion.div>
         </AnimatePresence>
+
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex + '-info'}
