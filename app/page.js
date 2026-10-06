@@ -15,16 +15,22 @@ const localCatalogByBrand = {
       img: 'https://images.printify.com/mockup/694c98873c0595a5040d5c49/12022/92570/mccarthyism-tee.jpg?camera_label=front' // Update this quote string with your copied Printify mockup address link
     },
     { 
-      id: 'pro-drop2', 
-      title: 'Class War Heavyweight Hoodie', 
-      price: 6500, 
-      img: 'https://printify.com'
+      id: '67ec6729e9abecfb76083051', 
+      title: 'Banana Contracts Tee', 
+      price: 3000, 
+      img: 'https://images.printify.com/mockup/67ec6729e9abecfb76083051/12028/92570/banana-contracts-tee.jpg?camera_label=front'
     },
     { 
-      id: 'pro-drop3', 
-      title: 'Revolution Stencil Snapback', 
-      price: 2800, 
-      img: 'https://printify.com'
+      id: '6a9a29ca678e542cd50aecc0', 
+      title: 'Liberation Baseball Jersey', 
+      price: 7500, 
+      img: 'https://images.printify.com/mockup/6a9a29ca678e542cd50aecc0/75703/24240/liberation-baseball-jersey.jpg?camera_label=on-person-left'
+    },
+    { 
+      id: '6a867614357c880984034567', 
+      title: 'PRO Sneakers v1', 
+      price: 7500, 
+      img: 'https://images.printify.com/mockup/6a867614357c880984034567/149563/120834/pro-sneakers-v1-lowtop-leather-sneakers.jpg?camera_label=left-shoe-inside'
     }
   ],
   nudefarmer: [
