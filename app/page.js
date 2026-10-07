@@ -60,8 +60,30 @@ const localCatalogByBrand = {
     { id: 'up-drop2', title: 'ACAB Vintage Box Tee', price: 3500, img: 'https://printify.com' }
   ],
   deadair: [
-    { id: 'da-drop1', title: 'Cult Cinema Rerun Hoodie', price: 6500, img: 'https://printify.com' },
-    { id: 'da-drop2', title: 'Channel Surf Style Tee', price: 3200, img: 'https://printify.com' }
+    { 
+      id: '6a891c7d8f3560ae1209748b', 
+      title: 'VHS Stripe Sneakers', 
+      price: 10000, 
+      img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/08/20260822041312-1f19ddfc-a230-639e-a5da-4e2ddbb1bc18.png?s=320&use_cdn_redirect=true&t=1787372037025' // Update this quote string with your copied Printify mockup address link
+    },
+    { 
+      id: '6a807c779c3944dca50fc520', 
+      title: 'Horror Icons Hoodie', 
+      price: 5000, 
+      img: 'https://images.printify.com/mockup/6a807c779c3944dca50fc520/32920/127688/1a005ee7dd8.jpg?s=608'
+    },
+    { 
+      id: '6ac6cbc4af1b945e440a77ac', 
+      title: 'On a Mission Coffee Mug', 
+      price: 1500, 
+      img: 'https://images.printify.com/mockup/6ac6cbc4af1b945e440a77ac/65216/10411/1a1188f1668.jpg?s=608'
+    },
+    { 
+      id: '6a7df4669b754b340509e259', 
+      title: 'Tootsie Star Kids Tee', 
+      price: 2500, 
+      img: 'https://images.printify.com/mockup/6a7df4669b754b340509e259/38508/108626/1a0a2246fa0.jpg?s=608'
+    }
   ],
   streetjesus: [
     { id: 'sj-drop1', title: '4 Elements Funk Hoodie', price: 7200, img: 'https://printify.com' },
