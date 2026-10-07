@@ -24,7 +24,7 @@ const localCatalogByBrand = {
       id: '6a9a29ca678e542cd50aecc0', 
       title: 'Liberation Baseball Jersey', 
       price: 7500, 
-      img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/09/20260904032641-1f1a8107-286e-6232-8631-1a9344a1bb8e.jpg?s=320&use_cdn_redirect=true&t=1788492437432'
+      img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/10/20261007022520-1f1c1f65-7d4e-66e6-a23f-7eb93be8fbd8.jpg?t=1791339965946&s=500'
     },
     { 
       id: '6a867614357c880984034567', 
