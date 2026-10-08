@@ -18,7 +18,7 @@ const localCatalogByBrand = {
       id: '67ec6729e9abecfb76083051', 
       title: 'Banana Contracts Tee', 
       price: 3000, 
-      img: 'https://images.printify.com/mockup/67ec6729e9abecfb76083051/12028/92570/banana-contracts-tee.jpg?camera_label=front'
+      img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/10/20261008025750-1f1c2c40-ccb5-6738-aed2-22f014b4007d.jpg'
     },
     { 
       id: '6a9a29ca678e542cd50aecc0', 
