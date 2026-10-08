@@ -86,8 +86,31 @@ const localCatalogByBrand = {
     }
   ],
   streetjesus: [
-    { id: 'sj-drop1', title: '4 Elements Funk Hoodie', price: 7200, img: 'https://printify.com' },
-    { id: 'sj-drop2', title: 'Got Soul Throwie Tee', price: 3600, img: 'https://printify.com' }
+    
+    { 
+      id: '6a7a1a5c34f2da72570a877d', 
+      title: '1200 Turntable Parts Tee', 
+      price: 3000, 
+      img: 'https://images.printify.com/mockup/6a7a1a5c34f2da72570a877d/38183/127673/19ffda467f0.jpg?s=608' // Update this quote string with your copied Printify mockup address link
+    },
+    { 
+      id: '6a8bc08e62b16797b603fdf0', 
+      title: 'NY Fat Embroidered 5 Panel Hat', 
+      price: 5000, 
+      img: 'https://images.printify.com/mockup/6a8bc08e62b16797b603fdf0/119158/110514/1a031edf328.jpg?s=608'
+    },
+    { 
+      id: '6833e8e0c495ed8f7e098dc4', 
+      title: 'MPC 2000 Pillow', 
+      price: 5000, 
+      img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/10/20261008003324-1f1c2afd-f6bd-651a-9082-b60972c16800.jpg'
+    },
+    { 
+      id: '6a8db3942c40ce32e807672f', 
+      title: 'Classic Breaks 45s Hoodies', 
+      price: 5000, 
+      img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/10/20261008005324-1f1c2b2a-a2c6-6510-b8cf-164a8691ae1c.jpg'
+    }
   ]
 }
 
