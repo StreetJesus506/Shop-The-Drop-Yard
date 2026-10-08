@@ -56,8 +56,30 @@ const localCatalogByBrand = {
     
   ],
   unpopular: [
-    { id: 'up-drop1', title: 'History Buried Heavy Hoodie', price: 7000, img: 'https://printify.com' },
-    { id: 'up-drop2', title: 'ACAB Vintage Box Tee', price: 3500, img: 'https://printify.com' }
+    { 
+      id: '6a6e6b8cbd30c4398403eedf', 
+      title: 'Amerikkkan Flag Tee', 
+      price: 3000, 
+      img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/08/20260801221547-1f18df68-c280-69de-b19f-f22c9c86690c.jpg' // Update this quote string with your copied Printify mockup address link
+    },
+    { 
+      id: '6a727c6e0df81a5d7f04f868', 
+      title: 'RAG Bikini', 
+      price: 5000, 
+      img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/08/20260814173152-1f198060-9e27-615c-a4f8-86d2a06b4581.png?s=320&use_cdn_redirect=true&t=1786728748401'
+    },
+    { 
+      id: '68f4084ead1c8737e205ca0a', 
+      title: 'Crow Named Jim Tee', 
+      price: 3000, 
+      img: 'https://images.printify.com/mockup/68f4084ead1c8737e205ca0a/12130/92570/crow-named-jim-tee.jpg?camera_label=front'
+    },
+    { 
+      id: '6ac596d3cc89d94a2203cc10', 
+      title: '2nd Amendment Hoodie', 
+      price: 5000, 
+      img: 'https://images.printify.com/mockup/6ac596d3cc89d94a2203cc10/42166/111848/2nd-amendment-hoodie.jpg?camera_label=person-6-back'
+    }
   ],
   deadair: [
     { 
