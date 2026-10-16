@@ -27,6 +27,9 @@ const workSans = Work_Sans({
 export const metadata = {
   title: 'The Drop Yard',
   description: 'One yard. Every label. P.R.O., The Nude Farmer, Unpopular Demand, Dead Air.',
+  verification: {
+    pinterest: '63379efe228ff40e1069bb2da6a43ba5',
+  },
   keywords: 'streetwear, clothing, independent brands, print on demand',
   openGraph: {
     title: 'The Drop Yard',
@@ -36,6 +39,7 @@ export const metadata = {
     type: 'website',
   }
 }
+
 
 const organizationSchema = {
   '@context': 'https://schema.org',
