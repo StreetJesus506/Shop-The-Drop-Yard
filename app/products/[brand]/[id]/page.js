@@ -4,6 +4,8 @@ import CartIcon from '@/components/CartIcon'
 import ImageGallery from '@/components/ImageGallery'
 import ShareButtons from '@/components/ShareButtons'
 
+const SITE_URL = 'https://shopthedropyard.com'
+
 const shopIds = {
   pro: process.env.PRINTIFY_SHOP_PRO,
   nudefarmer: process.env.PRINTIFY_SHOP_NUDEFARMER,
@@ -23,84 +25,101 @@ const brandStyles = {
 async function getProduct(shopId, productId) {
   try {
     const res = await fetch(
-      `https://printify.com{shopId}/products/${productId}.json`,
+      `https://api.printify.com/v1/shops/${shopId}/products/${productId}.json`,
       {
-        headers: { 'Authorization': `Bearer ${process.env.PRINTIFY_API_KEY}` },
+        headers: { Authorization: `Bearer ${process.env.PRINTIFY_API_KEY}` },
         next: { revalidate: 300 },
       }
     )
-    if (!res.ok) return null
+    if (!res.ok) {
+      console.error(`Printify fetch failed: ${res.status} for shop ${shopId}, product ${productId}`)
+      return null
+    }
     return await res.json()
-  } catch {
+  } catch (err) {
+    console.error('Printify fetch error:', err)
     return null
   }
 }
 
-// 🎯 AUTOMATED PINTEREST META ENGINE: Fixed array indices to secure stable compiler processing
+// Pinterest / Open Graph metadata
 export async function generateMetadata({ params }) {
-  const shopId = shopIds[params.brand]
+  const { brand, id } = await params
+  const shopId = shopIds[brand]
   if (!shopId) return {}
-  const product = await getProduct(shopId, params.id)
+  const product = await getProduct(shopId, id)
   if (!product) return {}
 
   const cleanDescription = product.description?.replace(/<[^>]*>/g, '').slice(0, 160) || ''
   const primaryImg = product.images?.[0]?.src || ''
-  
-  const enabledVariants = product.variants?.filter(v => v.is_enabled) || []
+
+  const enabledVariants = product.variants?.filter((v) => v.is_enabled) || []
   const basePrice = enabledVariants[0]?.price || 0
+  const productUrl = `${SITE_URL}/brands/${brand}/${id}`
 
   return {
-    title: `${product.title} — ${brandStyles[params.brand]?.name || ''} | The Drop Yard`,
+    title: `${product.title} — ${brandStyles[brand]?.name || ''} | The Drop Yard`,
     description: cleanDescription,
     openGraph: {
       title: product.title,
       description: cleanDescription,
-      url: `https://shopthedropyard.com{params.brand}/${params.id}`,
+      url: productUrl,
       siteName: 'The Drop Yard',
       images: [{ url: primaryImg, width: 800, height: 800, alt: product.title }],
-      type: 'og:product', 
+      type: 'website',
     },
     other: {
+      'og:type': 'product',
       'product:price:amount': (basePrice / 100).toFixed(2),
       'product:price:currency': 'USD',
       'product:availability': product.visible ? 'instock' : 'oos',
-    }
+    },
   }
 }
 
 export default async function ProductPage({ params }) {
-  const shopId = shopIds[params.brand]
-  const style = brandStyles[params.brand]
+  const { brand, id } = await params
+  const shopId = shopIds[brand]
+  const style = brandStyles[brand]
   if (!shopId || !style) notFound()
 
-  const product = await getProduct(shopId, params.id)
+  const product = await getProduct(shopId, id)
   if (!product) notFound()
 
-  const uniqueImages = (product.images || []).slice(0, 20)
-  const variants = product.variants?.filter(v => v.is_enabled) || []
-  
-  const firstPart = variants[0]?.title.split(' / ')[0] || ''
-  const isSizeFirst = ['XS','S','M','L','XL','2XL','3XL','4XL','5XL',
-    'Small','Medium','Large','X-Large','2X-Large','3X-Large'].includes(firstPart)
+  const brandUrl = `${SITE_URL}/brands/${brand}`
+  const productUrl = `${brandUrl}/${id}`
 
-  const colors = [...new Map(variants.map(v => {
-    const parts = v.title.split(' / ')
-    const color = isSizeFirst ? (parts[1] || 'Default') : parts[0]
-    return [color, { color, hex: null }]
-  })).values()]
+  const uniqueImages = (product.images || []).slice(0, 20)
+  const variants = product.variants?.filter((v) => v.is_enabled) || []
+
+  const firstPart = variants[0]?.title.split(' / ')[0] || ''
+  const isSizeFirst = [
+    'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL',
+    'Small', 'Medium', 'Large', 'X-Large', '2X-Large', '3X-Large',
+  ].includes(firstPart)
+
+  const colors = [
+    ...new Map(
+      variants.map((v) => {
+        const parts = v.title.split(' / ')
+        const color = isSizeFirst ? parts[1] || 'Default' : parts[0]
+        return [color, { color, hex: null }]
+      })
+    ).values(),
+  ]
 
   const sizeOrder = ['XS', 'S', 'S/M', 'M', 'M/L', 'L', 'XL', '2XL', '3XL', '4XL', '5XL']
 
   const SIZE_ALIASES = {
-    'X-SMALL': 'XS', 'XSMALL': 'XS', 'XS': 'XS',
-    'SMALL': 'S', 'S': 'S',
+    'X-SMALL': 'XS', XSMALL: 'XS', XS: 'XS',
+    SMALL: 'S', S: 'S',
     'S/M': 'S/M',
-    'MEDIUM': 'M', 'M': 'M',
+    MEDIUM: 'M', M: 'M',
     'M/L': 'M/L',
-    'LARGE': 'L', 'L': 'L',
-    'X-LARGE': 'XL', 'XLARGE': 'XL', 'XL': 'XL',
-    '2X-LARGE': '2XL', '2XLARGE': '2XL', '2XL': '2XL', 'XXL': '2XL',
-    '3X-LARGE': '3XL', '3XLARGE': '3XL', '3XL': '3XL', 'XXXL': '3XL',
+    LARGE: 'L', L: 'L',
+    'X-LARGE': 'XL', XLARGE: 'XL', XL: 'XL',
+    '2X-LARGE': '2XL', '2XLARGE': '2XL', '2XL': '2XL', XXL: '2XL',
+    '3X-LARGE': '3XL', '3XLARGE': '3XL', '3XL': '3XL', XXXL: '3XL',
     '4X-LARGE': '4XL', '4XLARGE': '4XL', '4XL': '4XL',
     '5X-LARGE': '5XL', '5XLARGE': '5XL', '5XL': '5XL',
   }
@@ -110,11 +129,14 @@ export default async function ProductPage({ params }) {
     return SIZE_ALIASES[key] || key
   }
 
-  const sizes = [...new Set(variants.map(v => {
-    const parts = v.title.split(' / ')
-    return isSizeFirst ? parts[0] : (parts[1] || parts[0])
-  }))]
-  .sort((a, b) => {
+  const sizes = [
+    ...new Set(
+      variants.map((v) => {
+        const parts = v.title.split(' / ')
+        return isSizeFirst ? parts[0] : parts[1] || parts[0]
+      })
+    ),
+  ].sort((a, b) => {
     const ai = sizeOrder.indexOf(normalizeSize(a))
     const bi = sizeOrder.indexOf(normalizeSize(b))
     if (ai === -1 && bi === -1) return a.localeCompare(b)
@@ -125,70 +147,89 @@ export default async function ProductPage({ params }) {
 
   const price = variants[0]?.price
   const formattedPrice = price ? `$${(price / 100).toFixed(2)}` : ''
+
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.description?.replace(/<[^>]*>/g, '').slice(0, 160),
+    image: product.images?.[0]?.src || '',
+    brand: {
+      '@type': 'Brand',
+      name: style.name,
+    },
+    offers: {
+      '@type': 'Offer',
+      url: productUrl,
+      priceCurrency: 'USD',
+      price: price ? (price / 100).toFixed(2) : '0.00',
+      availability: 'https://schema.org/InStock',
+      seller: {
+        '@type': 'Organization',
+        name: 'The Drop Yard',
+      },
+    },
+  }
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: style.name, item: brandUrl },
+      { '@type': 'ListItem', position: 3, name: product.title, item: productUrl },
+    ],
+  }
+
   return (
     <main style={{ minHeight: '100vh', background: style.bg, color: style.text }}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Product',
-            name: product.title,
-            description: product.description?.replace(/<[^>]*>/g, '').slice(0, 160),
-            image: product.images?.[0]?.src || '',
-            brand: {
-              '@type': 'Brand',
-              name: style.name,
-            },
-            offers: {
-              '@type': 'Offer',
-              url: `https://shopthedropyard.com{params.brand}/${params.id}`,
-              priceCurrency: 'USD',
-              price: (variants[0]?.price / 100).toFixed(2),
-              availability: 'https://schema.org',
-              seller: {
-                '@type': 'Organization',
-                name: 'The Drop Yard',
-              },
-            },
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://shopthedropyard.com' },
-            { '@type': 'ListItem', position: 2, name: style.name, item: `https://shopthedropyard.com{params.brand}` },
-            { '@type': 'ListItem', position: 3, name: product.title, item: `https://shopthedropyard.com{params.brand}/${params.id}` },
-          ],
-        })}}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       {/* Header */}
-      <div style={{
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '18px 24px', borderBottom: '1px solid rgba(255,255,255,0.1)',
-      }}>
-        <a href={`/brands/${params.brand}`} style={{
-          fontFamily: 'Big Shoulders Stencil, sans-serif',
-          fontSize: '12px', letterSpacing: '1px',
-          border: `1px solid ${style.text}`,
-          color: style.text, padding: '8px 14px',
-          textDecoration: 'none', textTransform: 'uppercase',
-        }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '18px 24px',
+          borderBottom: '1px solid rgba(255,255,255,0.1)',
+        }}
+      >
+        <a
+          href={`/brands/${brand}`}
+          style={{
+            fontFamily: 'Big Shoulders Stencil, sans-serif',
+            fontSize: '12px',
+            letterSpacing: '1px',
+            border: `1px solid ${style.text}`,
+            color: style.text,
+            padding: '8px 14px',
+            textDecoration: 'none',
+            textTransform: 'uppercase',
+          }}
+        >
           ← {style.name}
         </a>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <a href="/" style={{
-            fontFamily: 'Big Shoulders Stencil, sans-serif',
-            fontSize: '14px', fontWeight: 700,
-            color: style.accent, textDecoration: 'none',
-            textTransform: 'uppercase',
-          }}>
+          <a
+            href="/"
+            style={{
+              fontFamily: 'Big Shoulders Stencil, sans-serif',
+              fontSize: '14px',
+              fontWeight: 700,
+              color: style.accent,
+              textDecoration: 'none',
+              textTransform: 'uppercase',
+            }}
+          >
             THE DROP YARD
           </a>
           <CartIcon color={style.text} />
@@ -196,28 +237,65 @@ export default async function ProductPage({ params }) {
       </div>
 
       {/* Product Grid Content Container Layout */}
-      <div style={{
-        maxWidth: '1180px', margin: '0 auto',
-        padding: '40px 24px 80px',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '48px',
-      }}>
+      <div
+        style={{
+          maxWidth: '1180px',
+          margin: '0 auto',
+          padding: '40px 24px 80px',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '48px',
+        }}
+      >
         <ImageGallery images={uniqueImages} title={product.title} brandName={style.name} />
 
         <div>
-          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '11px', color: style.accent, letterSpacing: '2px', textTransform: 'uppercase', margin: '0 0 8px' }}>
+          <p
+            style={{
+              fontFamily: 'Space Mono, monospace',
+              fontSize: '11px',
+              color: style.accent,
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+              margin: '0 0 8px',
+            }}
+          >
             {style.name}
           </p>
-          <h1 style={{ fontFamily: 'Big Shoulders Stencil, sans-serif', fontSize: 'clamp(28px, 5vw, 52px)', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1, margin: '0 0 16px' }}>
+          <h1
+            style={{
+              fontFamily: 'Big Shoulders Stencil, sans-serif',
+              fontSize: 'clamp(28px, 5vw, 52px)',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              lineHeight: 1,
+              margin: '0 0 16px',
+            }}
+          >
             {product.title}
           </h1>
-          <p style={{ fontFamily: 'Space Mono, monospace', fontSize: '22px', color: style.accent, margin: '0 0 28px' }}>
+          <p
+            style={{
+              fontFamily: 'Space Mono, monospace',
+              fontSize: '22px',
+              color: style.accent,
+              margin: '0 0 28px',
+            }}
+          >
             {formattedPrice}
           </p>
 
           {product.description && (
-            <div dangerouslySetInnerHTML={{ __html: product.description }} style={{ fontSize: '14px', lineHeight: 1.6, opacity: 0.75, marginBottom: '32px', maxWidth: '480px' }} />
+            <div
+              dangerouslySetInnerHTML={{ __html: product.description }}
+              style={{
+                fontSize: '14px',
+                lineHeight: 1.6,
+                opacity: 0.75,
+                marginBottom: '32px',
+                maxWidth: '480px',
+              }}
+            />
           )}
 
           <AddToCart
@@ -229,9 +307,15 @@ export default async function ProductPage({ params }) {
             isSizeFirst={isSizeFirst}
           />
 
-          <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <div
+            style={{
+              marginTop: '24px',
+              paddingTop: '24px',
+              borderTop: '1px solid rgba(255,255,255,0.08)',
+            }}
+          >
             <ShareButtons
-              url={`https://shopthedropyard.com{params.brand}/${params.id}`}
+              url={productUrl}
               title={`${product.title} — ${style.name} | The Drop Yard`}
               image={product.images?.[0]?.src || ''}
             />
