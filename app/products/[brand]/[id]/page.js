@@ -23,7 +23,7 @@ const brandStyles = {
 async function getProduct(shopId, productId) {
   try {
     const res = await fetch(
-      `https://api.printify.com/v1/shops/${shopId}/products/${productId}.json`,
+      `https://printify.com{shopId}/products/${productId}.json`,
       {
         headers: { 'Authorization': `Bearer ${process.env.PRINTIFY_API_KEY}` },
         next: { revalidate: 300 },
@@ -36,7 +36,7 @@ async function getProduct(shopId, productId) {
   }
 }
 
-// 🎯 AUTOMATED PINTEREST META ENGINE: Dynamically builds Rich Pin metadata tags for web crawlers
+// 🎯 AUTOMATED PINTEREST META ENGINE: Fixed array indices to secure stable compiler processing
 export async function generateMetadata({ params }) {
   const shopId = shopIds[params.brand]
   if (!shopId) return {}
@@ -45,7 +45,9 @@ export async function generateMetadata({ params }) {
 
   const cleanDescription = product.description?.replace(/<[^>]*>/g, '').slice(0, 160) || ''
   const primaryImg = product.images?.[0]?.src || ''
-  const basePrice = product.variants?.filter(v => v.is_enabled)?.[0]?.price || 0
+  
+  const enabledVariants = product.variants?.filter(v => v.is_enabled) || []
+  const basePrice = enabledVariants[0]?.price || 0
 
   return {
     title: `${product.title} — ${brandStyles[params.brand]?.name || ''} | The Drop Yard`,
@@ -53,12 +55,11 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: product.title,
       description: cleanDescription,
-      url: `https://shopthedropyard.com/products/${params.brand}/${params.id}`,
+      url: `https://shopthedropyard.com{params.brand}/${params.id}`,
       siteName: 'The Drop Yard',
       images: [{ url: primaryImg, width: 800, height: 800, alt: product.title }],
       type: 'og:product', 
     },
-    // Pinterest Rich Pin Shoppable Catalog Object Data Maps
     other: {
       'product:price:amount': (basePrice / 100).toFixed(2),
       'product:price:currency': 'USD',
@@ -134,17 +135,17 @@ export default async function ProductPage({ params }) {
             '@type': 'Product',
             name: product.title,
             description: product.description?.replace(/<[^>]*>/g, '').slice(0, 160),
-            image: product.images?.[0]?.src,
+            image: product.images?.[0]?.src || '',
             brand: {
               '@type': 'Brand',
               name: style.name,
             },
             offers: {
               '@type': 'Offer',
-              url: `https://shopthedropyard.com/products/${params.brand}/${params.id}`,
+              url: `https://shopthedropyard.com{params.brand}/${params.id}`,
               priceCurrency: 'USD',
               price: (variants[0]?.price / 100).toFixed(2),
-              availability: 'https://schema.org/InStock',
+              availability: 'https://schema.org',
               seller: {
                 '@type': 'Organization',
                 name: 'The Drop Yard',
@@ -161,8 +162,8 @@ export default async function ProductPage({ params }) {
           '@type': 'BreadcrumbList',
           itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://shopthedropyard.com' },
-            { '@type': 'ListItem', position: 2, name: style.name, item: `https://shopthedropyard.com/brands/${params.brand}` },
-            { '@type': 'ListItem', position: 3, name: product.title, item: `https://shopthedropyard.com/products/${params.brand}/${params.id}` },
+            { '@type': 'ListItem', position: 2, name: style.name, item: `https://shopthedropyard.com{params.brand}` },
+            { '@type': 'ListItem', position: 3, name: product.title, item: `https://shopthedropyard.com{params.brand}/${params.id}` },
           ],
         })}}
       />
@@ -194,7 +195,7 @@ export default async function ProductPage({ params }) {
         </div>
       </div>
 
-      {/* Product Content Window Grid */}
+      {/* Product Grid Content Container Layout */}
       <div style={{
         maxWidth: '1180px', margin: '0 auto',
         padding: '40px 24px 80px',
@@ -230,9 +231,9 @@ export default async function ProductPage({ params }) {
 
           <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
             <ShareButtons
-              url={`https://shopthedropyard.com/products/${params.brand}/${params.id}`}
+              url={`https://shopthedropyard.com{params.brand}/${params.id}`}
               title={`${product.title} — ${style.name} | The Drop Yard`}
-              image={product.images?.[0]?.src}
+              image={product.images?.[0]?.src || ''}
             />
           </div>
         </div>
