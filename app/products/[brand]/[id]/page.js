@@ -57,7 +57,7 @@ export async function generateMetadata({ params }) {
   const basePrice = enabledVariants[0]?.price || 0
   const productUrl = `${SITE_URL}/brands/${brand}/${id}`
 
-  return {
+    return {
     title: `${product.title} — ${brandStyles[brand]?.name || ''} | The Drop Yard`,
     description: cleanDescription,
     openGraph: {
@@ -66,13 +66,12 @@ export async function generateMetadata({ params }) {
       url: productUrl,
       siteName: 'The Drop Yard',
       images: [{ url: primaryImg, width: 800, height: 800, alt: product.title }],
-      type: 'website',
+      type: 'product', // Corrected: Set the type directly to 'product' here
     },
     other: {
-      'og:type': 'product',
       'product:price:amount': (basePrice / 100).toFixed(2),
       'product:price:currency': 'USD',
-      'product:availability': product.visible ? 'instock' : 'oos',
+      'product:availability': product.visible ? 'instock' : 'outofstock', // Corrected: Changed 'oos' to 'outofstock'
     },
   }
 }
