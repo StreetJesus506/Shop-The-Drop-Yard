@@ -183,6 +183,9 @@ export default async function ProductPage({ params }) {
 
   return (
     <main style={{ minHeight: '100vh', background: style.bg, color: style.text }}>
+      {/* Safe Hoisted Override for Pinterest Rich Pins */}
+      <meta property="og:type" content="product" />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
