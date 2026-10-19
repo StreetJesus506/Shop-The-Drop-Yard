@@ -66,7 +66,7 @@ const localCatalogByBrand = {
       id: '6a727c6e0df81a5d7f04f868', 
       title: 'RAG Bikini', 
       price: 5000, 
-      img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/08/20260814173152-1f198060-9e27-615c-a4f8-86d2a06b4581.png?s=320&use_cdn_redirect=true&t=1786728748401'
+      img: 'https://d123s6f1z9g2wk.cloudfront.net/files/2026/10/20261019014120-1f1cb5e2-f685-6dca-924f-22e0e8f1763b.jpg?s=320&use_cdn_redirect=true&t=1792374129890'
     },
     { 
       id: '68f4084ead1c8737e205ca0a', 
